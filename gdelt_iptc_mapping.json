@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2025-12-22T21:26:01.931423",
+    "generated_at": "2025-12-22T21:40:19.720537",
     "total_themes": 174,
     "rule_matched": 172,
     "iptc_categories": 16,
@@ -29,7 +29,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "nn_weak",
-      "final_confidence": 0.318124383687973
+      "final_confidence": 0.318124383687973,
+      "tsne_x": 34.8731689453125,
+      "tsne_y": 45.437843322753906
     },
     {
       "theme_code": "AFFECT",
@@ -46,7 +48,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "nn_override",
-      "final_confidence": 0.4878619313240051
+      "final_confidence": 0.4878619313240051,
+      "tsne_x": 24.58082389831543,
+      "tsne_y": 23.167715072631836
     },
     {
       "theme_code": "AGRICULTURE",
@@ -63,7 +67,9 @@
       "iptc_final_id": "04000000",
       "iptc_final_label": "economy, business and finance",
       "decision_source": "nn_confident",
-      "final_confidence": 0.6296687126159668
+      "final_confidence": 0.6296687126159668,
+      "tsne_x": 10.804445266723633,
+      "tsne_y": 49.904884338378906
     },
     {
       "theme_code": "AID",
@@ -80,7 +86,9 @@
       "iptc_final_id": "13000000",
       "iptc_final_label": "science and technology",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 54.51732635498047,
+      "tsne_y": 64.57856750488281
     },
     {
       "theme_code": "ALLIANCE",
@@ -97,7 +105,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 46.09351348876953,
+      "tsne_y": 26.452743530273438
     },
     {
       "theme_code": "APPOINTMENT",
@@ -114,7 +124,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 67.3670654296875,
+      "tsne_y": 5.0
     },
     {
       "theme_code": "ARMEDCONFLICT",
@@ -131,7 +143,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 36.70600128173828,
+      "tsne_y": 14.093949317932129
     },
     {
       "theme_code": "ARREST",
@@ -148,7 +162,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 52.47936248779297,
+      "tsne_y": 35.93923568725586
     },
     {
       "theme_code": "ASSASSINATION",
@@ -165,7 +181,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 48.23857116699219,
+      "tsne_y": 37.830562591552734
     },
     {
       "theme_code": "AUSTERITY",
@@ -182,7 +200,9 @@
       "iptc_final_id": "04000000",
       "iptc_final_label": "economy, business and finance",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6236141443252563
+      "final_confidence": 0.6236141443252563,
+      "tsne_x": 14.40451431274414,
+      "tsne_y": 52.91579818725586
     },
     {
       "theme_code": "AVIATION",
@@ -199,7 +219,9 @@
       "iptc_final_id": "13000000",
       "iptc_final_label": "science and technology",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 64.00942993164062,
+      "tsne_y": 86.2567367553711
     },
     {
       "theme_code": "BAN",
@@ -216,7 +238,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 72.82550048828125,
+      "tsne_y": 33.83443069458008
     },
     {
       "theme_code": "BLACK",
@@ -233,7 +257,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.8
+      "final_confidence": 0.8,
+      "tsne_x": 55.7142448425293,
+      "tsne_y": 57.83243942260742
     },
     {
       "theme_code": "BLOCKADE",
@@ -250,7 +276,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 69.74524688720703,
+      "tsne_y": 30.807531356811523
     },
     {
       "theme_code": "BORDER",
@@ -267,7 +295,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 75.56343841552734,
+      "tsne_y": 63.98058319091797
     },
     {
       "theme_code": "BULLYING",
@@ -284,7 +314,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 86.26190948486328,
+      "tsne_y": 34.453861236572266
     },
     {
       "theme_code": "CEASEFIRE",
@@ -301,7 +333,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 42.87858200073242,
+      "tsne_y": 15.582830429077148
     },
     {
       "theme_code": "CHARASMATIC",
@@ -318,7 +352,9 @@
       "iptc_final_id": "08000000",
       "iptc_final_label": "human interest",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 56.170082092285156,
+      "tsne_y": 94.5213394165039
     },
     {
       "theme_code": "CHECKPOINT",
@@ -335,7 +371,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 33.83865737915039,
+      "tsne_y": 85.70986938476562
     },
     {
       "theme_code": "CLAIM",
@@ -352,7 +390,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 81.02980041503906,
+      "tsne_y": 46.236900329589844
     },
     {
       "theme_code": "CLOSURE",
@@ -369,7 +409,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 31.104835510253906,
+      "tsne_y": 80.76762390136719
     },
     {
       "theme_code": "CONFISCATION",
@@ -386,7 +428,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 75.77052307128906,
+      "tsne_y": 32.058685302734375
     },
     {
       "theme_code": "CONSTITUTIONAL",
@@ -403,7 +447,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6334851652383804
+      "final_confidence": 0.6334851652383804,
+      "tsne_x": 29.215970993041992,
+      "tsne_y": 49.17242431640625
     },
     {
       "theme_code": "CORRUPTION",
@@ -420,7 +466,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6272714406251907
+      "final_confidence": 0.6272714406251907,
+      "tsne_x": 22.644683837890625,
+      "tsne_y": 73.80207061767578
     },
     {
       "theme_code": "CRIME",
@@ -437,7 +485,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 55.74890899658203,
+      "tsne_y": 43.74879837036133
     },
     {
       "theme_code": "CRISISLEX",
@@ -454,7 +504,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 31.82205581665039,
+      "tsne_y": 17.05487060546875
     },
     {
       "theme_code": "CRM",
@@ -471,7 +523,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 51.33067321777344,
+      "tsne_y": 82.76382446289062
     },
     {
       "theme_code": "CURFEW",
@@ -488,7 +542,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 71.32550048828125,
+      "tsne_y": 37.484275817871094
     },
     {
       "theme_code": "CYBER",
@@ -505,7 +561,9 @@
       "iptc_final_id": "13000000",
       "iptc_final_label": "science and technology",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 39.86274337768555,
+      "tsne_y": 77.77946472167969
     },
     {
       "theme_code": "DEATH",
@@ -522,7 +580,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 59.20287322998047,
+      "tsne_y": 49.63074493408203
     },
     {
       "theme_code": "DEFECTION",
@@ -539,7 +599,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 69.02007293701172,
+      "tsne_y": 72.67467498779297
     },
     {
       "theme_code": "DELAY",
@@ -556,7 +618,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 33.212646484375,
+      "tsne_y": 81.50729370117188
     },
     {
       "theme_code": "DEMOCRACY",
@@ -573,7 +637,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 30.136699676513672,
+      "tsne_y": 34.13507843017578
     },
     {
       "theme_code": "DISABILITY",
@@ -590,7 +656,9 @@
       "iptc_final_id": "07000000",
       "iptc_final_label": "health",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 86.17927551269531,
+      "tsne_y": 48.21355056762695
     },
     {
       "theme_code": "DISASTER",
@@ -607,7 +675,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 17.88865089416504,
+      "tsne_y": 12.41847038269043
     },
     {
       "theme_code": "DISCRIMINATION",
@@ -624,7 +694,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6274810552597045
+      "final_confidence": 0.6274810552597045,
+      "tsne_x": 85.2673110961914,
+      "tsne_y": 42.767635345458984
     },
     {
       "theme_code": "DISPLACED",
@@ -641,7 +713,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 72.73971557617188,
+      "tsne_y": 16.261123657226562
     },
     {
       "theme_code": "DRONES",
@@ -658,7 +732,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 60.0488166809082,
+      "tsne_y": 82.41606903076172
     },
     {
       "theme_code": "DRUG",
@@ -675,7 +751,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 49.679813385009766,
+      "tsne_y": 66.61451721191406
     },
     {
       "theme_code": "ECON",
@@ -692,7 +770,9 @@
       "iptc_final_id": "04000000",
       "iptc_final_label": "economy, business and finance",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 6.651644706726074,
+      "tsne_y": 49.2169075012207
     },
     {
       "theme_code": "EDUCATION",
@@ -709,7 +789,9 @@
       "iptc_final_id": "05000000",
       "iptc_final_label": "education",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 6.9965338706970215,
+      "tsne_y": 30.90245819091797
     },
     {
       "theme_code": "ELECTION",
@@ -726,7 +808,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 30.454702377319336,
+      "tsne_y": 34.74833679199219
     },
     {
       "theme_code": "EMERG",
@@ -743,7 +827,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 47.46282196044922,
+      "tsne_y": 75.91768646240234
     },
     {
       "theme_code": "ENV",
@@ -760,7 +846,9 @@
       "iptc_final_id": "06000000",
       "iptc_final_label": "environment",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 17.57108497619629,
+      "tsne_y": 9.237447738647461
     },
     {
       "theme_code": "EPU",
@@ -777,7 +865,9 @@
       "iptc_final_id": "04000000",
       "iptc_final_label": "economy, business and finance",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 7.0684027671813965,
+      "tsne_y": 52.47758102416992
     },
     {
       "theme_code": "ETH",
@@ -794,7 +884,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 43.91946029663086,
+      "tsne_y": 74.46052551269531
     },
     {
       "theme_code": "EVACUATION",
@@ -811,7 +903,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 71.954833984375,
+      "tsne_y": 53.24348449707031
     },
     {
       "theme_code": "EXHUMATION",
@@ -828,7 +922,9 @@
       "iptc_final_id": "06000000",
       "iptc_final_label": "environment",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 75.06952667236328,
+      "tsne_y": 52.210819244384766
     },
     {
       "theme_code": "EXILE",
@@ -845,7 +941,9 @@
       "iptc_final_id": "10000000",
       "iptc_final_label": "lifestyle and leisure",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 70.73822784423828,
+      "tsne_y": 17.59865951538086
     },
     {
       "theme_code": "EXTREMISM",
@@ -862,7 +960,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 55.26460266113281,
+      "tsne_y": 17.820281982421875
     },
     {
       "theme_code": "FIREARM",
@@ -879,7 +979,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 45.47484588623047,
+      "tsne_y": 42.94319152832031
     },
     {
       "theme_code": "FOOD",
@@ -896,7 +998,9 @@
       "iptc_final_id": "10000000",
       "iptc_final_label": "lifestyle and leisure",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 44.029693603515625,
+      "tsne_y": 59.79661178588867
     },
     {
       "theme_code": "FREESPEECH",
@@ -913,7 +1017,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 58.40024948120117,
+      "tsne_y": 72.17876434326172
     },
     {
       "theme_code": "FUELPRICES",
@@ -930,7 +1036,9 @@
       "iptc_final_id": "04000000",
       "iptc_final_label": "economy, business and finance",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 5.0,
+      "tsne_y": 57.54575729370117
     },
     {
       "theme_code": "GEN",
@@ -947,7 +1055,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 63.35581588745117,
+      "tsne_y": 72.01786041259766
     },
     {
       "theme_code": "GENDER",
@@ -964,7 +1074,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6075738042593002
+      "final_confidence": 0.6075738042593002,
+      "tsne_x": 46.50557327270508,
+      "tsne_y": 51.700923919677734
     },
     {
       "theme_code": "GENERAL",
@@ -981,7 +1093,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "ambiguous",
-      "final_confidence": 0.64478440284729
+      "final_confidence": 0.64478440284729,
+      "tsne_x": 17.19069480895996,
+      "tsne_y": 36.706886291503906
     },
     {
       "theme_code": "GENTRIFICATION",
@@ -998,7 +1112,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 22.44740104675293,
+      "tsne_y": 63.805965423583984
     },
     {
       "theme_code": "GOV",
@@ -1015,7 +1131,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 34.145423889160156,
+      "tsne_y": 54.78942108154297
     },
     {
       "theme_code": "GRIEVANCES",
@@ -1032,7 +1150,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 69.14340209960938,
+      "tsne_y": 39.76248550415039
     },
     {
       "theme_code": "HARASSMENT",
@@ -1049,7 +1169,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 84.98800659179688,
+      "tsne_y": 34.95948028564453
     },
     {
       "theme_code": "HATE",
@@ -1066,7 +1188,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 56.406742095947266,
+      "tsne_y": 55.60997772216797
     },
     {
       "theme_code": "HEALTH",
@@ -1083,7 +1207,9 @@
       "iptc_final_id": "07000000",
       "iptc_final_label": "health",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 9.209949493408203,
+      "tsne_y": 25.660417556762695
     },
     {
       "theme_code": "HUMAN",
@@ -1100,7 +1226,9 @@
       "iptc_final_id": "08000000",
       "iptc_final_label": "human interest",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 48.78483200073242,
+      "tsne_y": 56.770877838134766
     },
     {
       "theme_code": "IDEOLOGY",
@@ -1117,7 +1245,9 @@
       "iptc_final_id": "12000000",
       "iptc_final_label": "religion",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 52.79126739501953,
+      "tsne_y": 9.991308212280273
     },
     {
       "theme_code": "IMMIGRATION",
@@ -1134,7 +1264,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6063954651355743
+      "final_confidence": 0.6063954651355743,
+      "tsne_x": 76.1800765991211,
+      "tsne_y": 61.25048065185547
     },
     {
       "theme_code": "IMPEACHMENT",
@@ -1151,7 +1283,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 64.87179565429688,
+      "tsne_y": 25.860652923583984
     },
     {
       "theme_code": "INCOME",
@@ -1168,7 +1302,9 @@
       "iptc_final_id": "04000000",
       "iptc_final_label": "economy, business and finance",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 11.52563762664795,
+      "tsne_y": 58.01406478881836
     },
     {
       "theme_code": "INEQUALITY",
@@ -1185,7 +1321,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 67.59619903564453,
+      "tsne_y": 64.81112670898438
     },
     {
       "theme_code": "INFO",
@@ -1202,7 +1340,9 @@
       "iptc_final_id": "01000000",
       "iptc_final_label": "arts, culture, entertainment and media",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 63.977413177490234,
+      "tsne_y": 65.84077453613281
     },
     {
       "theme_code": "INFRASTRUCTURE",
@@ -1219,7 +1359,9 @@
       "iptc_final_id": "05000000",
       "iptc_final_label": "education",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 34.16002655029297,
+      "tsne_y": 67.99810791015625
     },
     {
       "theme_code": "INSURGENCY",
@@ -1236,7 +1378,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 48.7342414855957,
+      "tsne_y": 20.963712692260742
     },
     {
       "theme_code": "INTERNET",
@@ -1253,7 +1397,9 @@
       "iptc_final_id": "13000000",
       "iptc_final_label": "science and technology",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 40.006412506103516,
+      "tsne_y": 73.78386688232422
     },
     {
       "theme_code": "JIHAD",
@@ -1270,7 +1416,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 52.9044075012207,
+      "tsne_y": 17.74469566345215
     },
     {
       "theme_code": "JUSTICE",
@@ -1287,7 +1435,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 60.897132873535156,
+      "tsne_y": 42.74665069580078
     },
     {
       "theme_code": "KIDNAP",
@@ -1304,7 +1454,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 55.193702697753906,
+      "tsne_y": 35.39954376220703
     },
     {
       "theme_code": "KILL",
@@ -1321,7 +1473,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 36.39476013183594,
+      "tsne_y": 18.4774169921875
     },
     {
       "theme_code": "LANDMINE",
@@ -1338,7 +1492,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 58.44184112548828,
+      "tsne_y": 79.04861450195312
     },
     {
       "theme_code": "LEADER",
@@ -1355,7 +1511,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 32.45736312866211,
+      "tsne_y": 33.516883850097656
     },
     {
       "theme_code": "LEG",
@@ -1372,7 +1530,9 @@
       "iptc_final_id": "15000000",
       "iptc_final_label": "sport",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 51.87950134277344,
+      "tsne_y": 61.179927825927734
     },
     {
       "theme_code": "LEGALIZE",
@@ -1389,7 +1549,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 29.814653396606445,
+      "tsne_y": 43.57340621948242
     },
     {
       "theme_code": "LEGISLATION",
@@ -1406,7 +1568,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 30.85215187072754,
+      "tsne_y": 43.99910354614258
     },
     {
       "theme_code": "LGBT",
@@ -1423,7 +1587,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6121199697256088
+      "final_confidence": 0.6121199697256088,
+      "tsne_x": 46.553070068359375,
+      "tsne_y": 50.919105529785156
     },
     {
       "theme_code": "LITERACY",
@@ -1440,7 +1606,9 @@
       "iptc_final_id": "05000000",
       "iptc_final_label": "education",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 14.868141174316406,
+      "tsne_y": 67.60054016113281
     },
     {
       "theme_code": "LOCUSTS",
@@ -1457,7 +1625,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 62.9868278503418,
+      "tsne_y": 79.21881103515625
     },
     {
       "theme_code": "MANMADE",
@@ -1474,7 +1644,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 15.666398048400879,
+      "tsne_y": 12.527021408081055
     },
     {
       "theme_code": "MARITIME",
@@ -1491,7 +1663,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 66.12577056884766,
+      "tsne_y": 86.74490356445312
     },
     {
       "theme_code": "MED",
@@ -1508,7 +1682,9 @@
       "iptc_final_id": "07000000",
       "iptc_final_label": "health",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 50.12678527832031,
+      "tsne_y": 68.27301788330078
     },
     {
       "theme_code": "MEDIA",
@@ -1525,7 +1701,9 @@
       "iptc_final_id": "01000000",
       "iptc_final_label": "arts, culture, entertainment and media",
       "decision_source": "nn_override",
-      "final_confidence": 0.6895816326141357
+      "final_confidence": 0.6895816326141357,
+      "tsne_x": 19.607580184936523,
+      "tsne_y": 26.14923095703125
     },
     {
       "theme_code": "MEDICAL",
@@ -1542,7 +1720,9 @@
       "iptc_final_id": "07000000",
       "iptc_final_label": "health",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 8.514531135559082,
+      "tsne_y": 26.29777717590332
     },
     {
       "theme_code": "MIL",
@@ -1559,7 +1739,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 59.622196197509766,
+      "tsne_y": 60.889556884765625
     },
     {
       "theme_code": "MILITARY",
@@ -1576,7 +1758,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 34.976409912109375,
+      "tsne_y": 15.264464378356934
     },
     {
       "theme_code": "MOVEMENT",
@@ -1593,7 +1777,9 @@
       "iptc_final_id": "10000000",
       "iptc_final_label": "lifestyle and leisure",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 68.28684997558594,
+      "tsne_y": 49.20205307006836
     },
     {
       "theme_code": "NATURAL",
@@ -1610,7 +1796,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 16.92584991455078,
+      "tsne_y": 11.667530059814453
     },
     {
       "theme_code": "NEGOTIATIONS",
@@ -1627,7 +1815,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 41.91594696044922,
+      "tsne_y": 28.01559066772461
     },
     {
       "theme_code": "NEW",
@@ -1644,7 +1834,9 @@
       "iptc_final_id": "13000000",
       "iptc_final_label": "science and technology",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 59.65841293334961,
+      "tsne_y": 68.27149963378906
     },
     {
       "theme_code": "ORGANIZED",
@@ -1661,7 +1853,9 @@
       "iptc_final_id": "15000000",
       "iptc_final_label": "sport",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 29.41071891784668,
+      "tsne_y": 58.586875915527344
     },
     {
       "theme_code": "PEACEKEEPING",
@@ -1678,7 +1872,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 42.60411834716797,
+      "tsne_y": 16.043651580810547
     },
     {
       "theme_code": "PERSECUTION",
@@ -1695,7 +1891,9 @@
       "iptc_final_id": "12000000",
       "iptc_final_label": "religion",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 62.10529708862305,
+      "tsne_y": 16.131216049194336
     },
     {
       "theme_code": "PHONE",
@@ -1712,7 +1910,9 @@
       "iptc_final_id": "13000000",
       "iptc_final_label": "science and technology",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 46.86558151245117,
+      "tsne_y": 62.06581115722656
     },
     {
       "theme_code": "PIPELINE",
@@ -1729,7 +1929,9 @@
       "iptc_final_id": "13000000",
       "iptc_final_label": "science and technology",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 42.89565658569336,
+      "tsne_y": 94.99999237060547
     },
     {
       "theme_code": "PIRACY",
@@ -1746,7 +1948,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 80.76095581054688,
+      "tsne_y": 69.71847534179688
     },
     {
       "theme_code": "POL",
@@ -1763,7 +1967,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 37.019657135009766,
+      "tsne_y": 38.594154357910156
     },
     {
       "theme_code": "POLITICAL",
@@ -1780,7 +1986,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 34.97112274169922,
+      "tsne_y": 36.89300537109375
     },
     {
       "theme_code": "POPULATION",
@@ -1797,7 +2005,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 73.14259338378906,
+      "tsne_y": 79.66731262207031
     },
     {
       "theme_code": "POVERTY",
@@ -1814,7 +2024,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 15.72270393371582,
+      "tsne_y": 61.0133056640625
     },
     {
       "theme_code": "POWER",
@@ -1831,7 +2043,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 40.60369110107422,
+      "tsne_y": 53.942684173583984
     },
     {
       "theme_code": "PRIVATIZATION",
@@ -1848,7 +2062,9 @@
       "iptc_final_id": "04000000",
       "iptc_final_label": "economy, business and finance",
       "decision_source": "ambiguous",
-      "final_confidence": 0.626786407828331
+      "final_confidence": 0.626786407828331,
+      "tsne_x": 20.489208221435547,
+      "tsne_y": 56.41835403442383
     },
     {
       "theme_code": "PROPAGANDA",
@@ -1865,7 +2081,9 @@
       "iptc_final_id": "01000000",
       "iptc_final_label": "arts, culture, entertainment and media",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6011022597551345
+      "final_confidence": 0.6011022597551345,
+      "tsne_x": 52.40393829345703,
+      "tsne_y": 10.504916191101074
     },
     {
       "theme_code": "PROPERTY",
@@ -1882,7 +2100,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 39.738616943359375,
+      "tsne_y": 51.55097961425781
     },
     {
       "theme_code": "PROTEST",
@@ -1899,7 +2119,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 69.45610046386719,
+      "tsne_y": 44.88332748413086
     },
     {
       "theme_code": "PUBLIC",
@@ -1916,7 +2138,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 33.23051834106445,
+      "tsne_y": 61.808685302734375
     },
     {
       "theme_code": "RAIL",
@@ -1933,7 +2157,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 45.23032760620117,
+      "tsne_y": 93.79004669189453
     },
     {
       "theme_code": "RAPE",
@@ -1950,7 +2176,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 56.991817474365234,
+      "tsne_y": 44.11049270629883
     },
     {
       "theme_code": "RATIFY",
@@ -1967,7 +2195,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.8
+      "final_confidence": 0.8,
+      "tsne_x": 54.67525100708008,
+      "tsne_y": 75.4345703125
     },
     {
       "theme_code": "REBELLION",
@@ -1984,7 +2214,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 51.62900161743164,
+      "tsne_y": 24.88631248474121
     },
     {
       "theme_code": "REBELS",
@@ -2001,7 +2233,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 50.190940856933594,
+      "tsne_y": 24.907230377197266
     },
     {
       "theme_code": "RECRUITMENT",
@@ -2018,7 +2252,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 78.32040405273438,
+      "tsne_y": 82.32684326171875
     },
     {
       "theme_code": "REFUGEES",
@@ -2035,7 +2271,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 75.98041534423828,
+      "tsne_y": 59.223785400390625
     },
     {
       "theme_code": "REL",
@@ -2052,7 +2290,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 49.33359146118164,
+      "tsne_y": 83.5935287475586
     },
     {
       "theme_code": "RELATIONS",
@@ -2069,7 +2309,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 40.48044967651367,
+      "tsne_y": 46.72119903564453
     },
     {
       "theme_code": "RELEASE",
@@ -2086,7 +2328,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 62.312137603759766,
+      "tsne_y": 67.82146453857422
     },
     {
       "theme_code": "RELIGION",
@@ -2103,7 +2347,9 @@
       "iptc_final_id": "12000000",
       "iptc_final_label": "religion",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 17.933826446533203,
+      "tsne_y": 26.291181564331055
     },
     {
       "theme_code": "RESIGNATION",
@@ -2120,7 +2366,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 75.46171569824219,
+      "tsne_y": 21.57404899597168
     },
     {
       "theme_code": "RETALIATE",
@@ -2137,7 +2385,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 48.18809509277344,
+      "tsne_y": 85.0542221069336
     },
     {
       "theme_code": "RETIREMENT",
@@ -2154,7 +2404,9 @@
       "iptc_final_id": "10000000",
       "iptc_final_label": "lifestyle and leisure",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 94.9690170288086,
+      "tsne_y": 56.63685989379883
     },
     {
       "theme_code": "RETIREMENTS",
@@ -2171,7 +2423,9 @@
       "iptc_final_id": "10000000",
       "iptc_final_label": "lifestyle and leisure",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 95.0,
+      "tsne_y": 56.67938995361328
     },
     {
       "theme_code": "ROAD",
@@ -2188,7 +2442,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 41.954864501953125,
+      "tsne_y": 65.76460266113281
     },
     {
       "theme_code": "RURAL",
@@ -2205,7 +2461,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 15.770767211914062,
+      "tsne_y": 63.688716888427734
     },
     {
       "theme_code": "SANCTIONS",
@@ -2222,7 +2480,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 42.326351165771484,
+      "tsne_y": 32.85194778442383
     },
     {
       "theme_code": "SANITATION",
@@ -2239,7 +2499,9 @@
       "iptc_final_id": "07000000",
       "iptc_final_label": "health",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6220647811889648
+      "final_confidence": 0.6220647811889648,
+      "tsne_x": 26.65682601928711,
+      "tsne_y": 67.08514404296875
     },
     {
       "theme_code": "SCANDAL",
@@ -2256,7 +2518,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 22.339475631713867,
+      "tsne_y": 74.50301361083984
     },
     {
       "theme_code": "SCIENCE",
@@ -2273,7 +2537,9 @@
       "iptc_final_id": "13000000",
       "iptc_final_label": "science and technology",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 7.142395973205566,
+      "tsne_y": 30.759035110473633
     },
     {
       "theme_code": "SECURITY",
@@ -2290,7 +2556,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 34.951927185058594,
+      "tsne_y": 12.118370056152344
     },
     {
       "theme_code": "SEIGE",
@@ -2307,7 +2575,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 55.021461486816406,
+      "tsne_y": 92.0669937133789
     },
     {
       "theme_code": "SEIZE",
@@ -2324,7 +2594,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 56.96000671386719,
+      "tsne_y": 36.128028869628906
     },
     {
       "theme_code": "SELF",
@@ -2341,7 +2613,9 @@
       "iptc_final_id": "08000000",
       "iptc_final_label": "human interest",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 50.49474334716797,
+      "tsne_y": 54.70741653442383
     },
     {
       "theme_code": "SEPARATISTS",
@@ -2358,7 +2632,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6098965227603912
+      "final_confidence": 0.6098965227603912,
+      "tsne_x": 24.434436798095703,
+      "tsne_y": 51.545066833496094
     },
     {
       "theme_code": "SHORTAGE",
@@ -2375,7 +2651,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 78.61944580078125,
+      "tsne_y": 82.72039794921875
     },
     {
       "theme_code": "SICKENED",
@@ -2392,7 +2670,9 @@
       "iptc_final_id": "07000000",
       "iptc_final_label": "health",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 53.03350067138672,
+      "tsne_y": 70.47267150878906
     },
     {
       "theme_code": "SLFID",
@@ -2409,7 +2689,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 64.61480712890625,
+      "tsne_y": 57.63652801513672
     },
     {
       "theme_code": "SLUMS",
@@ -2426,7 +2708,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 64.53054809570312,
+      "tsne_y": 56.89231491088867
     },
     {
       "theme_code": "SMUGGLING",
@@ -2443,7 +2727,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 79.68343353271484,
+      "tsne_y": 69.03711700439453
     },
     {
       "theme_code": "SOC",
@@ -2460,7 +2746,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 25.382463455200195,
+      "tsne_y": 22.462142944335938
     },
     {
       "theme_code": "SOVEREIGNTY",
@@ -2477,7 +2765,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 27.149124145507812,
+      "tsne_y": 49.168521881103516
     },
     {
       "theme_code": "STATE",
@@ -2494,7 +2784,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 36.810462951660156,
+      "tsne_y": 57.62897872924805
     },
     {
       "theme_code": "STRIKE",
@@ -2511,7 +2803,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 72.41177368164062,
+      "tsne_y": 44.58909225463867
     },
     {
       "theme_code": "SUICIDE",
@@ -2528,7 +2822,9 @@
       "iptc_final_id": "07000000",
       "iptc_final_label": "health",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 58.738548278808594,
+      "tsne_y": 50.746498107910156
     },
     {
       "theme_code": "SURVEILLANCE",
@@ -2545,7 +2841,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 49.97931671142578,
+      "tsne_y": 35.74458312988281
     },
     {
       "theme_code": "TAKE",
@@ -2562,7 +2860,9 @@
       "iptc_final_id": "15000000",
       "iptc_final_label": "sport",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 53.69733810424805,
+      "tsne_y": 50.717506408691406
     },
     {
       "theme_code": "TAX",
@@ -2579,7 +2879,9 @@
       "iptc_final_id": "04000000",
       "iptc_final_label": "economy, business and finance",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 10.195969581604004,
+      "tsne_y": 54.5666389465332
     },
     {
       "theme_code": "TECH",
@@ -2596,7 +2898,9 @@
       "iptc_final_id": "13000000",
       "iptc_final_label": "science and technology",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 40.247161865234375,
+      "tsne_y": 80.07471466064453
     },
     {
       "theme_code": "TERROR",
@@ -2613,7 +2917,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 31.954370498657227,
+      "tsne_y": 14.798487663269043
     },
     {
       "theme_code": "TORTURE",
@@ -2630,7 +2936,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 61.747520446777344,
+      "tsne_y": 33.886817932128906
     },
     {
       "theme_code": "TOURISM",
@@ -2647,7 +2955,9 @@
       "iptc_final_id": "10000000",
       "iptc_final_label": "lifestyle and leisure",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 16.872394561767578,
+      "tsne_y": 26.514236450195312
     },
     {
       "theme_code": "TRAFFIC",
@@ -2664,7 +2974,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 38.71536636352539,
+      "tsne_y": 70.33228302001953
     },
     {
       "theme_code": "TRANSPARENCY",
@@ -2681,7 +2993,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 31.72333335876465,
+      "tsne_y": 75.75245666503906
     },
     {
       "theme_code": "TREASON",
@@ -2698,7 +3012,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 65.27772521972656,
+      "tsne_y": 24.084569931030273
     },
     {
       "theme_code": "TRIAL",
@@ -2715,7 +3031,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 62.242557525634766,
+      "tsne_y": 41.175289154052734
     },
     {
       "theme_code": "UNEMPLOYMENT",
@@ -2732,7 +3050,9 @@
       "iptc_final_id": "09000000",
       "iptc_final_label": "labour",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 77.30711364746094,
+      "tsne_y": 45.20399856567383
     },
     {
       "theme_code": "UNGOVERNED",
@@ -2749,7 +3069,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 31.451013565063477,
+      "tsne_y": 52.545867919921875
     },
     {
       "theme_code": "UNGP",
@@ -2766,7 +3088,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 21.506380081176758,
+      "tsne_y": 43.45553207397461
     },
     {
       "theme_code": "UNREST",
@@ -2783,7 +3107,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 56.919044494628906,
+      "tsne_y": 21.316722869873047
     },
     {
       "theme_code": "UNSAFE",
@@ -2800,7 +3126,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 50.12977981567383,
+      "tsne_y": 44.82390213012695
     },
     {
       "theme_code": "URBAN",
@@ -2817,7 +3145,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "ambiguous",
-      "final_confidence": 0.6273130893707275
+      "final_confidence": 0.6273130893707275,
+      "tsne_x": 40.74677658081055,
+      "tsne_y": 64.47756958007812
     },
     {
       "theme_code": "USPEC",
@@ -2834,7 +3164,9 @@
       "iptc_final_id": "14000000",
       "iptc_final_label": "society",
       "decision_source": "rule_preferred",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 17.618946075439453,
+      "tsne_y": 38.109195709228516
     },
     {
       "theme_code": "VANDALIZE",
@@ -2851,7 +3183,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 82.32518768310547,
+      "tsne_y": 32.10171890258789
     },
     {
       "theme_code": "VETO",
@@ -2868,7 +3202,9 @@
       "iptc_final_id": "11000000",
       "iptc_final_label": "politics and government",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 68.42728424072266,
+      "tsne_y": 28.201339721679688
     },
     {
       "theme_code": "VIOLENT",
@@ -2885,7 +3221,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 51.92919158935547,
+      "tsne_y": 44.38201141357422
     },
     {
       "theme_code": "WATER",
@@ -2902,7 +3240,9 @@
       "iptc_final_id": "06000000",
       "iptc_final_label": "environment",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 45.45332336425781,
+      "tsne_y": 63.27606964111328
     },
     {
       "theme_code": "WB",
@@ -2919,7 +3259,9 @@
       "iptc_final_id": "04000000",
       "iptc_final_label": "economy, business and finance",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 6.331471920013428,
+      "tsne_y": 47.66714859008789
     },
     {
       "theme_code": "WHISTLEBLOWER",
@@ -2936,7 +3278,9 @@
       "iptc_final_id": "02000000",
       "iptc_final_label": "crime, law and justice",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 81.63263702392578,
+      "tsne_y": 38.33702850341797
     },
     {
       "theme_code": "WMD",
@@ -2953,7 +3297,9 @@
       "iptc_final_id": "16000000",
       "iptc_final_label": "conflict, war and peace",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 60.74993896484375,
+      "tsne_y": 27.197717666625977
     },
     {
       "theme_code": "WOUND",
@@ -2970,7 +3316,9 @@
       "iptc_final_id": "03000000",
       "iptc_final_label": "disaster, accident and emergency incident",
       "decision_source": "agreement",
-      "final_confidence": 0.9
+      "final_confidence": 0.9,
+      "tsne_x": 53.54692840576172,
+      "tsne_y": 62.95268249511719
     }
   ],
   "iptc_categories": {

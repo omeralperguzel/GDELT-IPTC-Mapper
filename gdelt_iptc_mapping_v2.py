@@ -22,6 +22,8 @@ from datetime import datetime
 try:
     from sentence_transformers import SentenceTransformer
     from sklearn.metrics.pairwise import cosine_similarity
+    from sklearn.manifold import TSNE
+    from sklearn.decomposition import PCA
     import torch
     TRANSFORMERS_AVAILABLE = True
 except ImportError:
@@ -222,6 +224,63 @@ def find_nearest_iptc(theme_emb: np.ndarray, iptc_emb: np.ndarray, categories: l
     
     return results
 
+
+def compute_2d_projection(embeddings: np.ndarray, method: str = 'tsne') -> np.ndarray:
+    """
+    Compute 2D projection of embeddings using t-SNE or PCA.
+    
+    Args:
+        embeddings: High-dimensional embeddings (N x D)
+        method: 'tsne' or 'pca'
+    
+    Returns:
+        2D coordinates (N x 2)
+    """
+    n_samples = len(embeddings)
+    
+    if n_samples < 5:
+        print(f"  [!] Too few samples ({n_samples}) for dimensionality reduction")
+        return np.random.randn(n_samples, 2) * 10
+    
+    if method == 'tsne':
+        # t-SNE parameters optimized for theme clustering visualization
+        perplexity = min(30, n_samples - 1)  # perplexity must be < n_samples
+        print(f"  Running t-SNE (perplexity={perplexity})...")
+        
+        # First reduce with PCA if high dimensional (faster t-SNE)
+        if embeddings.shape[1] > 50:
+            n_pca = min(50, n_samples - 1)
+            pca = PCA(n_components=n_pca, random_state=42)
+            embeddings_reduced = pca.fit_transform(embeddings)
+            print(f"  PCA pre-reduction: {embeddings.shape[1]} -> {n_pca} dims")
+        else:
+            embeddings_reduced = embeddings
+        
+        tsne = TSNE(
+            n_components=2,
+            perplexity=perplexity,
+            learning_rate='auto',
+            init='pca' if n_samples > 50 else 'random',
+            random_state=42,
+            max_iter=1000
+        )
+        coords_2d = tsne.fit_transform(embeddings_reduced)
+        
+    else:  # PCA
+        print("  Running PCA...")
+        pca = PCA(n_components=2, random_state=42)
+        coords_2d = pca.fit_transform(embeddings)
+    
+    # Normalize to 0-100 range for visualization
+    coords_min = coords_2d.min(axis=0)
+    coords_max = coords_2d.max(axis=0)
+    coords_range = coords_max - coords_min
+    coords_range[coords_range == 0] = 1  # Avoid division by zero
+    
+    coords_normalized = 5 + 90 * (coords_2d - coords_min) / coords_range  # 5-95 range
+    
+    return coords_normalized
+
 # ============================================================================
 # FUSION: COMBINE RULE-BASED AND EMBEDDING-BASED
 # ============================================================================
@@ -347,6 +406,15 @@ def run_full_mapping(output_dir: str = ".") -> dict:
         nn_list = find_nearest_iptc(theme_embeddings, iptc_embeddings, IPTC_CATEGORIES)
         
         nn_results = {theme: nn_list[i] for i, theme in enumerate(theme_list)}
+        
+        # Compute 2D projections for visualization
+        print("\n[*] Computing 2D projections for visualization...")
+        coords_2d = compute_2d_projection(theme_embeddings, method='tsne')
+        
+        # Store coordinates in nn_results
+        for i, theme in enumerate(theme_list):
+            nn_results[theme]['tsne_x'] = float(coords_2d[i, 0])
+            nn_results[theme]['tsne_y'] = float(coords_2d[i, 1])
     
     # FUSION
     print("\n[*] Fusion: Combining rule-based and embedding results...")
@@ -381,7 +449,10 @@ def run_full_mapping(output_dir: str = ".") -> dict:
             'iptc_final_id': final_id,
             'iptc_final_label': get_iptc_label(final_id) if final_id else '',
             'decision_source': decision,
-            'final_confidence': confidence
+            'final_confidence': confidence,
+            # 2D coordinates for visualization
+            'tsne_x': nn_data.get('tsne_x', 50 + np.random.randn() * 10),
+            'tsne_y': nn_data.get('tsne_y', 50 + np.random.randn() * 10)
         }
         final_results.append(result)
     

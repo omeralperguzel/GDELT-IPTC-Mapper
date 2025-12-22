@@ -35,6 +35,7 @@ try:
     from sklearn.metrics.pairwise import cosine_similarity
     from sklearn.decomposition import PCA
     from sklearn.cluster import AgglomerativeClustering
+    from sklearn.manifold import TSNE
     HAS_SKLEARN = True
 except ImportError:
     HAS_SKLEARN = False
@@ -313,6 +314,77 @@ def cluster_themes(
     return themes
 
 
+def compute_2d_projection(
+    theme_embeddings: np.ndarray,
+    themes: pd.DataFrame,
+    method: str = 'tsne'
+) -> pd.DataFrame:
+    """
+    Compute 2D projection of theme embeddings for visualization.
+    
+    Args:
+        theme_embeddings: High-dimensional embeddings (N x D)
+        themes: DataFrame with theme information
+        method: 'tsne' or 'pca'
+    
+    Returns:
+        themes DataFrame with tsne_x, tsne_y columns added
+    """
+    if not HAS_SKLEARN:
+        themes['tsne_x'] = np.random.randn(len(themes)) * 10 + 50
+        themes['tsne_y'] = np.random.randn(len(themes)) * 10 + 50
+        return themes
+    
+    n_samples = len(themes)
+    print(f"[*] Computing 2D {method.upper()} projection for {n_samples} themes...")
+    
+    if n_samples < 5:
+        themes['tsne_x'] = np.random.randn(n_samples) * 10 + 50
+        themes['tsne_y'] = np.random.randn(n_samples) * 10 + 50
+        return themes
+    
+    if method == 'tsne':
+        # t-SNE with optimized parameters
+        perplexity = min(30, n_samples - 1)
+        
+        # PCA pre-reduction for faster t-SNE
+        if theme_embeddings.shape[1] > 50:
+            n_pca = min(50, n_samples - 1)
+            pca = PCA(n_components=n_pca, random_state=42)
+            embeddings_reduced = pca.fit_transform(theme_embeddings)
+            print(f"   PCA pre-reduction: {theme_embeddings.shape[1]} -> {n_pca} dims")
+        else:
+            embeddings_reduced = theme_embeddings
+        
+        tsne = TSNE(
+            n_components=2,
+            perplexity=perplexity,
+            learning_rate='auto',
+            init='pca' if n_samples > 50 else 'random',
+            random_state=42,
+            max_iter=1000
+        )
+        coords_2d = tsne.fit_transform(embeddings_reduced)
+    else:
+        pca = PCA(n_components=2, random_state=42)
+        coords_2d = pca.fit_transform(theme_embeddings)
+    
+    # Normalize to 0-100 range
+    coords_min = coords_2d.min(axis=0)
+    coords_max = coords_2d.max(axis=0)
+    coords_range = coords_max - coords_min
+    coords_range[coords_range == 0] = 1
+    
+    coords_normalized = 5 + 90 * (coords_2d - coords_min) / coords_range
+    
+    themes['tsne_x'] = coords_normalized[:, 0]
+    themes['tsne_y'] = coords_normalized[:, 1]
+    
+    print(f"   2D projection complete. Range: x=[{coords_normalized[:,0].min():.1f}, {coords_normalized[:,0].max():.1f}], y=[{coords_normalized[:,1].min():.1f}, {coords_normalized[:,1].max():.1f}]")
+    
+    return themes
+
+
 # ============================================================================
 # ANALYSIS & EXPORT
 # ============================================================================
@@ -390,7 +462,10 @@ def export_results(themes: pd.DataFrame, iptc: pd.DataFrame, output_dir: Path):
             'iptc_label_2nd': row['iptc_label_2nd'],
             'similarity_2nd': clean_value(row['similarity_2nd']),
             'confidence': clean_value(row['confidence']),
-            'cluster_id': clean_value(row.get('cluster_id', 0))
+            'cluster_id': clean_value(row.get('cluster_id', 0)),
+            # 2D coordinates for visualization
+            'tsne_x': clean_value(row.get('tsne_x', 50)),
+            'tsne_y': clean_value(row.get('tsne_y', 50))
         })
     
     # Build final JSON
@@ -474,6 +549,10 @@ def run_iptc_mapping_pipeline(data_dir: Path = None) -> dict:
     print("\n[7/8] Additional clustering...")
     n_clusters = min(8, len(themes))
     themes = cluster_themes(theme_embeddings, themes, n_clusters=n_clusters)
+    
+    # Step 7b: Compute 2D projection for visualization
+    print("\n[7b/8] Computing 2D projection for visualization...")
+    themes = compute_2d_projection(theme_embeddings, themes, method='tsne')
     
     # Step 8: Export results
     print("\n[8/8] Exporting results...")

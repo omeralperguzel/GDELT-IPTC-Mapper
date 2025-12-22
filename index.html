@@ -2682,16 +2682,21 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             showStatus('✅ Kümeleme grafikleri oluşturuldu!', 'success');
         }
         
-        // t-SNE 2D Scatter Plot (simüle)
+        // t-SNE 2D Scatter Plot (Gerçek koordinatlar JSON'dan okunur)
         function createTSNEScatterChart() {
             const canvas = document.getElementById('tsne-scatter-chart');
             if (!canvas) return;
             
             const ctx = canvas.getContext('2d');
             
-            // Her IPTC kategorisi için renk ve koordinat oluştur
+            // Her IPTC kategorisi için temaları grupla
             const datasets = [];
             const categoryThemes = {};
+            
+            // Gerçek t-SNE koordinatları var mı kontrol et
+            const hasRealCoords = iptcMappingResults.themes.some(t => 
+                typeof t.tsne_x === 'number' && typeof t.tsne_y === 'number'
+            );
             
             iptcMappingResults.themes.forEach(theme => {
                 const cat = theme.iptc_final_label || theme.iptc_label || 'Diğer';
@@ -2702,15 +2707,28 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             // Her kategori için scatter data oluştur
             Object.entries(categoryThemes).forEach(([cat, themes]) => {
                 const color = iptcColors[cat] || '#999';
-                // Simüle edilmiş t-SNE koordinatları (benzerlik skoruna göre)
-                const centerX = Math.random() * 80 + 10;
-                const centerY = Math.random() * 80 + 10;
                 
-                const data = themes.slice(0, 20).map((theme, idx) => ({
-                    x: centerX + (Math.random() - 0.5) * 30,
-                    y: centerY + (Math.random() - 0.5) * 30,
-                    label: theme.theme_code
-                }));
+                // Gerçek t-SNE koordinatlarını kullan (JSON'dan)
+                const data = themes.map(theme => {
+                    // tsne_x ve tsne_y Python tarafından hesaplanmış koordinatlar
+                    let x = theme.tsne_x;
+                    let y = theme.tsne_y;
+                    
+                    // Koordinat yoksa veya geçersizse fallback (eski veriler için)
+                    if (typeof x !== 'number' || typeof y !== 'number' || isNaN(x) || isNaN(y)) {
+                        // Benzerlik skoruna dayalı fallback (gerçek olmayan)
+                        const sim = theme.nn_score || theme.similarity || 0.5;
+                        x = 50 + (Math.random() - 0.5) * 60;
+                        y = sim * 80 + 10 + (Math.random() - 0.5) * 20;
+                    }
+                    
+                    return {
+                        x: x,
+                        y: y,
+                        label: theme.theme_code,
+                        similarity: theme.nn_score || theme.similarity || 0
+                    };
+                });
                 
                 datasets.push({
                     label: cat.split(',')[0],
@@ -2718,10 +2736,27 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                     backgroundColor: color + 'BB',
                     borderColor: color,
                     borderWidth: 1,
-                    pointRadius: 6,
+                    pointRadius: 5,
                     pointHoverRadius: 8
                 });
             });
+            
+            // Koordinat aralığını hesapla (gerçek koordinatlar için)
+            let minX = 0, maxX = 100, minY = 0, maxY = 100;
+            if (hasRealCoords) {
+                const allX = iptcMappingResults.themes.map(t => t.tsne_x).filter(v => typeof v === 'number');
+                const allY = iptcMappingResults.themes.map(t => t.tsne_y).filter(v => typeof v === 'number');
+                if (allX.length > 0 && allY.length > 0) {
+                    minX = Math.floor(Math.min(...allX) - 2);
+                    maxX = Math.ceil(Math.max(...allX) + 2);
+                    minY = Math.floor(Math.min(...allY) - 2);
+                    maxY = Math.ceil(Math.max(...allY) + 2);
+                }
+            }
+            
+            const chartTitle = hasRealCoords 
+                ? 't-SNE 2D Tema Dağılımı (IPTC Kategorilerine Göre)'
+                : 'Tema Dağılımı (Simüle - Python\'da t-SNE çalıştırın)';
             
             const chart = new Chart(ctx, {
                 type: 'scatter',
@@ -2732,25 +2767,35 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Tema Dağılımı (IPTC Kategorilerine Göre)',
-                            font: { size: 14 }
+                            text: chartTitle,
+                            font: { size: 14 },
+                            color: hasRealCoords ? '#333' : '#FF9800'
                         },
                         legend: {
                             display: true,
                             position: 'right',
-                            labels: { boxWidth: 12, font: { size: 10 } }
+                            labels: { boxWidth: 12, font: { size: 9 } }
                         },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return context.raw.label || context.dataset.label;
+                                    const data = context.raw;
+                                    return `${data.label} (sim: ${(data.similarity * 100).toFixed(0)}%)`;
                                 }
                             }
                         }
                     },
                     scales: {
-                        x: { title: { display: true, text: 'Boyut 1' }, min: 0, max: 100 },
-                        y: { title: { display: true, text: 'Boyut 2' }, min: 0, max: 100 }
+                        x: { 
+                            title: { display: true, text: 't-SNE Boyut 1' }, 
+                            min: minX, 
+                            max: maxX 
+                        },
+                        y: { 
+                            title: { display: true, text: 't-SNE Boyut 2' }, 
+                            min: minY, 
+                            max: maxY 
+                        }
                     }
                 }
             });
