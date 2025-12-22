@@ -11,10 +11,11 @@ This script performs comprehensive GDELT theme analysis for 6 countries:
 - LO (Laos)
 - SA (Saudi Arabia)
 
-Data Sources:
-- bquxjob_645c6baa_19b43fe1bcd.csv: Total docs per country-theme (2022-2024)
-- bquxjob_4750d984_19b43fefa20.csv: Monthly quality metrics
-- bquxjob_5c135702_19b43f3f270.csv: Monthly detail data
+Data Sources (Unified Approach):
+- gdelt_monthly_docs_per_theme_country_2022_2024.csv: Monthly document counts by theme and country (primary source)
+- Total docs and quality metrics are computed from monthly detail to ensure consistency
+- Optional: gdelt_theme_trend_analysis_2022_2024.csv (trend analysis for enhanced decisions)
+- Original BigQuery exports: gdelt_top15_themes_by_country_2022_2024.csv (top 15 per country)
 
 Author: CMPE490 Project
 Date: 2024
@@ -102,30 +103,95 @@ def get_theme_type(theme_code: str) -> str:
     return 'other'
 
 
+def compute_total_from_monthly(monthly_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Compute total_docs per country-theme from monthly detail data.
+    This replaces the separate total_docs CSV.
+    """
+    if monthly_df is None:
+        return None
+    
+    total_docs = (
+        monthly_df
+        .groupby(['country', 'theme_code'])['n_docs']
+        .sum()
+        .reset_index()
+        .rename(columns={'n_docs': 'total_docs'})
+    )
+    
+    print(f"✅ Computed total_docs from monthly data: {len(total_docs)} rows")
+    return total_docs
+
+
+def compute_quality_from_monthly(monthly_df: pd.DataFrame, min_docs: int = MIN_DOCS_PER_MONTH) -> pd.DataFrame:
+    """
+    Compute quality metrics from monthly detail data.
+    This replaces the separate quality CSV.
+    """
+    if monthly_df is None:
+        return None
+    
+    quality = (
+        monthly_df
+        .groupby(['country', 'theme_code'])
+        .agg(
+            months_total=('ym', 'count'),
+            months_ok=('n_docs', lambda x: (x >= min_docs).sum()),
+            min_docs=('n_docs', 'min'),
+            median_docs=('n_docs', lambda x: x.median())
+        )
+        .reset_index()
+    )
+    
+    print(f"✅ Computed quality metrics from monthly data: {len(quality)} rows")
+    return quality
+
+
 def load_data(data_dir: Path = None) -> tuple:
     """
     Load all CSV data files.
     
     Returns:
-        tuple: (total_docs_df, quality_df, monthly_df)
+        tuple: (total_docs_df, quality_df, monthly_df, trend_df, iptc_mapping_df)
     """
     if data_dir is None:
         data_dir = Path(__file__).parent
     
-    # Total docs per country-theme
-    total_docs = pd.read_csv(data_dir / "bquxjob_645c6baa_19b43fe1bcd.csv")
-    
-    # Monthly quality metrics
-    quality = pd.read_csv(data_dir / "bquxjob_4750d984_19b43fefa20.csv")
-    
-    # Monthly detail (optional - might be large)
+    # Monthly detail (primary data source)
     try:
-        monthly = pd.read_csv(data_dir / "bquxjob_5c135702_19b43f3f270.csv")
+        monthly = pd.read_csv(data_dir / "gdelt_monthly_docs_per_theme_country_2022_2024.csv")
+        print("✅ Monthly detail loaded as primary data source")
     except FileNotFoundError:
         monthly = None
-        print("⚠️ Monthly detail file not found (optional)")
+        print("❌ Monthly detail file not found - cannot proceed")
+        return None, None, None, None, None
     
-    return total_docs, quality, monthly
+    # Compute total_docs from monthly detail
+    total_docs = compute_total_from_monthly(monthly)
+    
+    # Compute quality metrics from monthly detail
+    quality = compute_quality_from_monthly(monthly)
+    
+    # Load trend analysis (optional enhancement)
+    try:
+        trend = pd.read_csv(data_dir / "gdelt_theme_trend_analysis_2022_2024.csv")
+        print("✅ Trend analysis loaded")
+    except FileNotFoundError:
+        trend = None
+        print("⚠️ Trend analysis file not found (optional)")
+    
+    # Load IPTC mapping (for category integration)
+    try:
+        with open(data_dir / "gdelt_iptc_mapping_v2.json", 'r', encoding='utf-8') as f:
+            iptc_data = json.load(f)
+        iptc_mapping = pd.DataFrame(iptc_data['themes'])[['theme_code', 'iptc_final_id', 'iptc_final_label']]
+        iptc_mapping = iptc_mapping.rename(columns={'iptc_final_id': 'iptc_id', 'iptc_final_label': 'iptc_category'})
+        print("✅ IPTC mapping loaded")
+    except (FileNotFoundError, KeyError):
+        iptc_mapping = None
+        print("⚠️ IPTC mapping file not found (optional)")
+    
+    return total_docs, quality, monthly, trend, iptc_mapping
 
 
 # ============================================================================
@@ -199,14 +265,15 @@ def find_common_themes(top_k_df: pd.DataFrame) -> set:
 # STEP C: COVERAGE ANALYSIS (Monthly Quality)
 # ============================================================================
 
-def analyze_coverage(quality_df: pd.DataFrame, common_themes: set) -> pd.DataFrame:
+def analyze_coverage(quality_df: pd.DataFrame, common_themes: set, trend_df: pd.DataFrame = None) -> pd.DataFrame:
     """
     For each country-theme pair, analyze monthly coverage quality.
+    Enhanced with trend analysis for better decision making.
     
     Decision Rules:
-    - ratio >= 0.7: Use for monthly sentiment analysis
-    - 0.4 <= ratio < 0.7: Use quarterly aggregation
-    - ratio < 0.4: Exclude this category for this country
+    - ratio >= 0.7 AND trend stable/growing: Use for monthly sentiment analysis
+    - ratio >= 0.4 OR (ratio >= 0.6 AND growing): Use quarterly aggregation
+    - ratio < 0.4 OR declining: Exclude this category for this country
     """
     # Calculate ratio
     quality_df = quality_df.copy()
@@ -217,21 +284,47 @@ def analyze_coverage(quality_df: pd.DataFrame, common_themes: set) -> pd.DataFra
     # Filter to common themes only
     usable = quality_df[quality_df['theme_code'].isin(common_themes)].copy()
     
-    # Add decision column
-    def make_decision(ratio):
-        if ratio >= MONTHLY_THRESHOLD:
+    # Add trend information if available
+    if trend_df is not None:
+        usable = usable.merge(
+            trend_df[['country', 'theme_code', 'trend_category', 'std_docs']],
+            on=['country', 'theme_code'],
+            how='left'
+        )
+        usable['trend_category'] = usable['trend_category'].fillna('Unknown')
+        usable['std_docs'] = usable['std_docs'].fillna(usable['std_docs'].mean())
+    else:
+        usable['trend_category'] = 'Unknown'
+        usable['std_docs'] = usable['median_docs']  # Fallback
+    
+    # Enhanced decision function
+    def make_decision_enhanced(row):
+        ratio = row['ratio_ok']
+        trend = row['trend_category']
+        std_ratio = row['std_docs'] / row['median_docs'] if row['median_docs'] > 0 else 1
+        
+        # Prefer stable or growing themes with good coverage
+        if ratio >= 0.7 and trend in ['Stabil', 'Artan']:
             return 'monthly'
-        elif ratio >= QUARTERLY_THRESHOLD:
+        elif ratio >= 0.6 and trend == 'Artan':
+            return 'monthly'
+        elif ratio >= 0.4 and std_ratio < 0.5:  # Low variance
+            return 'quarterly'
+        elif ratio >= 0.5:
             return 'quarterly'
         else:
             return 'exclude'
     
-    usable['decision'] = usable['ratio_ok'].apply(make_decision)
+    usable['decision'] = usable.apply(make_decision_enhanced, axis=1)
     
-    print(f"\n📊 Coverage Analysis Summary:")
+    print(f"\n📊 Enhanced Coverage Analysis Summary:")
     for decision in ['monthly', 'quarterly', 'exclude']:
         count = (usable['decision'] == decision).sum()
         print(f"   • {decision.upper()}: {count} country-theme pairs")
+    
+    if trend_df is not None:
+        trend_counts = usable['trend_category'].value_counts()
+        print(f"   • Trend Distribution: {dict(trend_counts)}")
     
     return usable
 
@@ -343,7 +436,7 @@ def generate_group_matrix(group_analysis: pd.DataFrame) -> pd.DataFrame:
     ).fillna('exclude')
     
     # Apply symbols
-    symbol_matrix = matrix.applymap(to_symbol)
+    symbol_matrix = matrix.apply(lambda x: x.map(to_symbol))
     
     # Reorder columns
     group_order = list(CATEGORY_GROUPS.keys())
@@ -405,13 +498,14 @@ def aggregate_quarterly(monthly_df: pd.DataFrame) -> pd.DataFrame:
 def generate_report_sentences() -> list:
     """
     Generate ready-to-use sentences for the academic report.
+    Updated to reflect unified data source approach.
     """
     return [
         "We identified the most frequent GDELT theme families for each country and retained those that consistently appeared across all six countries and corresponded to meaningful news topics.",
         f"Metadata-only tags (TAX, WB, USPEC, etc.) were filtered out as they represent GDELT's internal classification rather than actual news content.",
         f"To ensure robust sentiment aggregation, we required at least {MIN_DOCS_PER_MONTH} distinct news records per country–theme–month.",
         f"Categories with monthly coverage ≥{int(MONTHLY_THRESHOLD*100)}% were used for monthly sentiment analysis; those with {int(QUARTERLY_THRESHOLD*100)}-{int(MONTHLY_THRESHOLD*100)}% coverage were aggregated quarterly; below {int(QUARTERLY_THRESHOLD*100)}% were excluded.",
-        "The final category selection provides adequate temporal granularity for cross-country sentiment comparison while maintaining statistical validity."
+        "All analyses were performed using unified monthly detail data to ensure consistency across total document counts, quality metrics, and coverage calculations."
     ]
 
 
@@ -477,13 +571,14 @@ def export_to_json(
     decision_matrix: pd.DataFrame,
     group_matrix: pd.DataFrame,
     group_analysis: pd.DataFrame,
+    results: dict,
     output_file: Path = None
 ):
     """Export results as JSON for web consumption."""
     if output_file is None:
         output_file = Path(__file__).parent / "gdelt_analysis_results.json"
     
-    results = {
+    json_results = {
         'generated_at': datetime.now().isoformat(),
         'countries': COUNTRIES,
         'category_groups': CATEGORY_GROUPS,
@@ -498,8 +593,16 @@ def export_to_json(
         'report_sentences': generate_report_sentences()
     }
     
+    # Yeni IPTC ve trend verilerini ekle
+    if results.get('category_stats') is not None:
+        json_results['category_stats'] = results['category_stats'].to_dict(orient='records')
+    if results.get('country_cat_coverage') is not None:
+        json_results['country_cat_coverage'] = results['country_cat_coverage'].to_dict(orient='records')
+    if results.get('trend_with_coverage') is not None:
+        json_results['trend_with_coverage'] = results['trend_with_coverage'].to_dict(orient='records')
+    
     with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
+        json.dump(json_results, f, indent=2, ensure_ascii=False)
     
     print(f"✅ JSON results exported to {output_file}")
 
@@ -520,34 +623,135 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
     
     # Step 1: Load data
     print("\n📥 Loading data...")
-    total_docs, quality, monthly = load_data(data_dir)
-    print(f"   • Total docs: {len(total_docs)} rows")
-    print(f"   • Quality: {len(quality)} rows")
-    print(f"   • Monthly: {len(monthly) if monthly is not None else 'N/A'} rows")
+    total_docs, quality, monthly, trend, iptc_mapping = load_data(data_dir)
     
-    # Step 2: Filter metadata themes
-    print("\n🔍 Step A: Filtering metadata themes...")
+    if monthly is None:
+        print("❌ Cannot proceed without monthly detail data")
+        return {}
+    
+    print(f"   • Monthly detail: {len(monthly)} rows")
+    print(f"   • Computed total_docs: {len(total_docs)} rows")
+    print(f"   • Computed quality: {len(quality)} rows")
+    print(f"   • Trend analysis: {len(trend) if trend is not None else 'N/A'} rows")
+    print(f"   • IPTC mapping: {len(iptc_mapping) if iptc_mapping is not None else 'N/A'} rows")
+    
+    # ============================================================================
+    # STEP A: TEMA SEÇİMİ VE IPTC ÖZETLERİ
+    # ============================================================================
+    
+    print("\n🔍 Adım A: Tema seçimi ve IPTC özetleri...")
+    
+    # Filter metadata themes
     filtered_docs = filter_metadata_themes(total_docs)
     
-    # Step 3: Select top-K themes per country
-    print(f"\n📊 Step B: Selecting top-{TOP_K} themes per country...")
+    # Select top-K themes per country
     top_k = select_top_k_themes_per_country(filtered_docs, TOP_K)
     
-    # Step 4: Find common themes
-    print("\n🔗 Step C: Finding common themes across all countries...")
+    # Find common themes
     common_themes = find_common_themes(top_k)
     
-    # Step 5: Coverage analysis
-    print("\n📈 Step D: Analyzing monthly coverage quality...")
-    coverage = analyze_coverage(quality, common_themes)
+    # IPTC entegrasyonu: top_k_df'yi IPTC mapping ile birleştir
+    top_k_with_iptc = None
+    common_with_iptc = None
+    category_stats = None
     
-    # Step 6: Generate decision matrix
-    print("\n📋 Step E: Generating decision matrices...")
+    if iptc_mapping is not None:
+        top_k_with_iptc = top_k.merge(
+            iptc_mapping[["theme_code", "iptc_id", "iptc_category"]],
+            on="theme_code",
+            how="left"
+        )
+        
+        common_with_iptc = top_k_with_iptc[
+            top_k_with_iptc["theme_code"].isin(common_themes)
+        ]
+        
+        # Kategori bazında özet istatistikleri hesapla
+        category_stats = (
+            common_with_iptc
+            .groupby("iptc_id")
+            .agg(
+                theme_count=("theme_code", "nunique"),
+                doc_count=("total_docs", "sum")
+            )
+            .reset_index()
+        )
+        
+        print(f"✅ IPTC entegrasyonu tamamlandı: {len(category_stats)} kategori bulundu")
+    
+    # ============================================================================
+    # STEP B: ÜLKE × IPTC KULLANILABILIRLIK MATRISI
+    # ============================================================================
+    
+    print("\n📊 Adım B: Ülke × IPTC kullanılabilirlik matrisi...")
+    
+    # Coverage analysis
+    coverage = analyze_coverage(quality, common_themes, trend)
+    
+    # IPTC'ye göre aggregate et
+    country_cat_coverage = None
+    
+    if iptc_mapping is not None:
+        coverage_with_iptc = coverage.merge(
+            iptc_mapping[["theme_code", "iptc_id"]],
+            on="theme_code",
+            how="left"
+        )
+        
+        country_cat_coverage = (
+            coverage_with_iptc
+            .groupby(["country", "iptc_id"])
+            .agg(
+                months_total=("months_total", "sum"),
+                months_ok=("months_ok", "sum")
+            )
+            .reset_index()
+        )
+        
+        country_cat_coverage["ratio_ok"] = (
+            country_cat_coverage["months_ok"] /
+            country_cat_coverage["months_total"]
+        )
+        
+        # Karar ver
+        def decide_level(r):
+            if r["ratio_ok"] >= MONTHLY_THRESHOLD:
+                return "monthly"
+            elif r["ratio_ok"] >= QUARTERLY_THRESHOLD:
+                return "quarterly"
+            else:
+                return "exclude"
+        
+        country_cat_coverage["coverage_level"] = country_cat_coverage.apply(decide_level, axis=1)
+        
+        print(f"✅ Ülke × IPTC matrisi oluşturuldu: {len(country_cat_coverage)} satır")
+    
+    # ============================================================================
+    # STEP C: ANALIZ İÇİN KATEGORI/ÜLKE SEÇİMİ VE TREND
+    # ============================================================================
+    
+    print("\n📈 Adım C: Analiz için kategori/ülke seçimi ve trend...")
+    
+    # Trend + coverage birleşimi
+    trend_with_coverage = None
+    
+    if trend is not None:
+        trend_with_coverage = trend.merge(
+            coverage[["country", "theme_code", "decision"]],
+            on=["country", "theme_code"],
+            how="left"
+        )
+        
+        trend_with_coverage = trend_with_coverage[
+            trend_with_coverage["decision"].isin(["monthly", "quarterly"])
+        ]
+        
+        print(f"✅ Trend + coverage birleşimi: {len(trend_with_coverage)} satır")
+    
+    # Eski adımlar (karar matrisi vb.)
+    print("\n📋 Ek analizler...")
     decision_matrix = generate_decision_matrix(coverage)
     numeric_matrix = generate_numeric_matrix(coverage)
-    
-    # Step 7: Category group analysis
-    print("\n🏷️ Step F: Analyzing category groups...")
     group_analysis = analyze_category_groups(coverage)
     group_matrix = generate_group_matrix(group_analysis)
     
@@ -557,7 +761,19 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
     # Export if requested
     if export:
         export_results(decision_matrix, group_matrix, group_analysis, coverage)
-        export_to_json(decision_matrix, group_matrix, group_analysis)
+        export_to_json(decision_matrix, group_matrix, group_analysis, {
+            'category_stats': category_stats,
+            'country_cat_coverage': country_cat_coverage,
+            'trend_with_coverage': trend_with_coverage
+        })
+        
+        # Yeni export'lar
+        if top_k_with_iptc is not None:
+            top_k_with_iptc.to_csv(Path(__file__).parent / "analysis_output" / f"top_k_with_iptc_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv", index=False)
+        if country_cat_coverage is not None:
+            country_cat_coverage.to_csv(Path(__file__).parent / "analysis_output" / f"country_cat_coverage_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv", index=False)
+        if trend_with_coverage is not None:
+            trend_with_coverage.to_csv(Path(__file__).parent / "analysis_output" / f"trend_with_coverage_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv", index=False)
     
     return {
         'common_themes': common_themes,
@@ -565,7 +781,12 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
         'decision_matrix': decision_matrix,
         'numeric_matrix': numeric_matrix,
         'group_analysis': group_analysis,
-        'group_matrix': group_matrix
+        'group_matrix': group_matrix,
+        'top_k_with_iptc': top_k_with_iptc,
+        'common_with_iptc': common_with_iptc,
+        'category_stats': category_stats,
+        'country_cat_coverage': country_cat_coverage,
+        'trend_with_coverage': trend_with_coverage
     }
 
 

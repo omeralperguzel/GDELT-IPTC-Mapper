@@ -38,13 +38,13 @@ def get_latest_saved_file():
 def save_analysis(data, filename=None):
     """Analizi JSON dosyasına kaydet"""
     if filename is None:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"analysis_{timestamp}.json"
-    
+        timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+        filename = f"gdelt_analysis_{timestamp}.json"
+
     filepath = SAVED_ANALYSES_DIR / filename
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2, cls=NaNEncoder)
-    
+
     return str(filepath)
 
 def load_analysis(filepath=None):
@@ -434,36 +434,174 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 })
                 self.wfile.write(error_response.encode('utf-8'))
         
-        elif self.path == '/api/list-saved':
+        elif self.path == '/api/save-analysis':
             try:
-                # Kaydedilmiş dosyaları listele
-                files = list(SAVED_ANALYSES_DIR.glob("analysis_*.json"))
-                file_list = []
-                
-                for f in sorted(files, key=lambda x: x.stat().st_mtime, reverse=True):
-                    file_list.append({
-                        "filename": f.name,
-                        "filepath": str(f),
-                        "modified": datetime.fromtimestamp(f.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S"),
-                        "size": f.stat().st_size
-                    })
-                
+                # İstek verilerini al
+                content_length = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_length)
+                data = json.loads(body.decode('utf-8'))
+
+                filename = data.get('filename', None)
+                analysis_data = data.get('data', {})
+
+                print(f"💾 Analiz kaydetme isteği alındı: {filename}")
+
+                # Veriyi kaydet
+                filepath = save_analysis(analysis_data, filename)
+
+                print(f"✅ Analiz kaydedildi: {filepath}")
+
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json; charset=utf-8')
                 self.end_headers()
-                
+
                 response = json.dumps({
                     "success": True,
-                    "files": file_list
+                    "filepath": str(filepath),
+                    "message": "Analiz başarıyla kaydedildi"
                 }, ensure_ascii=False)
                 self.wfile.write(response.encode('utf-8'))
-                
+
             except Exception as e:
-                print(f"❌ Liste API Hatası: {e}")
+                print(f"❌ Save Analysis API Hatası: {e}")
+                import traceback
+                traceback.print_exc()
+
                 self.send_response(500)
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
-                
+
+                error_response = json.dumps({
+                    "success": False,
+                    "error": str(e)
+                })
+                self.wfile.write(error_response.encode('utf-8'))
+
+        elif self.path.startswith('/api/load-analysis/'):
+            try:
+                # Dosya adını URL'den çıkar
+                filename = self.path.replace('/api/load-analysis/', '')
+
+                print(f"📂 Analiz yükleme isteği: {filename}")
+
+                # Dosya yolunu oluştur
+                filepath = SAVED_ANALYSES_DIR / filename
+
+                # Veriyi yükle
+                data = load_analysis(filepath)
+
+                if data is None:
+                    self.send_response(404)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+
+                    response = json.dumps({
+                        "success": False,
+                        "message": "Dosya bulunamadı"
+                    }, ensure_ascii=False)
+                    self.wfile.write(response.encode('utf-8'))
+                    return
+
+                print(f"✅ Analiz yüklendi: {filename}")
+
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json; charset=utf-8')
+                self.end_headers()
+
+                response = json.dumps(data, ensure_ascii=False, indent=2)
+                self.wfile.write(response.encode('utf-8'))
+
+            except Exception as e:
+                print(f"❌ Load Analysis API Hatası: {e}")
+                import traceback
+                traceback.print_exc()
+
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+
+                error_response = json.dumps({
+                    "success": False,
+                    "error": str(e)
+                })
+                self.wfile.write(error_response.encode('utf-8'))
+
+        elif self.path == '/api/list-saved-analyses':
+            try:
+                # Kaydedilmiş dosyaları listele
+                files = list(SAVED_ANALYSES_DIR.glob("gdelt_analysis_*.json"))
+                file_list = []
+
+                for f in sorted(files, key=lambda x: x.stat().st_mtime, reverse=True):
+                    file_list.append(f.name)
+
+                print(f"📋 {len(file_list)} kaydedilmiş analiz bulundu")
+
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json; charset=utf-8')
+                self.end_headers()
+
+                response = json.dumps(file_list, ensure_ascii=False)
+                self.wfile.write(response.encode('utf-8'))
+
+            except Exception as e:
+                print(f"❌ List Saved Analyses API Hatası: {e}")
+                import traceback
+                traceback.print_exc()
+
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+
+                error_response = json.dumps({
+                    "success": False,
+                    "error": str(e)
+                })
+                self.wfile.write(error_response.encode('utf-8'))
+
+        elif self.path.startswith('/api/delete-analysis/'):
+            try:
+                # Dosya adını URL'den çıkar
+                filename = self.path.replace('/api/delete-analysis/', '')
+
+                print(f"🗑️ Analiz silme isteği: {filename}")
+
+                # Dosya yolunu oluştur
+                filepath = SAVED_ANALYSES_DIR / filename
+
+                if filepath.exists():
+                    filepath.unlink()
+                    print(f"✅ Analiz silindi: {filename}")
+
+                    self.send_response(200)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+
+                    response = json.dumps({
+                        "success": True,
+                        "message": "Analiz başarıyla silindi"
+                    }, ensure_ascii=False)
+                    self.wfile.write(response.encode('utf-8'))
+                else:
+                    self.send_response(404)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+
+                    response = json.dumps({
+                        "success": False,
+                        "message": "Dosya bulunamadı"
+                    }, ensure_ascii=False)
+                    self.wfile.write(response.encode('utf-8'))
+
+            except Exception as e:
+                print(f"❌ Delete Analysis API Hatası: {e}")
+                import traceback
+                traceback.print_exc()
+
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+
                 error_response = json.dumps({
                     "success": False,
                     "error": str(e)

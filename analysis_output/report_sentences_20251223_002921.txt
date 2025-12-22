@@ -1,0 +1,10 @@
+We identified the most frequent GDELT theme families for each country and retained those that consistently appeared across all six countries and corresponded to meaningful news topics.
+
+Metadata-only tags (TAX, WB, USPEC, etc.) were filtered out as they represent GDELT's internal classification rather than actual news content.
+
+To ensure robust sentiment aggregation, we required at least 50 distinct news records per country–theme–month.
+
+Categories with monthly coverage ≥70% were used for monthly sentiment analysis; those with 40-70% coverage were aggregated quarterly; below 40% were excluded.
+
+All analyses were performed using unified monthly detail data to ensure consistency across total document counts, quality metrics, and coverage calculations.
+

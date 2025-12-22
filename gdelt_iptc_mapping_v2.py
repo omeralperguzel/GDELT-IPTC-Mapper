@@ -341,9 +341,9 @@ def run_full_mapping(output_dir: str = ".") -> dict:
     
     theme_codes = set()
     csv_files = [
-        'bquxjob_645c6baa_19b43fe1bcd.csv',
-        'bquxjob_4750d984_19b43fefa20.csv',
-        'bquxjob_5c135702_19b43f3f270.csv'
+        'gdelt_top15_themes_by_country_2022_2024.csv',
+        'gdelt_monthly_quality_metrics.csv',
+        'gdelt_monthly_docs_per_theme_country_2022_2024.csv'
     ]
     
     for csv_file in csv_files:

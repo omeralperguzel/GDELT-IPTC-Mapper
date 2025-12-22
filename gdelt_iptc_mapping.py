@@ -53,9 +53,9 @@ EMBEDDING_DIM = 384
 IPTC_FILE = "iptc_mediatopics.csv"
 VARGO_FILE = "vargo_gdelt_themes_issues.csv"
 GDELT_CSV_FILES = [
-    "bquxjob_645c6baa_19b43fe1bcd.csv",
-    "bquxjob_4750d984_19b43fefa20.csv",
-    "bquxjob_5c135702_19b43f3f270.csv"
+    'gdelt_top15_themes_by_country_2022_2024.csv',
+    'gdelt_monthly_quality_metrics.csv',
+    'gdelt_monthly_docs_per_theme_country_2022_2024.csv'
 ]
 
 # Output

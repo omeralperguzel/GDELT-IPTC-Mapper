@@ -1,0 +1,91 @@
+country,theme_code,total_docs,iptc_id,iptc_category
+CE,EPU,546673,04000000,"economy, business and finance"
+CE,CRISISLEX,480331,16000000,"conflict, war and peace"
+CE,GENERAL,420317,14000000,society
+CE,LEADER,328327,11000000,politics and government
+CE,ECON,290553,04000000,"economy, business and finance"
+CE,MEDIA,213550,01000000,"arts, culture, entertainment and media"
+CE,MANMADE,208655,03000000,"disaster, accident and emergency incident"
+CE,EDUCATION,194313,05000000,education
+CE,MEDICAL,170414,07000000,health
+CE,ARMEDCONFLICT,151646,16000000,"conflict, war and peace"
+CE,KILL,123214,16000000,"conflict, war and peace"
+CE,ENV,118873,06000000,environment
+CE,LEGISLATION,106965,11000000,politics and government
+CE,SCIENCE,104352,13000000,science and technology
+CE,MARITIME,102955,16000000,"conflict, war and peace"
+HO,EPU,334528,04000000,"economy, business and finance"
+HO,CRISISLEX,320922,16000000,"conflict, war and peace"
+HO,GENERAL,246149,14000000,society
+HO,LEADER,206168,11000000,politics and government
+HO,MANMADE,131666,03000000,"disaster, accident and emergency incident"
+HO,AFFECT,122484,14000000,society
+HO,KILL,118033,16000000,"conflict, war and peace"
+HO,EDUCATION,117291,05000000,education
+HO,MEDICAL,104074,07000000,health
+HO,MEDIA,101987,01000000,"arts, culture, entertainment and media"
+HO,ECON,91731,04000000,"economy, business and finance"
+HO,SECURITY,87972,16000000,"conflict, war and peace"
+HO,TRIAL,85460,02000000,"crime, law and justice"
+HO,BORDER,84490,09000000,labour
+HO,LEGISLATION,82043,11000000,politics and government
+HR,EPU,906788,04000000,"economy, business and finance"
+HR,CRISISLEX,765376,16000000,"conflict, war and peace"
+HR,GENERAL,638545,14000000,society
+HR,LEADER,479629,11000000,politics and government
+HR,MANMADE,299775,03000000,"disaster, accident and emergency incident"
+HR,MEDIA,273857,01000000,"arts, culture, entertainment and media"
+HR,ARMEDCONFLICT,271746,16000000,"conflict, war and peace"
+HR,EDUCATION,250648,05000000,education
+HR,ECON,248799,04000000,"economy, business and finance"
+HR,AFFECT,213386,14000000,society
+HR,MEDICAL,212778,07000000,health
+HR,KILL,204932,16000000,"conflict, war and peace"
+HR,SECURITY,162191,16000000,"conflict, war and peace"
+HR,LEGISLATION,151898,11000000,politics and government
+HR,MARITIME,129016,16000000,"conflict, war and peace"
+KG,EPU,373615,04000000,"economy, business and finance"
+KG,CRISISLEX,318459,16000000,"conflict, war and peace"
+KG,GENERAL,290645,14000000,society
+KG,LEADER,222023,11000000,politics and government
+KG,MEDIA,163792,01000000,"arts, culture, entertainment and media"
+KG,EDUCATION,155210,05000000,education
+KG,MANMADE,139463,03000000,"disaster, accident and emergency incident"
+KG,ECON,134455,04000000,"economy, business and finance"
+KG,MEDICAL,123750,07000000,health
+KG,ARMEDCONFLICT,117633,16000000,"conflict, war and peace"
+KG,SCIENCE,91517,13000000,science and technology
+KG,ENV,90338,06000000,environment
+KG,KILL,82269,16000000,"conflict, war and peace"
+KG,LEGISLATION,79022,11000000,politics and government
+KG,AGRICULTURE,62199,04000000,"economy, business and finance"
+LO,GENERAL,363657,14000000,society
+LO,EPU,357701,04000000,"economy, business and finance"
+LO,CRISISLEX,320367,16000000,"conflict, war and peace"
+LO,LEADER,256616,11000000,politics and government
+LO,ARMEDCONFLICT,173343,16000000,"conflict, war and peace"
+LO,MEDIA,155447,01000000,"arts, culture, entertainment and media"
+LO,MANMADE,152505,03000000,"disaster, accident and emergency incident"
+LO,EDUCATION,113017,05000000,education
+LO,ECON,108332,04000000,"economy, business and finance"
+LO,AFFECT,102025,14000000,society
+LO,KILL,101658,16000000,"conflict, war and peace"
+LO,MEDICAL,93263,07000000,health
+LO,MILITARY,88900,16000000,"conflict, war and peace"
+LO,ELECTION,85002,11000000,politics and government
+LO,SECURITY,68878,16000000,"conflict, war and peace"
+SA,EPU,1867358,04000000,"economy, business and finance"
+SA,CRISISLEX,1515875,16000000,"conflict, war and peace"
+SA,GENERAL,1198155,14000000,society
+SA,LEADER,1066700,11000000,politics and government
+SA,ECON,837457,04000000,"economy, business and finance"
+SA,ARMEDCONFLICT,834238,16000000,"conflict, war and peace"
+SA,MEDIA,680697,01000000,"arts, culture, entertainment and media"
+SA,MANMADE,673632,03000000,"disaster, accident and emergency incident"
+SA,ENV,634838,06000000,environment
+SA,KILL,562489,16000000,"conflict, war and peace"
+SA,MEDICAL,449528,07000000,health
+SA,EDUCATION,441036,05000000,education
+SA,AFFECT,404882,14000000,society
+SA,TERROR,400938,16000000,"conflict, war and peace"
+SA,MILITARY,355662,16000000,"conflict, war and peace"

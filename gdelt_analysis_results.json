@@ -1,0 +1,1512 @@
+{
+  "generated_at": "2025-12-23T00:29:21.563326",
+  "countries": [
+    "CE",
+    "HO",
+    "HR",
+    "KG",
+    "LO",
+    "SA"
+  ],
+  "category_groups": {
+    "Economy": [
+      "ECON",
+      "EPU_ECONOMY",
+      "EPU",
+      "EPU_POLICY"
+    ],
+    "Government": [
+      "GENERAL_GOVERNMENT",
+      "GENERAL",
+      "GOV",
+      "LEADER",
+      "ELECTION"
+    ],
+    "Security": [
+      "CRISISLEX",
+      "ARMEDCONFLICT",
+      "TERROR",
+      "SECURITY",
+      "MILITARY"
+    ],
+    "Health": [
+      "HEALTH",
+      "GENERAL_HEALTH",
+      "MEDICAL"
+    ],
+    "Education": [
+      "EDUCATION"
+    ],
+    "Tourism": [
+      "TOURISM"
+    ]
+  },
+  "thresholds": {
+    "monthly": 0.7,
+    "quarterly": 0.4,
+    "min_docs": 50
+  },
+  "decision_matrix": {
+    "CRISISLEX": {
+      "CE": "quarterly",
+      "HO": "quarterly",
+      "HR": "monthly",
+      "KG": "quarterly",
+      "LO": "quarterly",
+      "SA": "monthly"
+    },
+    "ECON": {
+      "CE": "quarterly",
+      "HO": "monthly",
+      "HR": "quarterly",
+      "KG": "quarterly",
+      "LO": "monthly",
+      "SA": "monthly"
+    },
+    "EDUCATION": {
+      "CE": "monthly",
+      "HO": "quarterly",
+      "HR": "quarterly",
+      "KG": "quarterly",
+      "LO": "quarterly",
+      "SA": "monthly"
+    },
+    "EPU": {
+      "CE": "quarterly",
+      "HO": "quarterly",
+      "HR": "monthly",
+      "KG": "monthly",
+      "LO": "quarterly",
+      "SA": "monthly"
+    },
+    "GENERAL": {
+      "CE": "quarterly",
+      "HO": "quarterly",
+      "HR": "monthly",
+      "KG": "quarterly",
+      "LO": "quarterly",
+      "SA": "monthly"
+    },
+    "KILL": {
+      "CE": "quarterly",
+      "HO": "quarterly",
+      "HR": "monthly",
+      "KG": "quarterly",
+      "LO": "quarterly",
+      "SA": "monthly"
+    },
+    "LEADER": {
+      "CE": "quarterly",
+      "HO": "quarterly",
+      "HR": "quarterly",
+      "KG": "quarterly",
+      "LO": "quarterly",
+      "SA": "monthly"
+    },
+    "MANMADE": {
+      "CE": "quarterly",
+      "HO": "quarterly",
+      "HR": "quarterly",
+      "KG": "quarterly",
+      "LO": "quarterly",
+      "SA": "quarterly"
+    },
+    "MEDIA": {
+      "CE": "monthly",
+      "HO": "quarterly",
+      "HR": "monthly",
+      "KG": "quarterly",
+      "LO": "quarterly",
+      "SA": "monthly"
+    },
+    "MEDICAL": {
+      "CE": "quarterly",
+      "HO": "quarterly",
+      "HR": "monthly",
+      "KG": "quarterly",
+      "LO": "quarterly",
+      "SA": "monthly"
+    }
+  },
+  "group_matrix": {
+    "Economy": {
+      "CE": "⚠",
+      "HO": "✔",
+      "HR": "⚠",
+      "KG": "⚠",
+      "LO": "✔",
+      "SA": "✔"
+    },
+    "Government": {
+      "CE": "⚠",
+      "HO": "⚠",
+      "HR": "✔",
+      "KG": "⚠",
+      "LO": "⚠",
+      "SA": "✔"
+    },
+    "Security": {
+      "CE": "⚠",
+      "HO": "⚠",
+      "HR": "✔",
+      "KG": "⚠",
+      "LO": "⚠",
+      "SA": "✔"
+    },
+    "Health": {
+      "CE": "⚠",
+      "HO": "⚠",
+      "HR": "✔",
+      "KG": "⚠",
+      "LO": "⚠",
+      "SA": "✔"
+    },
+    "Education": {
+      "CE": "✔",
+      "HO": "⚠",
+      "HR": "⚠",
+      "KG": "⚠",
+      "LO": "⚠",
+      "SA": "✔"
+    }
+  },
+  "group_analysis": [
+    {
+      "country": "CE",
+      "category_group": "Economy",
+      "best_theme": "ECON",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 6845.5
+    },
+    {
+      "country": "HO",
+      "category_group": "Economy",
+      "best_theme": "ECON",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 2401.0
+    },
+    {
+      "country": "HR",
+      "category_group": "Economy",
+      "best_theme": "ECON",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 7040.5
+    },
+    {
+      "country": "KG",
+      "category_group": "Economy",
+      "best_theme": "ECON",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 3617.5
+    },
+    {
+      "country": "LO",
+      "category_group": "Economy",
+      "best_theme": "ECON",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 2896.5
+    },
+    {
+      "country": "SA",
+      "category_group": "Economy",
+      "best_theme": "ECON",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 20028.0
+    },
+    {
+      "country": "CE",
+      "category_group": "Government",
+      "best_theme": "GENERAL",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 10193.0
+    },
+    {
+      "country": "HO",
+      "category_group": "Government",
+      "best_theme": "GENERAL",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 6226.5
+    },
+    {
+      "country": "HR",
+      "category_group": "Government",
+      "best_theme": "GENERAL",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 17516.5
+    },
+    {
+      "country": "KG",
+      "category_group": "Government",
+      "best_theme": "GENERAL",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 7555.0
+    },
+    {
+      "country": "LO",
+      "category_group": "Government",
+      "best_theme": "GENERAL",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 9337.5
+    },
+    {
+      "country": "SA",
+      "category_group": "Government",
+      "best_theme": "GENERAL",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 31872.0
+    },
+    {
+      "country": "CE",
+      "category_group": "Security",
+      "best_theme": "CRISISLEX",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 11723.0
+    },
+    {
+      "country": "HO",
+      "category_group": "Security",
+      "best_theme": "CRISISLEX",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 8491.0
+    },
+    {
+      "country": "HR",
+      "category_group": "Security",
+      "best_theme": "CRISISLEX",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 21247.5
+    },
+    {
+      "country": "KG",
+      "category_group": "Security",
+      "best_theme": "CRISISLEX",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 8270.5
+    },
+    {
+      "country": "LO",
+      "category_group": "Security",
+      "best_theme": "CRISISLEX",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 8283.0
+    },
+    {
+      "country": "SA",
+      "category_group": "Security",
+      "best_theme": "CRISISLEX",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 41288.0
+    },
+    {
+      "country": "CE",
+      "category_group": "Health",
+      "best_theme": "MEDICAL",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 4154.0
+    },
+    {
+      "country": "HO",
+      "category_group": "Health",
+      "best_theme": "MEDICAL",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 2607.5
+    },
+    {
+      "country": "HR",
+      "category_group": "Health",
+      "best_theme": "MEDICAL",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 5830.0
+    },
+    {
+      "country": "KG",
+      "category_group": "Health",
+      "best_theme": "MEDICAL",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 3206.0
+    },
+    {
+      "country": "LO",
+      "category_group": "Health",
+      "best_theme": "MEDICAL",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 2107.5
+    },
+    {
+      "country": "SA",
+      "category_group": "Health",
+      "best_theme": "MEDICAL",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 11284.0
+    },
+    {
+      "country": "CE",
+      "category_group": "Education",
+      "best_theme": "EDUCATION",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 5193.5
+    },
+    {
+      "country": "HO",
+      "category_group": "Education",
+      "best_theme": "EDUCATION",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 3164.5
+    },
+    {
+      "country": "HR",
+      "category_group": "Education",
+      "best_theme": "EDUCATION",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 7210.5
+    },
+    {
+      "country": "KG",
+      "category_group": "Education",
+      "best_theme": "EDUCATION",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 4053.0
+    },
+    {
+      "country": "LO",
+      "category_group": "Education",
+      "best_theme": "EDUCATION",
+      "ratio": 1.0,
+      "decision": "quarterly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 3013.5
+    },
+    {
+      "country": "SA",
+      "category_group": "Education",
+      "best_theme": "EDUCATION",
+      "ratio": 1.0,
+      "decision": "monthly",
+      "months_ok": 36,
+      "months_total": 36,
+      "median_docs": 11169.0
+    }
+  ],
+  "report_sentences": [
+    "We identified the most frequent GDELT theme families for each country and retained those that consistently appeared across all six countries and corresponded to meaningful news topics.",
+    "Metadata-only tags (TAX, WB, USPEC, etc.) were filtered out as they represent GDELT's internal classification rather than actual news content.",
+    "To ensure robust sentiment aggregation, we required at least 50 distinct news records per country–theme–month.",
+    "Categories with monthly coverage ≥70% were used for monthly sentiment analysis; those with 40-70% coverage were aggregated quarterly; below 40% were excluded.",
+    "All analyses were performed using unified monthly detail data to ensure consistency across total document counts, quality metrics, and coverage calculations."
+  ],
+  "category_stats": [
+    {
+      "iptc_id": "01000000",
+      "theme_count": 1,
+      "doc_count": 1589330
+    },
+    {
+      "iptc_id": "03000000",
+      "theme_count": 1,
+      "doc_count": 1605696
+    },
+    {
+      "iptc_id": "04000000",
+      "theme_count": 2,
+      "doc_count": 6097990
+    },
+    {
+      "iptc_id": "05000000",
+      "theme_count": 1,
+      "doc_count": 1271515
+    },
+    {
+      "iptc_id": "07000000",
+      "theme_count": 1,
+      "doc_count": 1153807
+    },
+    {
+      "iptc_id": "11000000",
+      "theme_count": 1,
+      "doc_count": 2559463
+    },
+    {
+      "iptc_id": "14000000",
+      "theme_count": 1,
+      "doc_count": 3157468
+    },
+    {
+      "iptc_id": "16000000",
+      "theme_count": 2,
+      "doc_count": 4913925
+    }
+  ],
+  "country_cat_coverage": [
+    {
+      "country": "CE",
+      "iptc_id": "01000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "CE",
+      "iptc_id": "03000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "CE",
+      "iptc_id": "04000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "CE",
+      "iptc_id": "05000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "CE",
+      "iptc_id": "07000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "CE",
+      "iptc_id": "11000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "CE",
+      "iptc_id": "14000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "CE",
+      "iptc_id": "16000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HO",
+      "iptc_id": "01000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HO",
+      "iptc_id": "03000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HO",
+      "iptc_id": "04000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HO",
+      "iptc_id": "05000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HO",
+      "iptc_id": "07000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HO",
+      "iptc_id": "11000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HO",
+      "iptc_id": "14000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HO",
+      "iptc_id": "16000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HR",
+      "iptc_id": "01000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HR",
+      "iptc_id": "03000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HR",
+      "iptc_id": "04000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HR",
+      "iptc_id": "05000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HR",
+      "iptc_id": "07000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HR",
+      "iptc_id": "11000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HR",
+      "iptc_id": "14000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "HR",
+      "iptc_id": "16000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "KG",
+      "iptc_id": "01000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "KG",
+      "iptc_id": "03000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "KG",
+      "iptc_id": "04000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "KG",
+      "iptc_id": "05000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "KG",
+      "iptc_id": "07000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "KG",
+      "iptc_id": "11000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "KG",
+      "iptc_id": "14000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "KG",
+      "iptc_id": "16000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "LO",
+      "iptc_id": "01000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "LO",
+      "iptc_id": "03000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "LO",
+      "iptc_id": "04000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "LO",
+      "iptc_id": "05000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "LO",
+      "iptc_id": "07000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "LO",
+      "iptc_id": "11000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "LO",
+      "iptc_id": "14000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "LO",
+      "iptc_id": "16000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "SA",
+      "iptc_id": "01000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "SA",
+      "iptc_id": "03000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "SA",
+      "iptc_id": "04000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "SA",
+      "iptc_id": "05000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "SA",
+      "iptc_id": "07000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "SA",
+      "iptc_id": "11000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "SA",
+      "iptc_id": "14000000",
+      "months_total": 36,
+      "months_ok": 36,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    },
+    {
+      "country": "SA",
+      "iptc_id": "16000000",
+      "months_total": 72,
+      "months_ok": 72,
+      "ratio_ok": 1.0,
+      "coverage_level": "monthly"
+    }
+  ],
+  "trend_with_coverage": [
+    {
+      "country": "CE",
+      "theme_code": "EDUCATION",
+      "months_count": 36,
+      "avg_docs": 5397.58,
+      "std_docs": 1301.24,
+      "trend_slope": 27.7378,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "CE",
+      "theme_code": "MEDIA",
+      "months_count": 36,
+      "avg_docs": 5931.94,
+      "std_docs": 2268.41,
+      "trend_slope": 3.1072,
+      "trend_category": "Stabil",
+      "decision": "monthly"
+    },
+    {
+      "country": "CE",
+      "theme_code": "EPU",
+      "months_count": 36,
+      "avg_docs": 15185.36,
+      "std_docs": 5265.35,
+      "trend_slope": -21.6538,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "CE",
+      "theme_code": "CRISISLEX",
+      "months_count": 36,
+      "avg_docs": 13342.53,
+      "std_docs": 5064.42,
+      "trend_slope": -21.9406,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "CE",
+      "theme_code": "MEDICAL",
+      "months_count": 36,
+      "avg_docs": 4733.72,
+      "std_docs": 1884.67,
+      "trend_slope": -25.5758,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "CE",
+      "theme_code": "KILL",
+      "months_count": 36,
+      "avg_docs": 3422.61,
+      "std_docs": 1320.13,
+      "trend_slope": -27.5408,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "CE",
+      "theme_code": "ECON",
+      "months_count": 36,
+      "avg_docs": 8070.92,
+      "std_docs": 4734.64,
+      "trend_slope": -50.2483,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "CE",
+      "theme_code": "GENERAL",
+      "months_count": 36,
+      "avg_docs": 11675.47,
+      "std_docs": 4872.16,
+      "trend_slope": -57.4371,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "CE",
+      "theme_code": "MANMADE",
+      "months_count": 36,
+      "avg_docs": 5795.97,
+      "std_docs": 2256.45,
+      "trend_slope": -58.1224,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "CE",
+      "theme_code": "LEADER",
+      "months_count": 36,
+      "avg_docs": 9120.19,
+      "std_docs": 5027.33,
+      "trend_slope": -84.3718,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "ECON",
+      "months_count": 36,
+      "avg_docs": 2548.08,
+      "std_docs": 910.03,
+      "trend_slope": -4.8566,
+      "trend_category": "Stabil",
+      "decision": "monthly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "EDUCATION",
+      "months_count": 36,
+      "avg_docs": 3258.08,
+      "std_docs": 1261.69,
+      "trend_slope": -15.1503,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "MEDICAL",
+      "months_count": 36,
+      "avg_docs": 2890.94,
+      "std_docs": 1292.2,
+      "trend_slope": -68.0513,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "MANMADE",
+      "months_count": 36,
+      "avg_docs": 3657.39,
+      "std_docs": 1702.79,
+      "trend_slope": -86.8065,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "KILL",
+      "months_count": 36,
+      "avg_docs": 3278.69,
+      "std_docs": 1832.56,
+      "trend_slope": -100.4277,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "MEDIA",
+      "months_count": 36,
+      "avg_docs": 2832.97,
+      "std_docs": 1200.98,
+      "trend_slope": -110.0455,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "CRISISLEX",
+      "months_count": 36,
+      "avg_docs": 8914.5,
+      "std_docs": 3151.95,
+      "trend_slope": -116.1259,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "EPU",
+      "months_count": 36,
+      "avg_docs": 9292.44,
+      "std_docs": 3271.48,
+      "trend_slope": -148.1469,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "GENERAL",
+      "months_count": 36,
+      "avg_docs": 6837.47,
+      "std_docs": 2444.1,
+      "trend_slope": -149.2179,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HO",
+      "theme_code": "LEADER",
+      "months_count": 36,
+      "avg_docs": 5726.89,
+      "std_docs": 2174.88,
+      "trend_slope": -171.2541,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "CRISISLEX",
+      "months_count": 36,
+      "avg_docs": 21260.44,
+      "std_docs": 4725.15,
+      "trend_slope": 156.4522,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "EPU",
+      "months_count": 36,
+      "avg_docs": 25188.56,
+      "std_docs": 4417.31,
+      "trend_slope": 84.8904,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "KILL",
+      "months_count": 36,
+      "avg_docs": 5692.56,
+      "std_docs": 1763.97,
+      "trend_slope": 64.8298,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "MEDICAL",
+      "months_count": 36,
+      "avg_docs": 5910.5,
+      "std_docs": 1312.02,
+      "trend_slope": 61.5012,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "GENERAL",
+      "months_count": 36,
+      "avg_docs": 17737.36,
+      "std_docs": 3047.75,
+      "trend_slope": 17.7354,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "MEDIA",
+      "months_count": 36,
+      "avg_docs": 7607.14,
+      "std_docs": 1730.32,
+      "trend_slope": -8.7191,
+      "trend_category": "Stabil",
+      "decision": "monthly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "ECON",
+      "months_count": 36,
+      "avg_docs": 6911.08,
+      "std_docs": 1018.7,
+      "trend_slope": -40.3578,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "MANMADE",
+      "months_count": 36,
+      "avg_docs": 8327.08,
+      "std_docs": 2335.46,
+      "trend_slope": -67.0944,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "EDUCATION",
+      "months_count": 36,
+      "avg_docs": 6962.44,
+      "std_docs": 1522.06,
+      "trend_slope": -77.4196,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "HR",
+      "theme_code": "LEADER",
+      "months_count": 36,
+      "avg_docs": 13323.03,
+      "std_docs": 2736.11,
+      "trend_slope": -261.1037,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "EPU",
+      "months_count": 36,
+      "avg_docs": 10378.19,
+      "std_docs": 2647.13,
+      "trend_slope": 14.9779,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "MEDIA",
+      "months_count": 36,
+      "avg_docs": 4549.78,
+      "std_docs": 1272.23,
+      "trend_slope": -14.0163,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "ECON",
+      "months_count": 36,
+      "avg_docs": 3734.86,
+      "std_docs": 885.41,
+      "trend_slope": -16.0478,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "GENERAL",
+      "months_count": 36,
+      "avg_docs": 8073.47,
+      "std_docs": 2002.98,
+      "trend_slope": -21.5396,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "MEDICAL",
+      "months_count": 36,
+      "avg_docs": 3437.5,
+      "std_docs": 878.34,
+      "trend_slope": -32.5571,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "KILL",
+      "months_count": 36,
+      "avg_docs": 2285.25,
+      "std_docs": 1034.91,
+      "trend_slope": -48.8939,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "CRISISLEX",
+      "months_count": 36,
+      "avg_docs": 8846.08,
+      "std_docs": 2308.86,
+      "trend_slope": -69.6702,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "EDUCATION",
+      "months_count": 36,
+      "avg_docs": 4311.39,
+      "std_docs": 1146.61,
+      "trend_slope": -79.634,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "LEADER",
+      "months_count": 36,
+      "avg_docs": 6167.31,
+      "std_docs": 2441.51,
+      "trend_slope": -110.134,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "KG",
+      "theme_code": "MANMADE",
+      "months_count": 36,
+      "avg_docs": 3873.97,
+      "std_docs": 1503.66,
+      "trend_slope": -149.7284,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "ECON",
+      "months_count": 36,
+      "avg_docs": 3009.22,
+      "std_docs": 783.41,
+      "trend_slope": 6.7716,
+      "trend_category": "Stabil",
+      "decision": "monthly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "MEDICAL",
+      "months_count": 36,
+      "avg_docs": 2590.64,
+      "std_docs": 2276.07,
+      "trend_slope": -69.6538,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "EDUCATION",
+      "months_count": 36,
+      "avg_docs": 3139.36,
+      "std_docs": 906.52,
+      "trend_slope": -78.5793,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "KILL",
+      "months_count": 36,
+      "avg_docs": 2823.83,
+      "std_docs": 1221.4,
+      "trend_slope": -99.303,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "MEDIA",
+      "months_count": 36,
+      "avg_docs": 4317.97,
+      "std_docs": 2183.62,
+      "trend_slope": -113.4767,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "GENERAL",
+      "months_count": 36,
+      "avg_docs": 10101.58,
+      "std_docs": 3841.05,
+      "trend_slope": -121.2133,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "EPU",
+      "months_count": 36,
+      "avg_docs": 9936.14,
+      "std_docs": 4005.3,
+      "trend_slope": -154.1946,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "MANMADE",
+      "months_count": 36,
+      "avg_docs": 4236.25,
+      "std_docs": 1834.62,
+      "trend_slope": -166.9406,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "CRISISLEX",
+      "months_count": 36,
+      "avg_docs": 8899.08,
+      "std_docs": 3752.49,
+      "trend_slope": -182.0991,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "LO",
+      "theme_code": "LEADER",
+      "months_count": 36,
+      "avg_docs": 7128.22,
+      "std_docs": 3689.87,
+      "trend_slope": -202.4382,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "EPU",
+      "months_count": 36,
+      "avg_docs": 51871.06,
+      "std_docs": 18032.85,
+      "trend_slope": 736.4289,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "LEADER",
+      "months_count": 36,
+      "avg_docs": 29630.56,
+      "std_docs": 11702.78,
+      "trend_slope": 405.1562,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "ECON",
+      "months_count": 36,
+      "avg_docs": 23262.69,
+      "std_docs": 7719.12,
+      "trend_slope": 390.0361,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "CRISISLEX",
+      "months_count": 36,
+      "avg_docs": 42107.64,
+      "std_docs": 15564.43,
+      "trend_slope": 352.2599,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "GENERAL",
+      "months_count": 36,
+      "avg_docs": 33282.08,
+      "std_docs": 11673.33,
+      "trend_slope": 310.2622,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "MEDIA",
+      "months_count": 36,
+      "avg_docs": 18908.25,
+      "std_docs": 6869.24,
+      "trend_slope": 264.2319,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "KILL",
+      "months_count": 36,
+      "avg_docs": 15624.69,
+      "std_docs": 8254.7,
+      "trend_slope": 195.0711,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "MEDICAL",
+      "months_count": 36,
+      "avg_docs": 12486.89,
+      "std_docs": 5631.88,
+      "trend_slope": 187.5338,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "EDUCATION",
+      "months_count": 36,
+      "avg_docs": 12251.0,
+      "std_docs": 4021.65,
+      "trend_slope": 143.5431,
+      "trend_category": "Artan",
+      "decision": "monthly"
+    },
+    {
+      "country": "SA",
+      "theme_code": "MANMADE",
+      "months_count": 36,
+      "avg_docs": 18712.0,
+      "std_docs": 8051.56,
+      "trend_slope": -80.0233,
+      "trend_category": "Azalan",
+      "decision": "quarterly"
+    }
+  ]
+}

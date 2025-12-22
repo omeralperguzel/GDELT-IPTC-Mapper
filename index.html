@@ -642,6 +642,7 @@
                 <button class="run-btn" style="background: #6c757d;" id="reset-btn" onclick="resetGDELTFilters()">🔄 Sıfırla</button>
                 <span style="margin: 0 10px; color: #999;">|</span>
                 <button class="run-btn" style="background: #28a745;" id="save-btn" title="Mevcut analizi kaydet" onclick="saveGDELTAnalysis()">💾 Kaydet</button>
+                <button class="run-btn" style="background: #17a2b8;" id="manage-analyses-btn" title="Kaydedilmiş analizleri yönet" onclick="showSavedAnalysesManager()">📂 Analizler</button>
                 <button class="run-btn" style="background: #17a2b8;" id="import-btn" title="Dosyadan içe aktar" onclick="triggerImport()">📥 İçe Aktar</button>
                 <input type="file" id="import-file-input" accept=".json" style="display: none;" onchange="handleGDELTImportFile(event)">
             </div>
@@ -1192,6 +1193,7 @@
                             
                             <div style="margin-bottom: 10px;">
                                 <button onclick="selectRecommendedCategories()" style="padding: 5px 10px; font-size: 0.8em; cursor: pointer; background: #4CAF50; color: white; border: none; border-radius: 4px; margin-right: 5px;">🎯 Önerilenleri Seç</button>
+                                <button onclick="selectAlternativeCategories()" style="padding: 5px 10px; font-size: 0.8em; cursor: pointer; background: #FF9800; color: white; border: none; border-radius: 4px; margin-right: 5px;">⚡ Alternatifleri Seç</button>
                                 <button onclick="clearCategorySelection()" style="padding: 5px 10px; font-size: 0.8em; cursor: pointer; background: #f44336; color: white; border: none; border-radius: 4px;">✖ Temizle</button>
                             </div>
                             
@@ -1581,23 +1583,68 @@
             return {
                 timestamp: new Date().toISOString(),
                 dataType: 'gdelt-iptc',
+                version: '2.0', // Versiyon bilgisi ekle
                 parameters: {
                     min_docs_threshold: parseInt(document.getElementById('min-docs-threshold')?.value) || 1000,
                     quality_threshold: parseInt(document.getElementById('quality-threshold')?.value) || 50,
                     similarity_threshold: parseFloat(document.getElementById('similarity-threshold')?.value) || 0.30,
                     iptc_filter: document.getElementById('iptc-filter-param')?.value || 'all'
                 },
+                // GDELT verileri
                 gdeltData: {
                     totalDocs: totalDocsData || [],
                     monthlyQuality: monthlyQualityData || [],
-                    monthlyDetail: monthlyDetailData || []
+                    monthlyDetail: monthlyDetailData || [],
+                    trendAnalysis: trendAnalysisData || []
                 },
-                iptcMapping: iptcMappingResults || null,
+                // IPTC eşleştirme sonuçları
+                iptcMapping: {
+                    activeMapping: activeMapping,
+                    v1: iptcMappingResultsV1 || null,
+                    v2: iptcMappingResultsV2 || null,
+                    current: iptcMappingResults || null
+                },
+                // Tema analizi sonuçları
+                themeAnalysis: {
+                    analyzedIPTCCategories: window.analyzedIPTCCategories || [],
+                    selectedIPTCCategories: Array.from(selectedIPTCCategories || []),
+                    themeCountByCountry: window.themeCountByCountry || {},
+                    categoryCountryChart: categoryCountryChart ? {
+                        type: 'chart',
+                        data: categoryCountryChart.data,
+                        options: categoryCountryChart.options
+                    } : null
+                },
+                // Grafik durumları
+                charts: {
+                    gdeltChartsGenerated: gdeltChartInstances.length > 0,
+                    clusteringChartsGenerated: clusteringChartInstances.length > 0,
+                    currentTab: document.querySelector('.tab-button.active')?.dataset?.tab || 'tab-gdelt'
+                },
+                // Tablo sıralama durumları
+                tableStates: {
+                    monthlyDetailSortColumn: monthlyDetailSortColumn || 'n_docs',
+                    monthlyDetailSortAsc: monthlyDetailSortAsc || false,
+                    trendSortColumn: trendSortColumn || 'trend_slope',
+                    trendSortAsc: trendSortAsc || false
+                },
+                // Filtre durumları
+                filters: {
+                    gdeltFiltersApplied: false, // Filtre uygulandı mı kontrolü
+                    exportColumns: Array.from(document.querySelectorAll('.export-col-checkbox:checked')).map(cb => cb.value) || []
+                },
+                // UI durumları
+                ui: {
+                    dataLoaded: gdeltDataLoaded || false,
+                    iptcResultsLoaded: (iptcMappingResultsV1 || iptcMappingResultsV2) ? true : false,
+                    themeAnalysisCompleted: window.analyzedIPTCCategories ? true : false
+                },
                 summary: {
                     totalThemes: totalDocsData ? new Set(totalDocsData.map(d => d.theme_code)).size : 0,
                     totalCountries: totalDocsData ? new Set(totalDocsData.map(d => d.country)).size : 0,
                     totalDocs: totalDocsData ? totalDocsData.reduce((s, d) => s + (d.total_docs || 0), 0) : 0,
-                    iptcCategories: iptcMappingResults ? new Set(iptcMappingResults.mappings?.map(m => m.iptc_category)).size : 0
+                    iptcCategories: iptcMappingResults ? new Set(iptcMappingResults.mappings?.map(m => m.iptc_category)).size : 0,
+                    selectedCategories: selectedIPTCCategories ? selectedIPTCCategories.size : 0
                 }
             };
         }
@@ -1622,44 +1669,127 @@
         // GDELT durumunu uygula
         function applyGDELTState(state) {
             if (!state) return;
-            
+
+            console.log('📂 Durum yükleniyor:', state.version || '1.0');
+
             // Parametreleri uygula
             if (state.parameters) {
                 const minDocsEl = document.getElementById('min-docs-threshold');
                 const qualityEl = document.getElementById('quality-threshold');
                 const similarityEl = document.getElementById('similarity-threshold');
                 const iptcFilterEl = document.getElementById('iptc-filter-param');
-                
+
                 if (minDocsEl) minDocsEl.value = state.parameters.min_docs_threshold || 1000;
                 if (qualityEl) qualityEl.value = state.parameters.quality_threshold || 50;
                 if (similarityEl) similarityEl.value = state.parameters.similarity_threshold || 0.30;
                 if (iptcFilterEl) iptcFilterEl.value = state.parameters.iptc_filter || 'all';
             }
-            
+
             // GDELT verilerini uygula
             if (state.gdeltData) {
                 if (state.gdeltData.totalDocs && state.gdeltData.totalDocs.length > 0) {
                     totalDocsData = state.gdeltData.totalDocs;
+                    gdeltTotalDocs = state.gdeltData.totalDocs;
                     updateTotalDocsTable();
                 }
                 if (state.gdeltData.monthlyQuality && state.gdeltData.monthlyQuality.length > 0) {
                     monthlyQualityData = state.gdeltData.monthlyQuality;
+                    gdeltMonthlyQuality = state.gdeltData.monthlyQuality;
                     updateMonthlyQualityTable();
                 }
                 if (state.gdeltData.monthlyDetail) {
                     monthlyDetailData = state.gdeltData.monthlyDetail;
+                    gdeltMonthlyDetail = state.gdeltData.monthlyDetail;
+                    updateMonthlyDetailTable();
+                }
+                if (state.gdeltData.trendAnalysis) {
+                    trendAnalysisData = state.gdeltData.trendAnalysis;
+                    updateTrendAnalysisTable();
                 }
             }
-            
+
             // IPTC eşleştirme sonuçlarını uygula
             if (state.iptcMapping) {
-                iptcMappingResults = state.iptcMapping;
-                displayIPTCMappingResults(iptcMappingResults);
+                if (state.iptcMapping.v1) {
+                    iptcMappingResultsV1 = state.iptcMapping.v1;
+                    document.getElementById('v1-status').innerHTML = `<span style="color: #4CAF50;">✓ ${state.iptcMapping.v1.themes ? state.iptcMapping.v1.themes.length : 0} tema yüklendi</span>`;
+                }
+                if (state.iptcMapping.v2) {
+                    iptcMappingResultsV2 = state.iptcMapping.v2;
+                    document.getElementById('v2-status').innerHTML = `<span style="color: #4CAF50;">✓ ${state.iptcMapping.v2.themes ? state.iptcMapping.v2.themes.length : 0} tema yüklendi</span>`;
+                }
+                if (state.iptcMapping.activeMapping) {
+                    activeMapping = state.iptcMapping.activeMapping;
+                    document.getElementById('active-mapping-select').value = activeMapping;
+                }
+                if (state.iptcMapping.current) {
+                    iptcMappingResults = state.iptcMapping.current;
+                    displayIPTCMappingResults(iptcMappingResults);
+                }
             }
-            
+
+            // Tema analizi sonuçlarını uygula
+            if (state.themeAnalysis) {
+                if (state.themeAnalysis.analyzedIPTCCategories) {
+                    window.analyzedIPTCCategories = state.themeAnalysis.analyzedIPTCCategories;
+                }
+                if (state.themeAnalysis.selectedIPTCCategories) {
+                    selectedIPTCCategories = new Set(state.themeAnalysis.selectedIPTCCategories);
+                    updateCategorySelection();
+                }
+                if (state.themeAnalysis.themeCountByCountry) {
+                    window.themeCountByCountry = state.themeAnalysis.themeCountByCountry;
+                }
+                // Grafikleri yeniden oluştur
+                if (state.themeAnalysis.categoryCountryChart) {
+                    updateCategoryCountryChart();
+                }
+            }
+
+            // Tablo sıralama durumlarını uygula
+            if (state.tableStates) {
+                monthlyDetailSortColumn = state.tableStates.monthlyDetailSortColumn || 'n_docs';
+                monthlyDetailSortAsc = state.tableStates.monthlyDetailSortAsc || false;
+                trendSortColumn = state.tableStates.trendSortColumn || 'trend_slope';
+                trendSortAsc = state.tableStates.trendSortAsc || false;
+            }
+
+            // Export sütun seçimlerini uygula
+            if (state.filters && state.filters.exportColumns) {
+                state.filters.exportColumns.forEach(col => {
+                    const checkbox = document.querySelector(`.export-col-checkbox[value="${col}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+
+            // UI durumlarını uygula
+            if (state.ui) {
+                gdeltDataLoaded = state.ui.dataLoaded || false;
+                if (state.ui.themeAnalysisCompleted && window.analyzedIPTCCategories) {
+                    // Adım A ve C'yi yeniden render et
+                    renderIPTCSummaryCards(window.analyzedIPTCCategories, [], iptcColors);
+                    renderIPTCSelectionPanel(window.analyzedIPTCCategories, [], iptcColors);
+                }
+            }
+
+            // Aktif sekmeyi uygula
+            if (state.charts && state.charts.currentTab) {
+                switchTab(state.charts.currentTab);
+            }
+
+            // Grafikleri yeniden oluştur (eğer veri varsa)
+            if (state.charts) {
+                if (state.charts.gdeltChartsGenerated && gdeltTotalDocs.length > 0) {
+                    setTimeout(() => generateGDELTCharts(), 500);
+                }
+                if (state.charts.clusteringChartsGenerated && iptcMappingResults) {
+                    setTimeout(() => generateClusteringCharts(), 500);
+                }
+            }
+
             // Özet bilgilerini göster
             if (state.summary) {
-                showStatus(`📊 Yüklendi: ${state.summary.totalThemes || 0} tema, ${state.summary.totalCountries || 0} ülke, ${(state.summary.totalDocs || 0).toLocaleString()} doküman`, 'success');
+                showStatus(`📊 Durum yüklendi: ${state.summary.totalThemes || 0} tema, ${state.summary.totalCountries || 0} ülke, ${state.summary.selectedCategories || 0} seçili kategori`, 'success');
             }
         }
         
@@ -1690,23 +1820,46 @@
                 showStatus('⚠️ Kaydetmek için önce GDELT verilerini yükleyin!', 'error');
                 return;
             }
-            
+
             const saveBtn = document.getElementById('save-btn');
             saveBtn.disabled = true;
             saveBtn.innerHTML = '<span class="loading-spinner"></span>Kaydediliyor...';
-            
+
             try {
                 const state = collectGDELTState();
-                
-                // JSON dosyası olarak indir (sunucu gerektirmez)
+
+                // Dosya adını oluştur
+                const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+                const filename = `gdelt_analysis_${timestamp}.json`;
+
+                // JSON dosyası olarak indir (kullanıcı indirmek isterse)
                 const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = `gdelt_iptc_analiz_${new Date().toISOString().slice(0,10)}.json`;
+                link.download = filename;
                 link.click();
-                
-                showStatus('✅ GDELT analizi JSON olarak indirildi!', 'success');
-                
+
+                // Ayrıca saved_analyses klasörüne kaydetmeye çalış (server-side)
+                try {
+                    const response = await fetch('/api/save-analysis', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            filename: filename,
+                            data: state
+                        })
+                    });
+
+                    if (response.ok) {
+                        showStatus(`✅ Analiz hem indirildi hem de sunucuya kaydedildi: ${filename}`, 'success');
+                    } else {
+                        showStatus(`✅ Analiz indirildi! Sunucu kaydetme başarısız (${response.status})`, 'info');
+                    }
+                } catch (serverError) {
+                    console.log('Server save failed:', serverError);
+                    showStatus(`✅ Analiz indirildi! (${filename})`, 'success');
+                }
+
             } catch (error) {
                 console.error('Kaydetme hatası:', error);
                 showStatus(`❌ Kaydetme hatası: ${error.message}`, 'error');
@@ -1730,25 +1883,32 @@
         async function handleGDELTImportFile(e) {
             const file = e.target.files[0];
             if (!file) return;
-            
+
             const importBtn = document.getElementById('import-btn');
             importBtn.disabled = true;
             importBtn.innerHTML = '<span class="loading-spinner"></span>Yükleniyor...';
-            
+
             try {
                 const text = await file.text();
                 const data = JSON.parse(text);
-                
+
                 // Veri tipine göre işle
                 if (data.dataType === 'gdelt-iptc') {
                     applyGDELTState(data);
                     showStatus(`✅ GDELT analizi yüklendi: ${file.name}`, 'success');
+
+                    // LocalStorage'a kaydet (gelecekteki otomatik yükleme için)
+                    try {
+                        localStorage.setItem('gdelt_iptc_last_state', JSON.stringify(data));
+                    } catch (storageError) {
+                        console.log('LocalStorage save failed:', storageError);
+                    }
                 } else {
                     // Eski format
                     applyState(data);
                     showStatus(`✅ Analiz dosyası yüklendi: ${file.name}`, 'success');
                 }
-                
+
             } catch (error) {
                 console.error('İçe aktarma hatası:', error);
                 showStatus(`❌ İçe aktarma hatası: ${error.message}`, 'error');
@@ -1814,22 +1974,158 @@
         
         // Otomatik yükleme (sayfa açılışında)
         async function autoLoadLastAnalysis() {
-            // LocalStorage'dan son durumu yükle
             try {
+                // Önce LocalStorage'dan son durumu yükle
                 const savedState = localStorage.getItem('gdelt_iptc_last_state');
                 if (savedState) {
                     const state = JSON.parse(savedState);
                     if (state.dataType === 'gdelt-iptc' && state.gdeltData) {
                         console.log('📂 LocalStorage\'dan son durum yükleniyor...');
                         applyGDELTState(state);
+                        return;
                     }
                 }
+
+                // LocalStorage'da yoksa, saved_analyses klasöründen en son dosyayı yüklemeye çalış
+                try {
+                    const response = await fetch('/api/list-saved-analyses');
+                    if (response.ok) {
+                        const files = await response.json();
+                        if (files && files.length > 0) {
+                            // En son dosyayı al (timestamp'e göre)
+                            const latestFile = files.sort().reverse()[0];
+                            console.log('📂 Sunucudan son analiz yükleniyor:', latestFile);
+
+                            const fileResponse = await fetch(`/api/load-analysis/${latestFile}`);
+                            if (fileResponse.ok) {
+                                const data = await fileResponse.json();
+                                applyGDELTState(data);
+
+                                // LocalStorage'a da kaydet
+                                localStorage.setItem('gdelt_iptc_last_state', JSON.stringify(data));
+                                return;
+                            }
+                        }
+                    }
+                } catch (serverError) {
+                    console.log('Server auto-load failed:', serverError);
+                }
+
             } catch (error) {
-                console.log('LocalStorage yükleme hatası:', error.message);
+                console.log('Auto-load error:', error.message);
             }
         }
         
-        // ==================== KAYDETME / İÇE AKTARMA FONKSİYONLARI SONU ====================
+        // Kaydedilmiş analizleri yönet
+        async function showSavedAnalysesManager() {
+            try {
+                const response = await fetch('/api/list-saved-analyses');
+                if (!response.ok) {
+                    showStatus('❌ Kaydedilmiş analizler yüklenemedi (sunucu bağlantısı yok)', 'error');
+                    return;
+                }
+
+                const files = await response.json();
+
+                if (!files || files.length === 0) {
+                    showStatus('📂 Kaydedilmiş analiz bulunamadı', 'info');
+                    return;
+                }
+
+                // Modal dialog oluştur
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.7); z-index: 10000; display: flex;
+                    align-items: center; justify-content: center;
+                `;
+
+                modal.innerHTML = `
+                    <div style="background: white; padding: 20px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+                        <h3 style="margin: 0 0 15px 0; color: #333;">💾 Kaydedilmiş Analizler</h3>
+                        <div id="saved-analyses-list" style="margin-bottom: 20px;">
+                            ${files.map(file => `
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 5px;">
+                                    <div style="flex: 1;">
+                                        <strong>${file.replace('.json', '')}</strong>
+                                        <div style="font-size: 0.8em; color: #666;">${formatFileDate(file)}</div>
+                                    </div>
+                                    <div>
+                                        <button onclick="loadSavedAnalysis('${file}'); this.closest('div').parentElement.parentElement.parentElement.remove();" style="background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; margin-right: 5px; cursor: pointer;">📥 Yükle</button>
+                                        <button onclick="deleteSavedAnalysis('${file}'); this.closest('div').remove();" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">🗑️ Sil</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div style="text-align: right;">
+                            <button onclick="this.closest('div').parentElement.remove();" style="background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Kapat</button>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+            } catch (error) {
+                console.error('Saved analyses manager error:', error);
+                showStatus('❌ Kaydedilmiş analizler yüklenirken hata oluştu', 'error');
+            }
+        }
+
+        // Kaydedilmiş analizi yükle
+        async function loadSavedAnalysis(filename) {
+            try {
+                showStatus('📥 Kaydedilmiş analiz yükleniyor...', 'info');
+
+                const response = await fetch(`/api/load-analysis/${filename}`);
+                if (!response.ok) throw new Error('Dosya yüklenemedi');
+
+                const data = JSON.parse(await response.text());
+                applyGDELTState(data);
+
+                // LocalStorage'a da kaydet
+                localStorage.setItem('gdelt_iptc_last_state', JSON.stringify(data));
+
+                showStatus(`✅ Kaydedilmiş analiz yüklendi: ${filename}`, 'success');
+
+            } catch (error) {
+                console.error('Load saved analysis error:', error);
+                showStatus(`❌ Analiz yüklenirken hata: ${error.message}`, 'error');
+            }
+        }
+
+        // Kaydedilmiş analizi sil
+        async function deleteSavedAnalysis(filename) {
+            if (!confirm(`"${filename}" dosyasını silmek istediğinizden emin misiniz?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/delete-analysis/${filename}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showStatus(`✅ Analiz silindi: ${filename}`, 'success');
+                } else {
+                    throw new Error('Silme başarısız');
+                }
+
+            } catch (error) {
+                console.error('Delete saved analysis error:', error);
+                showStatus(`❌ Analiz silinirken hata: ${error.message}`, 'error');
+            }
+        }
+
+        // Dosya tarihini formatla
+        function formatFileDate(filename) {
+            // gdelt_analysis_2024-12-23T10-30-45.json formatından tarih çıkar
+            const match = filename.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2})/);
+            if (match) {
+                const date = new Date(match[1].replace(/-/g, ':').replace('T', ' '));
+                return date.toLocaleString('tr-TR');
+            }
+            return '';
+        }
         
         // ==================== GDELT DIŞARI AKTARMA FONKSİYONLARI ====================
         
@@ -4326,6 +4622,7 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             const listEl = document.getElementById('iptc-selection-list');
             if (!listEl) return;
             
+            const countries = ['CE', 'HO', 'HR', 'KG', 'LO', 'SA'];
             const allIPTCCategories = Object.keys(IPTC_CATEGORIES);
             const iptcEmojis = {
                 'economy, business and finance': '💰',
@@ -4347,59 +4644,223 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 'weather': '🌤️'
             };
             
-            let html = '';
+            // Her kategori için kapsamlı metrikleri hesapla
+            const categoryMetrics = {};
             
-            // Tema sayısına göre sırala
-            const categoryStats = {};
             allIPTCCategories.forEach(cat => {
                 const themesInCat = sortedIPTCCategories.find(([c, _]) => c === cat);
                 const themes = themesInCat ? themesInCat[1] : [];
-                const totalDocs = themes.reduce((sum, t) => sum + t.totalDocs, 0);
                 
-                // Kalite kontrolü yap
-                let avgQuality = 0;
-                let qualityCount = 0;
-                themes.forEach(t => {
-                    ['CE', 'HO', 'HR', 'KG', 'LO', 'SA'].forEach(country => {
-                        const qRow = gdeltMonthlyQuality.find(r => r.country === country && r.theme_code === t.theme);
-                        if (qRow && qRow.months_total > 0) {
-                            avgQuality += qRow.months_ok / qRow.months_total;
-                            qualityCount++;
+                // 1. HACİM VERİSİ
+                const themeCount = themes.length;
+                let totalDocs = 0;
+                const countryDocs = {};
+                
+                countries.forEach(country => {
+                    countryDocs[country] = 0;
+                });
+                
+                themes.forEach(themeInfo => {
+                    // Tablo 3'ten doküman sayısı
+                    const themeDocs = gdeltMonthlyDetail ? 
+                        gdeltMonthlyDetail.filter(row => row.theme_code === themeInfo.theme)
+                            .reduce((sum, row) => sum + (row.n_docs || 0), 0) : 0;
+                    
+                    totalDocs += themeDocs;
+                    
+                    // Ülke bazında dağılım
+                    countries.forEach(country => {
+                        const countryThemeDocs = gdeltMonthlyDetail ?
+                            gdeltMonthlyDetail.filter(row => 
+                                row.theme_code === themeInfo.theme && row.country === country)
+                                .reduce((sum, row) => sum + (row.n_docs || 0), 0) : 0;
+                        countryDocs[country] += countryThemeDocs;
+                    });
+                });
+                
+                // 2. KAPSAMA/KALİTE VERİSİ
+                let totalMonthsOk = 0;
+                let totalMonthsTotal = 0;
+                let monthlyCount = 0;
+                let quarterlyCount = 0;
+                let excludeCount = 0;
+                
+                themes.forEach(themeInfo => {
+                    countries.forEach(country => {
+                        const qualityRow = gdeltMonthlyQuality.find(
+                            r => r.country === country && r.theme_code === themeInfo.theme
+                        );
+                        if (qualityRow && qualityRow.months_total > 0) {
+                            totalMonthsOk += qualityRow.months_ok;
+                            totalMonthsTotal += qualityRow.months_total;
+                            
+                            const ratio = qualityRow.months_ok / qualityRow.months_total;
+                            if (ratio >= 0.7) monthlyCount++;
+                            else if (ratio >= 0.4) quarterlyCount++;
+                            else excludeCount++;
                         }
                     });
                 });
-                avgQuality = qualityCount > 0 ? (avgQuality / qualityCount * 100) : 0;
                 
-                categoryStats[cat] = { themes, totalDocs, avgQuality, themeCount: themes.length };
+                const avgRatioOk = totalMonthsTotal > 0 ? totalMonthsOk / totalMonthsTotal : 0;
+                
+                // 3. V1-V2 ALGORİTMA FARKI
+                let v1Themes = 0;
+                let v2Themes = 0;
+                if (iptcMappingResultsV1 && iptcMappingResultsV1.themes) {
+                    v1Themes = iptcMappingResultsV1.themes.filter(t => 
+                        (t.iptc_final_label || t.iptc_label) === cat).length;
+                }
+                if (iptcMappingResultsV2 && iptcMappingResultsV2.themes) {
+                    v2Themes = iptcMappingResultsV2.themes.filter(t => 
+                        (t.iptc_final_label || t.iptc_label) === cat).length;
+                }
+                const v1v2Diff = v2Themes - v1Themes;
+                
+                // 4. TREND VERİSİ (Tablo 4'ten)
+                let increasingCount = 0;
+                let decreasingCount = 0;
+                let stableCount = 0;
+                
+                if (gdeltTrendAnalysis) {
+                    themes.forEach(themeInfo => {
+                        const trendRow = gdeltTrendAnalysis.find(
+                            r => r.theme_code === themeInfo.theme
+                        );
+                        if (trendRow) {
+                            const category = trendRow.trend_category || trendRow.category;
+                            if (category === 'Artan' || category === 'Increasing') increasingCount++;
+                            else if (category === 'Azalan' || category === 'Decreasing') decreasingCount++;
+                            else stableCount++;
+                        }
+                    });
+                }
+                
+                // PUAN HESAPLAMA (5+2 seçim için)
+                // Kriterler: hacim, kapsama, trend, V1-V2 tutarlılığı
+                const volumeScore = Math.min(themeCount / 10, 1) * 25; // Max 25 puan
+                const coverageScore = (monthlyCount * 2 + quarterlyCount) / (countries.length * 2) * 35; // Max 35 puan
+                const trendScore = (increasingCount + decreasingCount * 0.5) / themeCount * 25; // Max 25 puan
+                const consistencyScore = Math.max(0, 15 - Math.abs(v1v2Diff) * 2); // Max 15 puan
+                
+                const totalScore = volumeScore + coverageScore + trendScore + consistencyScore;
+                
+                categoryMetrics[cat] = {
+                    // Temel bilgiler
+                    themeCount,
+                    totalDocs,
+                    countryDocs,
+                    
+                    // Kapsama metrikleri
+                    totalMonthsOk,
+                    totalMonthsTotal,
+                    avgRatioOk,
+                    monthlyCount,
+                    quarterlyCount,
+                    excludeCount,
+                    
+                    // V1-V2 farkı
+                    v1Themes,
+                    v2Themes,
+                    v1v2Diff,
+                    
+                    // Trend metrikleri
+                    increasingCount,
+                    decreasingCount,
+                    stableCount,
+                    
+                    // Puan ve karar
+                    totalScore,
+                    themes
+                };
             });
             
-            const sortedCats = Object.entries(categoryStats).sort((a, b) => b[1].themeCount - a[1].themeCount);
+            // Kategorileri puana göre sırala (en yüksek puan önce)
+            const sortedCats = Object.entries(categoryMetrics)
+                .sort((a, b) => b[1].totalScore - a[1].totalScore);
             
-            sortedCats.forEach(([cat, stats]) => {
+            // En iyi 5'i "Önerilen", sonraki 2'yi "Alternatif" olarak işaretle
+            const recommendedCats = sortedCats.slice(0, 5).map(([cat, _]) => cat);
+            const alternativeCats = sortedCats.slice(5, 7).map(([cat, _]) => cat);
+            
+            // HTML oluştur
+            let html = `
+                <div style="background: #e3f2fd; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #2196F3;">
+                    <h5 style="color: #1976D2; margin: 0 0 8px 0; font-size: 0.9em;">🎯 Kategori Öneri Sistemi</h5>
+                    <p style="font-size: 0.8em; color: #666; margin: 0; line-height: 1.4;">
+                        Kategoriler hacim, kapsama, trend ve algoritma tutarlılığına göre puanlandı.<br>
+                        <strong>Önerilen (5):</strong> Ana analiz için en uygun • <strong>Alternatif (2):</strong> İlave seçenekler
+                    </p>
+                </div>
+            `;
+            
+            sortedCats.forEach(([cat, metrics], index) => {
                 const color = iptcColors[cat] || '#667eea';
                 const emoji = iptcEmojis[cat] || '📌';
                 const shortLabel = cat.split(',')[0];
-                const hasData = stats.themeCount > 0;
-                const isRecommended = stats.avgQuality >= 70 && stats.themeCount >= 5;
+                const hasData = metrics.themeCount > 0;
+                
+                // Öneri tipi belirle
+                let recommendationType = '';
+                let recommendationColor = '';
+                if (recommendedCats.includes(cat)) {
+                    recommendationType = 'Önerilen';
+                    recommendationColor = '#4CAF50';
+                } else if (alternativeCats.includes(cat)) {
+                    recommendationType = 'Alternatif';
+                    recommendationColor = '#FF9800';
+                }
                 
                 // Doküman formatla
                 let docsStr = '-';
-                if (stats.totalDocs > 1000000) docsStr = (stats.totalDocs / 1000000).toFixed(1) + 'M';
-                else if (stats.totalDocs > 1000) docsStr = (stats.totalDocs / 1000).toFixed(0) + 'K';
-                else if (stats.totalDocs > 0) docsStr = stats.totalDocs.toString();
+                if (metrics.totalDocs > 1000000) docsStr = (metrics.totalDocs / 1000000).toFixed(1) + 'M';
+                else if (metrics.totalDocs > 1000) docsStr = (metrics.totalDocs / 1000).toFixed(0) + 'K';
+                else if (metrics.totalDocs > 0) docsStr = metrics.totalDocs.toString();
+                
+                // Detay tooltip metni
+                const tooltipText = hasData ? `
+📊 HACİM: ${metrics.themeCount} tema, ${docsStr} doküman
+🌍 Ülke dağılımı: ${Object.entries(metrics.countryDocs).map(([c,d]) => `${c}:${(d/1000).toFixed(0)}K`).join(' ')}
+
+📈 KAPSAMA: ${(metrics.avgRatioOk * 100).toFixed(0)}% ortalama
+   ✓ ${metrics.monthlyCount} aylık • ⚠ ${metrics.quarterlyCount} üç aylık • ✗ ${metrics.excludeCount} hariç
+
+🔄 V1-V2 FARKI: V1:${metrics.v1Themes} V2:${metrics.v2Themes} (${metrics.v1v2Diff >= 0 ? '+' : ''}${metrics.v1v2Diff})
+
+📊 TREND: ↑${metrics.increasingCount} ↓${metrics.decreasingCount} →${metrics.stableCount}
+
+🎯 PUAN: ${metrics.totalScore.toFixed(1)}/100
+                ` : 'Veri yok';
                 
                 html += `
-                    <label class="iptc-select-row" style="display: flex; align-items: center; padding: 8px 10px; margin-bottom: 4px; background: ${hasData ? (isRecommended ? '#e8f5e9' : 'white') : '#f5f5f5'}; border: 1px solid ${hasData ? (isRecommended ? '#4CAF50' : '#e0e0e0') : '#ccc'}; border-radius: 6px; cursor: ${hasData ? 'pointer' : 'not-allowed'}; opacity: ${hasData ? 1 : 0.5};">
-                        <input type="checkbox" value="${cat}" onchange="updateCategorySelection()" ${hasData ? '' : 'disabled'} style="margin-right: 10px; width: 18px; height: 18px;">
+                    <label class="iptc-select-row" style="display: flex; align-items: center; padding: 12px 10px; margin-bottom: 6px; background: ${hasData ? 'white' : '#f5f5f5'}; border: 2px solid ${hasData ? (recommendationColor ? recommendationColor + '40' : '#e0e0e0') : '#ccc'}; border-radius: 8px; cursor: ${hasData ? 'pointer' : 'not-allowed'}; opacity: ${hasData ? 1 : 0.5}; transition: all 0.2s;" title="${tooltipText.trim()}">
+                        <input type="checkbox" value="${cat}" onchange="updateCategorySelection()" ${hasData ? '' : 'disabled'} style="margin-right: 12px; width: 18px; height: 18px;">
                         <div style="flex: 1;">
-                            <div style="display: flex; align-items: center; gap: 5px;">
-                                <span style="color: ${color}; font-weight: 600;">${emoji}</span>
-                                <span style="font-size: 0.9em; color: #333; text-transform: capitalize;">${shortLabel}</span>
-                                ${isRecommended ? '<span style="background: #4CAF50; color: white; padding: 1px 5px; border-radius: 8px; font-size: 0.65em;">Önerilen</span>' : ''}
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="color: ${color}; font-weight: 600; font-size: 1.1em;">${emoji}</span>
+                                <span style="font-size: 0.95em; color: #333; text-transform: capitalize; font-weight: 600;">${shortLabel}</span>
+                                ${recommendationType ? `<span style="background: ${recommendationColor}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7em; font-weight: 600;">${recommendationType}</span>` : ''}
+                                <span style="background: #f0f0f0; color: #666; padding: 2px 6px; border-radius: 8px; font-size: 0.7em; margin-left: auto;">${metrics.totalScore.toFixed(0)} puan</span>
                             </div>
-                            <div style="font-size: 0.75em; color: #666; margin-top: 2px;">
-                                ${stats.themeCount} tema · ${docsStr} doküman
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 6px;">
+                                <div style="font-size: 0.8em; color: #666;">
+                                    <strong>${metrics.themeCount}</strong> tema • <strong>${docsStr}</strong> doküman
+                                </div>
+                                <div style="font-size: 0.8em; color: #666;">
+                                    ✓${metrics.monthlyCount} ⚠${metrics.quarterlyCount} ✗${metrics.excludeCount} kapsama
+                                </div>
+                                <div style="font-size: 0.8em; color: #666;">
+                                    ↑${metrics.increasingCount} ↓${metrics.decreasingCount} →${metrics.stableCount} trend
+                                </div>
                             </div>
+                            
+                            ${hasData ? `
+                                <div style="display: flex; gap: 12px; font-size: 0.75em; color: #888;">
+                                    <span>V1-V2: ${metrics.v1Themes}→${metrics.v2Themes} (${metrics.v1v2Diff >= 0 ? '+' : ''}${metrics.v1v2Diff})</span>
+                                    <span>Ort. Kalite: ${(metrics.avgRatioOk * 100).toFixed(0)}%</span>
+                                </div>
+                            ` : '<div style="font-size: 0.8em; color: #999;">Veri yok</div>'}
                         </div>
                     </label>
                 `;
@@ -4431,13 +4892,32 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
         }
         
         function selectRecommendedCategories() {
+            // En yüksek puanlı 5 kategoriyi seç (önerilenler)
             const checkboxes = document.querySelectorAll('#iptc-selection-list input[type="checkbox"]');
-            checkboxes.forEach(cb => {
-                const row = cb.closest('.iptc-select-row');
-                if (row && row.querySelector('span[style*="#4CAF50"]')) {
-                    cb.checked = true;
+            const recommendedRows = document.querySelectorAll('#iptc-selection-list .iptc-select-row:has(span[style*="background: #4CAF50"])');
+            
+            recommendedRows.forEach(row => {
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                if (checkbox && !checkbox.disabled) {
+                    checkbox.checked = true;
                 }
             });
+            
+            updateCategorySelection();
+        }
+        
+        function selectAlternativeCategories() {
+            // En yüksek puanlı 2 kategoriyi seç (alternatifler)
+            const checkboxes = document.querySelectorAll('#iptc-selection-list input[type="checkbox"]');
+            const alternativeRows = document.querySelectorAll('#iptc-selection-list .iptc-select-row:has(span[style*="background: #FF9800"])');
+            
+            alternativeRows.forEach(row => {
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                if (checkbox && !checkbox.disabled) {
+                    checkbox.checked = true;
+                }
+            });
+            
             updateCategorySelection();
         }
         
