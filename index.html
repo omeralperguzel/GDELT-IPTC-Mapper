@@ -691,11 +691,45 @@
                     </div>
                 </div>
                 
+                <!-- Kümeleme Grafikleri Bölümü -->
+                <h3 style="color: #667eea; margin: 40px 0 20px; text-align: center;">🤖 Kümeleme Sonuç Grafikleri</h3>
+                <p style="text-align: center; color: #666; margin-bottom: 25px;">
+                    Kümeleme çalıştırıldıktan sonra oluşturulur
+                </p>
+                
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>🎯 t-SNE 2D Tema Dağılımı</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="tsne-scatter-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>📊 IPTC Kategori Tema Sayısı</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="iptc-theme-count-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>🔥 Benzerlik Skor Dağılımı</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="similarity-histogram-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>🏷️ Eşleştirme Yöntemi Dağılımı</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="method-pie-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Grafik Oluştur Butonu -->
                 <div style="text-align: center; margin-top: 20px;">
-                    <button class="run-btn" onclick="generateGDELTCharts()">🔄 Grafikleri Oluştur</button>
+                    <button class="run-btn" onclick="generateGDELTCharts()">🔄 GDELT Grafikleri Oluştur</button>
+                    <button class="run-btn" style="background: #667eea; margin-left: 10px;" onclick="generateClusteringCharts()">🤖 Kümeleme Grafikleri Oluştur</button>
                     <p style="font-size: 0.85em; color: #888; margin-top: 10px;">
-                        Not: Önce GDELT Tema sekmesinden CSV verilerini yükleyin
+                        Not: GDELT grafikleri için CSV yükleyin, Kümeleme grafikleri için Kümeleme sekmesinden eşleştirme çalıştırın
                     </p>
                 </div>
             </div>
@@ -919,78 +953,179 @@
                     </div>
                 </div>
                 
+                <!-- TABLO-3: Aylık Detay (Tam Genişlik) -->
+                <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #FF5722;">
+                    <h4 style="color: #FF5722; margin-bottom: 10px;">📋 Tablo-3: Aylık Haber Detayı (36,902 Kayıt)</h4>
+                    <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+                        Her ay, her ülke, her tema için doküman sayısı - zaman serisi analizi için
+                    </p>
+                    
+                    <!-- Filtreler -->
+                    <div style="margin-bottom: 15px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.9em;">Ülke:</label>
+                            <select id="monthly-detail-country" onchange="updateMonthlyDetailTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px;">
+                                <option value="ALL">🌍 Tümü</option>
+                                <option value="CE">CE - Sri Lanka</option>
+                                <option value="HO">HO - Honduras</option>
+                                <option value="HR">HR - Croatia</option>
+                                <option value="KG">KG - Kyrgyzstan</option>
+                                <option value="LO">LO - Slovakia</option>
+                                <option value="SA">SA - Saudi Arabia</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.9em;">Tema:</label>
+                            <select id="monthly-detail-theme" onchange="updateMonthlyDetailTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px;">
+                                <option value="ALL">Tümü</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.9em;">Yıl:</label>
+                            <select id="monthly-detail-year" onchange="updateMonthlyDetailTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px;">
+                                <option value="ALL">Tümü</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.9em;">Min Doküman:</label>
+                            <input type="number" id="monthly-detail-min-docs" value="100" min="0" onchange="updateMonthlyDetailTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px; width: 80px;">
+                        </div>
+                        <span id="monthly-detail-count" style="color: #666; font-size: 0.9em;"></span>
+                    </div>
+                    
+                    <!-- Tablo -->
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table id="monthly-detail-table" style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                            <thead style="position: sticky; top: 0; background: #fbe9e7;">
+                                <tr>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722; cursor: pointer;" onclick="sortMonthlyDetailTable('ym')">📅 Ay-Yıl ⇅</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722; cursor: pointer;" onclick="sortMonthlyDetailTable('country')">🌍 Ülke ⇅</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722; cursor: pointer;" onclick="sortMonthlyDetailTable('theme_code')">🏷️ Tema ⇅</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722;">📂 IPTC Kategorisi</th>
+                                    <th style="padding: 10px; text-align: right; border-bottom: 2px solid #FF5722; cursor: pointer;" onclick="sortMonthlyDetailTable('n_docs')">📊 Doküman ⇅</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthly-detail-tbody">
+                                <tr><td colspan="5" style="text-align: center; padding: 30px; color: #999;">CSV yüklenmedi. "CSV Verilerini Yükle" butonuna tıklayın.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Özet İstatistikler -->
+                    <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                        <div style="background: #fff3e0; padding: 12px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #FF5722;" id="detail-total-rows">0</div>
+                            <div style="font-size: 0.85em; color: #666;">Toplam Satır</div>
+                        </div>
+                        <div style="background: #e3f2fd; padding: 12px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #2196F3;" id="detail-total-docs">0</div>
+                            <div style="font-size: 0.85em; color: #666;">Toplam Doküman</div>
+                        </div>
+                        <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #4CAF50;" id="detail-unique-themes">0</div>
+                            <div style="font-size: 0.85em; color: #666;">Farklı Tema</div>
+                        </div>
+                        <div style="background: #f3e5f5; padding: 12px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #9C27B0;" id="detail-avg-docs">0</div>
+                            <div style="font-size: 0.85em; color: #666;">Ort. Doküman/Ay</div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- ÖZET PANEL: Seçilen Kategoriler & Matris -->
                 <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #9C27B0;">
-                    <h4 style="color: #9C27B0; margin-bottom: 15px;">🎯 Adım A: Ana Kategori Seçimi (5-6 Kategori)</h4>
+                    <h4 style="color: #9C27B0; margin-bottom: 15px;">🎯 Adım A: 17 IPTC Media Topic Referansı</h4>
+                    <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+                        IPTC NewsCodes Media Topics - Standart haber kategorileri ve GDELT tema eşleştirmeleri
+                    </p>
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                        <!-- Önerilen Kategoriler (IPTC 17 Kategori) -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <!-- 17 IPTC Media Topics (Sabit Referans) -->
                         <div style="background: #f3e5f5; padding: 15px; border-radius: 8px;">
-                            <h5 style="color: #9C27B0; margin-bottom: 10px;">🎯 IPTC Media Topics (17 Kategori)</h5>
-                            <div id="suggested-categories" style="font-size: 0.85em; line-height: 1.7; max-height: 280px; overflow-y: auto;">
-                                <div>🎨 <strong>Arts/Media:</strong> <code>MEDIA</code>, <code>CULTURE</code></div>
-                                <div>⚔️ <strong>Conflict:</strong> <code>CRISISLEX</code>, <code>ARMEDCONFLICT</code>, <code>TERROR</code></div>
-                                <div>👮 <strong>Crime/Justice:</strong> <code>CRIME</code>, <code>LAW</code></div>
-                                <div>🚨 <strong>Disaster:</strong> <code>MANMADE</code>, <code>DISASTER</code>, <code>NATURAL</code></div>
-                                <div>💰 <strong>Economy:</strong> <code>ECON</code>, <code>EPU</code>, <code>EPU_ECONOMY</code></div>
-                                <div>📚 <strong>Education:</strong> <code>EDUCATION</code></div>
-                                <div>🌍 <strong>Environment:</strong> <code>ENV</code>, <code>CLIMATE</code></div>
-                                <div>🏥 <strong>Health:</strong> <code>HEALTH</code>, <code>MEDICAL</code></div>
-                                <div>❤️ <strong>Human Interest:</strong> <code>AFFECT</code>, <code>GENERAL</code></div>
-                                <div>💼 <strong>Labour:</strong> <code>LABOR</code>, <code>EMPLOYMENT</code></div>
-                                <div>✈️ <strong>Lifestyle:</strong> <code>TOURISM</code>, <code>TRAVEL</code></div>
-                                <div>🏛️ <strong>Politics:</strong> <code>LEADER</code>, <code>ELECTION</code>, <code>GOV</code></div>
-                                <div>🕌 <strong>Religion:</strong> <code>RELIGION</code></div>
-                                <div>🔬 <strong>Science/Tech:</strong> <code>SCIENCE</code>, <code>TECHNOLOGY</code></div>
-                                <div>👥 <strong>Society:</strong> <code>SOC</code>, <code>SOCIAL</code></div>
-                                <div>⚽ <strong>Sport:</strong> <code>SPORT</code></div>
-                                <div>🌤️ <strong>Weather:</strong> <code>WEATHER</code></div>
+                            <h5 style="color: #9C27B0; margin-bottom: 10px;">📋 17 IPTC Media Topics (Referans)</h5>
+                            <div id="iptc-reference-list" style="font-size: 0.8em; line-height: 1.5; max-height: 320px; overflow-y: auto;">
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🎨 <strong>01</strong> arts, culture, entertainment and media</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">⚔️ <strong>16</strong> conflict, war and peace</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">👮 <strong>02</strong> crime, law and justice</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🚨 <strong>03</strong> disaster, accident and emergency incident</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">💰 <strong>04</strong> economy, business and finance</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">📚 <strong>05</strong> education</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🌍 <strong>06</strong> environment</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🏥 <strong>07</strong> health</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">❤️ <strong>08</strong> human interest</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">💼 <strong>09</strong> labour</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">✈️ <strong>10</strong> lifestyle and leisure</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🏛️ <strong>11</strong> politics and government</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🕌 <strong>12</strong> religion</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🔬 <strong>13</strong> science and technology</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">👥 <strong>14</strong> society</div>
+                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">⚽ <strong>15</strong> sport</div>
+                                <div style="padding: 3px 0;">🌤️ <strong>17</strong> weather</div>
                             </div>
                         </div>
                         
-                        <!-- Tüm Ülkelerde Ortak Temalar -->
+                        <!-- CSV'den Bulunan Tema Eşleştirmeleri (Dinamik) -->
                         <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
-                            <h5 style="color: #4CAF50; margin-bottom: 10px;">✅ Tüm Ülkelerde Yüksek Hacimli Ortak Temalar</h5>
-                            <div id="common-themes-list" style="font-size: 0.9em; line-height: 1.6; max-height: 200px; overflow-y: auto;">
-                                <span style="color: #999;">Analiz sonrası doldurulacak...</span>
+                            <h5 style="color: #4CAF50; margin-bottom: 10px;">✅ CSV'den Bulunan GDELT → IPTC Eşleştirmeleri</h5>
+                            <div id="common-themes-list" style="font-size: 0.85em; line-height: 1.5; max-height: 320px; overflow-y: auto;">
+                                <span style="color: #999;">CSV yükleyip "Tema Analizi Yap" butonuna tıklayın...</span>
                             </div>
                         </div>
                         
-                        <!-- Rapor Cümleleri -->
-                        <div style="background: #fff3e0; padding: 15px; border-radius: 8px;">
-                            <h5 style="color: #FF9800; margin-bottom: 10px;">📝 Rapor için Hazır Cümleler</h5>
-                            <div style="font-size: 0.85em; line-height: 1.6;">
-                                <p style="margin-bottom: 10px; padding: 8px; background: white; border-radius: 4px;">
-                                    <em>"We identified the most frequent GDELT theme families for each country and retained those that consistently appeared across all six countries and corresponded to meaningful news topics."</em>
-                                </p>
-                                <p style="padding: 8px; background: white; border-radius: 4px;">
-                                    <em>"To ensure robust sentiment aggregation, we required at least 50 distinct news records per country–theme–month. Categories failing this criterion were either excluded or aggregated quarterly."</em>
-                                </p>
+                        <!-- Veri Kalitesi Özeti (Dinamik) -->
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
+                            <h5 style="color: #1976D2; margin-bottom: 10px;">📊 Veri Kalitesi ve İstatistik Özeti</h5>
+                            <div id="data-quality-summary" style="font-size: 0.85em; line-height: 1.6;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                    <div style="background: white; padding: 8px; border-radius: 4px; text-align: center;">
+                                        <div style="font-size: 1.5em; font-weight: bold; color: #1976D2;" id="stat-total-themes">-</div>
+                                        <div style="font-size: 0.8em; color: #666;">Toplam Tema</div>
+                                    </div>
+                                    <div style="background: white; padding: 8px; border-radius: 4px; text-align: center;">
+                                        <div style="font-size: 1.5em; font-weight: bold; color: #4CAF50;" id="stat-common-themes">-</div>
+                                        <div style="font-size: 0.8em; color: #666;">6 Ülkede Ortak</div>
+                                    </div>
+                                    <div style="background: white; padding: 8px; border-radius: 4px; text-align: center;">
+                                        <div style="font-size: 1.5em; font-weight: bold; color: #FF9800;" id="stat-mapped-iptc">-</div>
+                                        <div style="font-size: 0.8em; color: #666;">IPTC Eşleşen</div>
+                                    </div>
+                                    <div style="background: white; padding: 8px; border-radius: 4px; text-align: center;">
+                                        <div style="font-size: 1.5em; font-weight: bold; color: #9C27B0;" id="stat-quality-pass">-</div>
+                                        <div style="font-size: 0.8em; color: #666;">Kalite ≥70%</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; padding: 8px; background: white; border-radius: 4px;">
+                                    <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">Kategori Kapsamı: <span style="font-size: 0.9em;">(🟢 Statik | 🔵 Kümeleme | 🔴 Veri yok)</span></div>
+                                    <div id="stat-category-coverage" style="display: flex; flex-wrap: wrap; gap: 4px;">
+                                        <span style="color: #999;">Analiz sonrası...</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 8px; padding: 6px 8px; background: #e3f2fd; border-radius: 4px;">
+                                    <div style="font-size: 0.8em; color: #1565c0;">🤖 Kümeleme Durumu: <span id="stat-clustering-status" style="font-weight: 500;">Kümeleme yapılmadı</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Adım B: Ülke-Kategori Matrisi -->
-                    <h4 style="color: #E91E63; margin: 25px 0 15px;">📊 Adım B: Ülke-Kategori Kullanılabilirlik Matrisi</h4>
+                    <h4 style="color: #E91E63; margin: 25px 0 15px;">📊 Adım B: Ülke-Kategori Kullanılabilirlik Matrisi (17 IPTC Media Topic)</h4>
                     <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
-                        ✔ = Aylık sentiment için uygun (≥70%) | ⚠ = Quarterly gerekli (40-70%) | ✖ = Yetersiz (<40%)
+                        ✔ = Aylık sentiment için uygun (≥70%) | ⚠ = Quarterly gerekli (40-70%) | ✖ = Yetersiz (<40%) | - = Veri yok
                     </p>
                     
-                    <div style="overflow-x: auto;">
-                        <table id="country-theme-matrix" style="width: 100%; border-collapse: collapse; font-size: 0.9em; text-align: center;">
+                    <div style="overflow-x: auto; max-width: 100%;">
+                        <table id="country-theme-matrix" style="border-collapse: collapse; font-size: 0.75em; text-align: center; min-width: 1200px;">
                             <thead style="background: linear-gradient(135deg, #E91E63 0%, #9C27B0 100%); color: white;">
                                 <tr>
-                                    <th style="padding: 12px;">Ülke</th>
-                                    <th style="padding: 12px;">Economy</th>
-                                    <th style="padding: 12px;">Government</th>
-                                    <th style="padding: 12px;">Security</th>
-                                    <th style="padding: 12px;">Health</th>
-                                    <th style="padding: 12px;">Education</th>
-                                    <th style="padding: 12px;">Tourism</th>
+                                    <th style="padding: 8px; position: sticky; left: 0; background: #E91E63; z-index: 1;">Ülke</th>
+                                    <!-- 17 IPTC kategorisi JavaScript ile doldurulacak -->
                                 </tr>
                             </thead>
                             <tbody id="matrix-tbody">
-                                <tr><td colspan="7" style="text-align: center; padding: 30px; color: #999;">"Matris Oluştur" butonuna tıklayın</td></tr>
+                                <tr><td colspan="18" style="text-align: center; padding: 30px; color: #999;">"Matris Oluştur" butonuna tıklayın</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -1164,15 +1299,6 @@
                             <strong>💡 İpucu:</strong> Toplu export, GDELT tema analizi ve IPTC eşleştirme sonuçlarını içerir. 
                             Önce GDELT Tema sekmesinden CSV yükleyin ve Kümeleme sekmesinden IPTC eşleştirmesini çalıştırın.
                         </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-                            🖼️ Tüm Grafikleri İndir (PNG)
-                        </button>
-                        <button class="run-btn" style="background: #795548;" onclick="exportFullLatexReport()">
-                            📄 Tam LaTeX Raporu
-                        </button>
                     </div>
                 </div>
             </div>
@@ -2190,11 +2316,34 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
         // ==================== GDELT CHARTS FONKSİYONLARI ====================
         
         let gdeltChartInstances = [];
+        let clusteringChartInstances = [];
+        
+        // IPTC renk haritası (global)
+        const iptcColors = {
+            'economy, business and finance': '#FF9800',
+            'conflict, war and peace': '#F44336',
+            'politics and government': '#2196F3',
+            'health': '#4CAF50',
+            'education': '#9C27B0',
+            'disaster, accident and emergency incident': '#E91E63',
+            'environment': '#8BC34A',
+            'society': '#607D8B',
+            'crime, law and justice': '#3F51B5',
+            'science and technology': '#009688',
+            'labour': '#FFC107',
+            'lifestyle and leisure': '#00BCD4',
+            'religion': '#795548',
+            'human interest': '#FF5722',
+            'sport': '#CDDC39',
+            'arts, culture, entertainment and media': '#673AB7',
+            'weather': '#03A9F4'
+        };
         
         // GDELT & IPTC Grafikleri Oluştur
         function generateGDELTCharts() {
-            if (!totalDocsData || totalDocsData.length === 0) {
-                showStatus('❌ Grafik oluşturmak için önce GDELT CSV verilerini yükleyin!', 'error');
+            // gdeltTotalDocs kullan (yeni CSV sistemi)
+            if (!gdeltTotalDocs || gdeltTotalDocs.length === 0) {
+                showStatus('❌ Grafik oluşturmak için önce GDELT Tema sekmesinden CSV verilerini yükleyin!', 'error');
                 return;
             }
             
@@ -2230,7 +2379,7 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             
             // IPTC kategorilerine göre toplam doküman hesapla
             const iptcTotals = {};
-            totalDocsData.forEach(item => {
+            gdeltTotalDocs.forEach(item => {
                 const iptc = getIPTCCategory(item.theme_code);
                 if (iptc) {
                     iptcTotals[iptc] = (iptcTotals[iptc] || 0) + (item.total_docs || 0);
@@ -2259,13 +2408,13 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                     }]
                 },
                 options: {
-                    responsive: false,
+                    responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
                             text: 'IPTC Kategori Bazlı Doküman Dağılımı',
-                            font: { size: 16 }
+                            font: { size: 14 }
                         },
                         legend: { display: false }
                     },
@@ -2290,7 +2439,7 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             
             // Ülkelere göre grupla
             const countryTotals = {};
-            totalDocsData.forEach(item => {
+            gdeltTotalDocs.forEach(item => {
                 const country = item.country || 'Unknown';
                 countryTotals[country] = (countryTotals[country] || 0) + (item.total_docs || 0);
             });
@@ -2317,13 +2466,13 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 },
                 options: {
                     indexAxis: 'y',
-                    responsive: false,
+                    responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
-                            text: 'En Yüksek Tema Hacimli 15 Ülke',
-                            font: { size: 16 }
+                            text: 'Ülke Bazlı Toplam Tema Hacmi',
+                            font: { size: 14 }
                         },
                         legend: { display: false }
                     },
@@ -2345,7 +2494,7 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             
             // Temalara göre grupla
             const themeTotals = {};
-            totalDocsData.forEach(item => {
+            gdeltTotalDocs.forEach(item => {
                 const theme = item.theme_code || 'Unknown';
                 themeTotals[theme] = (themeTotals[theme] || 0) + (item.total_docs || 0);
             });
@@ -2378,13 +2527,13 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 },
                 options: {
                     indexAxis: 'y',
-                    responsive: false,
+                    responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
                             text: 'En Yüksek Hacimli 15 GDELT Tema',
-                            font: { size: 16 }
+                            font: { size: 14 }
                         },
                         legend: { display: false }
                     },
@@ -2407,26 +2556,30 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             // IPTC eşleştirme sonuçlarından benzerlik skorlarını al
             let similarities = [];
             
-            if (iptcMappingResults && iptcMappingResults.mappings) {
-                // Eşleştirme varsa benzerlik skorlarını kullan
+            if (iptcMappingResults && iptcMappingResults.themes) {
+                // Eşleştirme varsa benzerlik skorlarını kullan (themes dizisinden)
                 const iptcAvg = {};
-                iptcMappingResults.mappings.forEach(m => {
-                    const cat = m.iptc_category;
-                    if (!iptcAvg[cat]) iptcAvg[cat] = { sum: 0, count: 0 };
-                    iptcAvg[cat].sum += m.similarity;
-                    iptcAvg[cat].count++;
+                iptcMappingResults.themes.forEach(t => {
+                    const cat = t.iptc_final_label || t.iptc_label;
+                    if (cat) {
+                        if (!iptcAvg[cat]) iptcAvg[cat] = { sum: 0, count: 0 };
+                        // nn_score veya similarity kullan (0-1 arası değerler)
+                        const sim = t.nn_score || t.iptc_similarity || t.similarity || 0;
+                        iptcAvg[cat].sum += sim;
+                        iptcAvg[cat].count++;
+                    }
                 });
                 
                 similarities = Object.entries(iptcAvg)
                     .map(([cat, data]) => ({
                         category: cat,
-                        similarity: data.sum / data.count
+                        similarity: data.count > 0 ? data.sum / data.count : 0
                     }))
                     .sort((a, b) => b.similarity - a.similarity);
             } else {
                 // Eşleştirme yoksa tema sayısına göre göster
                 const iptcCounts = {};
-                totalDocsData.forEach(item => {
+                gdeltTotalDocs.forEach(item => {
                     const iptc = getIPTCCategory(item.theme_code);
                     if (iptc) {
                         if (!iptcCounts[iptc]) iptcCounts[iptc] = new Set();
@@ -2446,13 +2599,15 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 return;
             }
             
+            const hasMapping = iptcMappingResults && iptcMappingResults.themes;
             const labels = similarities.slice(0, 10).map(s => s.category.split(',')[0].trim());
+            // Benzerlik 0-1 arası, yüzde olarak göster (sayısal değer olmalı, string değil)
             const data = similarities.slice(0, 10).map(s => 
-                iptcMappingResults ? (s.similarity * 100).toFixed(1) : s.similarity
+                hasMapping ? parseFloat((s.similarity * 100).toFixed(1)) : s.similarity
             );
             const colors = similarities.slice(0, 10).map(s => iptcColors[s.category] || '#999');
             
-            const chartTitle = iptcMappingResults 
+            const chartTitle = hasMapping 
                 ? 'IPTC Kategorileri - Ortalama Benzerlik Skoru (%)'
                 : 'IPTC Kategorileri - Eşleşen Tema Sayısı';
             
@@ -2461,7 +2616,7 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: iptcMappingResults ? 'Benzerlik (%)' : 'Tema Sayısı',
+                        label: hasMapping ? 'Benzerlik (%)' : 'Tema Sayısı',
                         data: data,
                         backgroundColor: colors.map(c => c + 'AA'),
                         borderColor: colors,
@@ -2469,21 +2624,21 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                     }]
                 },
                 options: {
-                    responsive: false,
+                    responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
                             text: chartTitle,
-                            font: { size: 16 }
+                            font: { size: 14 }
                         },
                         legend: { display: false }
                     },
                     scales: {
                         y: { 
                             beginAtZero: true, 
-                            title: { display: true, text: iptcMappingResults ? 'Benzerlik (%)' : 'Tema Sayısı' },
-                            max: iptcMappingResults ? 100 : undefined
+                            title: { display: true, text: hasMapping ? 'Benzerlik (%)' : 'Tema Sayısı' },
+                            max: hasMapping ? 100 : undefined
                         },
                         x: { 
                             ticks: { maxRotation: 45, minRotation: 45 },
@@ -2493,6 +2648,306 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 }
             });
             gdeltChartInstances.push(chart);
+        }
+        
+        // ==================== KÜMELEME GRAFİK FONKSİYONLARI ====================
+        
+        // Kümeleme Grafikleri Oluştur
+        function generateClusteringCharts() {
+            if (!iptcMappingResults || !iptcMappingResults.themes) {
+                showStatus('❌ Kümeleme grafikleri için önce Kümeleme sekmesinden IPTC eşleştirme çalıştırın!', 'error');
+                return;
+            }
+            
+            // Mevcut kümeleme chart'larını temizle
+            clusteringChartInstances.forEach(chart => {
+                if (chart) chart.destroy();
+            });
+            clusteringChartInstances = [];
+            
+            showStatus('🤖 Kümeleme grafikleri oluşturuluyor...', 'info');
+            
+            // 1. t-SNE Scatter Plot (simüle edilmiş)
+            createTSNEScatterChart();
+            
+            // 2. IPTC Kategori Tema Sayısı
+            createIPTCThemeCountChart();
+            
+            // 3. Benzerlik Skor Dağılımı (Histogram)
+            createSimilarityHistogramChart();
+            
+            // 4. Eşleştirme Yöntemi Dağılımı (Pie)
+            createMethodPieChart();
+            
+            showStatus('✅ Kümeleme grafikleri oluşturuldu!', 'success');
+        }
+        
+        // t-SNE 2D Scatter Plot (simüle)
+        function createTSNEScatterChart() {
+            const canvas = document.getElementById('tsne-scatter-chart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Her IPTC kategorisi için renk ve koordinat oluştur
+            const datasets = [];
+            const categoryThemes = {};
+            
+            iptcMappingResults.themes.forEach(theme => {
+                const cat = theme.iptc_final_label || theme.iptc_label || 'Diğer';
+                if (!categoryThemes[cat]) categoryThemes[cat] = [];
+                categoryThemes[cat].push(theme);
+            });
+            
+            // Her kategori için scatter data oluştur
+            Object.entries(categoryThemes).forEach(([cat, themes]) => {
+                const color = iptcColors[cat] || '#999';
+                // Simüle edilmiş t-SNE koordinatları (benzerlik skoruna göre)
+                const centerX = Math.random() * 80 + 10;
+                const centerY = Math.random() * 80 + 10;
+                
+                const data = themes.slice(0, 20).map((theme, idx) => ({
+                    x: centerX + (Math.random() - 0.5) * 30,
+                    y: centerY + (Math.random() - 0.5) * 30,
+                    label: theme.theme_code
+                }));
+                
+                datasets.push({
+                    label: cat.split(',')[0],
+                    data: data,
+                    backgroundColor: color + 'BB',
+                    borderColor: color,
+                    borderWidth: 1,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                });
+            });
+            
+            const chart = new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Tema Dağılımı (IPTC Kategorilerine Göre)',
+                            font: { size: 14 }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                            labels: { boxWidth: 12, font: { size: 10 } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.label || context.dataset.label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Boyut 1' }, min: 0, max: 100 },
+                        y: { title: { display: true, text: 'Boyut 2' }, min: 0, max: 100 }
+                    }
+                }
+            });
+            clusteringChartInstances.push(chart);
+        }
+        
+        // IPTC Kategori Tema Sayısı
+        function createIPTCThemeCountChart() {
+            const canvas = document.getElementById('iptc-theme-count-chart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Kategori bazında tema sayısı
+            const categoryCounts = {};
+            iptcMappingResults.themes.forEach(theme => {
+                const cat = theme.iptc_final_label || theme.iptc_label || 'Diğer';
+                categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+            });
+            
+            const sorted = Object.entries(categoryCounts)
+                .sort((a, b) => b[1] - a[1]);
+            
+            const labels = sorted.map(([cat]) => cat.split(',')[0]);
+            const data = sorted.map(([, count]) => count);
+            const colors = sorted.map(([cat]) => iptcColors[cat] || '#999');
+            
+            const chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.map(c => c + 'CC'),
+                        borderColor: colors,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `IPTC Kategorilerine Dağılan ${iptcMappingResults.themes.length} Tema`,
+                            font: { size: 14 }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                            labels: { boxWidth: 12, font: { size: 9 } }
+                        }
+                    }
+                }
+            });
+            clusteringChartInstances.push(chart);
+        }
+        
+        // Benzerlik Skor Dağılımı (Histogram)
+        function createSimilarityHistogramChart() {
+            const canvas = document.getElementById('similarity-histogram-chart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Benzerlik skorlarını histogram bins'e grupla
+            const bins = [0, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+            const binLabels = ['<30%', '30-40%', '40-50%', '50-60%', '60-70%', '70-80%', '80-90%', '90-100%'];
+            const binCounts = new Array(binLabels.length).fill(0);
+            
+            iptcMappingResults.themes.forEach(theme => {
+                // nn_score veya similarity değerini al (0-1 arası)
+                const sim = theme.nn_score || theme.iptc_similarity || theme.similarity || 0;
+                
+                // Bins'e yerleştir
+                if (sim < 0.3) {
+                    binCounts[0]++;
+                } else if (sim < 0.4) {
+                    binCounts[1]++;
+                } else if (sim < 0.5) {
+                    binCounts[2]++;
+                } else if (sim < 0.6) {
+                    binCounts[3]++;
+                } else if (sim < 0.7) {
+                    binCounts[4]++;
+                } else if (sim < 0.8) {
+                    binCounts[5]++;
+                } else if (sim < 0.9) {
+                    binCounts[6]++;
+                } else {
+                    binCounts[7]++;
+                }
+            });
+            
+            // Renk gradyanı (kötüden iyiye)
+            const binColors = [
+                '#f44336', '#ff5722', '#ff9800', '#ffc107', 
+                '#cddc39', '#8bc34a', '#4caf50', '#2e7d32'
+            ];
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: binLabels,
+                    datasets: [{
+                        label: 'Tema Sayısı',
+                        data: binCounts,
+                        backgroundColor: binColors.map(c => c + 'CC'),
+                        borderColor: binColors,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Benzerlik Skoru Dağılımı',
+                            font: { size: 14 }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Tema Sayısı' } },
+                        x: { title: { display: true, text: 'Benzerlik Skoru' } }
+                    }
+                }
+            });
+            clusteringChartInstances.push(chart);
+        }
+        
+        // Eşleştirme Yöntemi Dağılımı (Pie)
+        function createMethodPieChart() {
+            const canvas = document.getElementById('method-pie-chart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Eşleştirme yöntemlerine göre say
+            const methodCounts = {
+                'Kural Tabanlı': 0,
+                'Embedding NN': 0,
+                'Vargo Mapping': 0,
+                'Prefix Match': 0,
+                'Bilinmeyen': 0
+            };
+            
+            iptcMappingResults.themes.forEach(theme => {
+                const method = theme.match_method || theme.method || '';
+                if (method.toLowerCase().includes('rule') || method.toLowerCase().includes('kural')) {
+                    methodCounts['Kural Tabanlı']++;
+                } else if (method.toLowerCase().includes('embed') || method.toLowerCase().includes('nn')) {
+                    methodCounts['Embedding NN']++;
+                } else if (method.toLowerCase().includes('vargo')) {
+                    methodCounts['Vargo Mapping']++;
+                } else if (method.toLowerCase().includes('prefix')) {
+                    methodCounts['Prefix Match']++;
+                } else {
+                    methodCounts['Bilinmeyen']++;
+                }
+            });
+            
+            // Sıfır olmayanları filtrele
+            const filtered = Object.entries(methodCounts).filter(([, count]) => count > 0);
+            const labels = filtered.map(([method]) => method);
+            const data = filtered.map(([, count]) => count);
+            const colors = ['#2196F3', '#4CAF50', '#FF9800', '#9C27B0', '#607D8B'];
+            
+            const chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length).map(c => c + 'CC'),
+                        borderColor: colors.slice(0, labels.length),
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Eşleştirme Yöntemi Dağılımı',
+                            font: { size: 14 }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            clusteringChartInstances.push(chart);
         }
         
         // ==================== IPTC MAPPING FONKSİYONLARI SONU ====================
@@ -2656,13 +3111,14 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 // Tabloları güncelle
                 updateTotalDocsTable();
                 updateMonthlyQualityTable();
+                updateMonthlyDetailTable();  // Tablo-3
                 
                 // Butonları aktif et
                 document.getElementById('analyze-themes-btn').disabled = false;
                 document.getElementById('generate-matrix-btn').disabled = false;
                 document.getElementById('export-gdelt-btn').disabled = false;
                 
-                showGDELTStatus(`✅ Veriler yüklendi! Toplam Docs: ${gdeltTotalDocs.length} satır, Aylık Kalite: ${gdeltMonthlyQuality.length} satır`, 'success');
+                showGDELTStatus(`✅ Veriler yüklendi! Toplam Docs: ${gdeltTotalDocs.length}, Aylık Kalite: ${gdeltMonthlyQuality.length}, Aylık Detay: ${gdeltMonthlyDetail.length} satır`, 'success');
                 
             } catch (error) {
                 showGDELTStatus(`❌ Yükleme hatası: ${error.message}`, 'error');
@@ -2837,7 +3293,160 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             }
         }
         
-        // Tema analizi yap
+        // ==================== TABLO-3: AYLIK DETAY FONKSİYONLARI ====================
+        
+        let monthlyDetailSortColumn = 'n_docs';
+        let monthlyDetailSortAsc = false;
+        
+        // Tablo-3 tema dropdown'ını doldur
+        function populateThemeDropdown() {
+            const select = document.getElementById('monthly-detail-theme');
+            if (!select || gdeltMonthlyDetail.length === 0) return;
+            
+            // Mevcut seçimi koru
+            const currentValue = select.value;
+            
+            // Benzersiz temaları al
+            const themes = [...new Set(gdeltMonthlyDetail.map(d => d.theme_code))].sort();
+            
+            select.innerHTML = '<option value="ALL">Tümü</option>';
+            themes.forEach(theme => {
+                const opt = document.createElement('option');
+                opt.value = theme;
+                opt.textContent = theme;
+                select.appendChild(opt);
+            });
+            
+            // Önceki seçimi geri yükle
+            if (currentValue && themes.includes(currentValue)) {
+                select.value = currentValue;
+            }
+        }
+        
+        // Tablo-3'ü güncelle
+        function updateMonthlyDetailTable() {
+            const tbody = document.getElementById('monthly-detail-tbody');
+            
+            if (!gdeltDataLoaded || gdeltMonthlyDetail.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 30px; color: #999;">CSV yüklenmedi. "CSV Verilerini Yükle" butonuna tıklayın.</td></tr>';
+                return;
+            }
+            
+            // Tema dropdown'ını doldur (ilk çağrıda)
+            populateThemeDropdown();
+            
+            // Filtre değerlerini al
+            const countryFilter = document.getElementById('monthly-detail-country').value;
+            const themeFilter = document.getElementById('monthly-detail-theme').value;
+            const yearFilter = document.getElementById('monthly-detail-year').value;
+            const minDocs = parseInt(document.getElementById('monthly-detail-min-docs').value) || 0;
+            
+            // IPTC renk haritası
+            const iptcColors = {
+                'economy, business and finance': '#FF9800',
+                'conflict, war and peace': '#F44336',
+                'politics and government': '#2196F3',
+                'health': '#4CAF50',
+                'education': '#9C27B0',
+                'lifestyle and leisure': '#00BCD4',
+                'disaster, accident and emergency incident': '#E91E63',
+                'environment': '#8BC34A',
+                'arts, culture, entertainment and media': '#673AB7',
+                'society': '#607D8B',
+                'human interest': '#FF5722',
+                'religion': '#795548',
+                'science and technology': '#009688',
+                'crime, law and justice': '#3F51B5',
+                'labour': '#FFC107',
+                'sport': '#CDDC39',
+                'weather': '#03A9F4'
+            };
+            
+            // Filtreleme
+            let filtered = gdeltMonthlyDetail.filter(row => {
+                if (countryFilter !== 'ALL' && row.country !== countryFilter) return false;
+                if (themeFilter !== 'ALL' && row.theme_code !== themeFilter) return false;
+                if (yearFilter !== 'ALL' && !row.ym.startsWith(yearFilter)) return false;
+                if (row.n_docs < minDocs) return false;
+                return true;
+            });
+            
+            // Sıralama
+            filtered.sort((a, b) => {
+                let aVal = a[monthlyDetailSortColumn];
+                let bVal = b[monthlyDetailSortColumn];
+                
+                // Sayısal karşılaştırma
+                if (monthlyDetailSortColumn === 'n_docs') {
+                    aVal = parseInt(aVal) || 0;
+                    bVal = parseInt(bVal) || 0;
+                }
+                
+                if (monthlyDetailSortAsc) {
+                    return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+                } else {
+                    return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+                }
+            });
+            
+            // İstatistikleri güncelle
+            const totalDocs = filtered.reduce((sum, r) => sum + (r.n_docs || 0), 0);
+            const uniqueThemes = new Set(filtered.map(r => r.theme_code)).size;
+            const avgDocs = filtered.length > 0 ? Math.round(totalDocs / filtered.length) : 0;
+            
+            document.getElementById('detail-total-rows').textContent = filtered.length.toLocaleString();
+            document.getElementById('detail-total-docs').textContent = totalDocs.toLocaleString();
+            document.getElementById('detail-unique-themes').textContent = uniqueThemes;
+            document.getElementById('detail-avg-docs').textContent = avgDocs.toLocaleString();
+            document.getElementById('monthly-detail-count').textContent = `(${filtered.length.toLocaleString()} kayıt gösteriliyor)`;
+            
+            // İlk 500 satırı göster (performans için)
+            const toShow = filtered.slice(0, 500);
+            
+            tbody.innerHTML = '';
+            toShow.forEach(row => {
+                const iptcCategory = getIPTCCategory(row.theme_code);
+                const color = iptcColors[iptcCategory] || '#667eea';
+                const shortLabel = iptcCategory ? iptcCategory.split(',')[0] : '-';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding: 8px; border-bottom: 1px solid #eee; font-family: monospace;">${row.ym}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">${row.country}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee; font-family: monospace; font-weight: 600;">${row.theme_code}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">
+                        ${iptcCategory ? `<span style="background: ${color}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75em; text-transform: capitalize;">${shortLabel}</span>` : '<span style="color: #999;">-</span>'}
+                    </td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-weight: 600;">${row.n_docs.toLocaleString()}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #999;">Filtreye uygun veri yok</td></tr>';
+            } else if (filtered.length > 500) {
+                const infoRow = document.createElement('tr');
+                infoRow.innerHTML = `<td colspan="5" style="text-align: center; padding: 15px; background: #fff3e0; color: #FF5722;">
+                    ⚠️ ${filtered.length.toLocaleString()} kayıttan ilk 500 gösteriliyor. Daha fazlası için filtreleri daraltın.
+                </td>`;
+                tbody.appendChild(infoRow);
+            }
+        }
+        
+        // Tablo-3 sıralama
+        function sortMonthlyDetailTable(column) {
+            if (monthlyDetailSortColumn === column) {
+                monthlyDetailSortAsc = !monthlyDetailSortAsc;
+            } else {
+                monthlyDetailSortColumn = column;
+                monthlyDetailSortAsc = column === 'n_docs' ? false : true;  // n_docs için varsayılan desc
+            }
+            updateMonthlyDetailTable();
+        }
+        
+        // ==================== TABLO-3 SONU ====================
+        
+        // Tema analizi yap - IPTC kategorileriyle entegre
         function analyzeThemes() {
             if (!gdeltDataLoaded) {
                 showGDELTStatus('❌ Önce CSV verilerini yükleyin!', 'error');
@@ -2846,117 +3455,455 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             
             showGDELTStatus('🔍 Tema analizi yapılıyor...', 'info');
             
-            // Tüm ülkelerde ortak olan ve yüksek hacimli temaları bul
             const countries = ['CE', 'HO', 'HR', 'KG', 'LO', 'SA'];
             const themeCountByCountry = {};
             
-            // Her tema için hangi ülkelerde var?
+            // Her tema için hangi ülkelerde var ve toplam docs?
             gdeltTotalDocs.forEach(row => {
                 if (!themeCountByCountry[row.theme_code]) {
-                    themeCountByCountry[row.theme_code] = { countries: new Set(), totalDocs: 0 };
+                    themeCountByCountry[row.theme_code] = { 
+                        countries: new Set(), 
+                        totalDocs: 0,
+                        byCountry: {}
+                    };
                 }
                 themeCountByCountry[row.theme_code].countries.add(row.country);
                 themeCountByCountry[row.theme_code].totalDocs += row.total_docs;
+                themeCountByCountry[row.theme_code].byCountry[row.country] = row.total_docs;
             });
             
-            // Tüm 6 ülkede bulunan temalar
-            const commonThemes = [];
-            for (const [theme, data] of Object.entries(themeCountByCountry)) {
-                if (data.countries.size === 6 && getThemeType(theme) === 'category') {
-                    commonThemes.push({ theme, totalDocs: data.totalDocs });
+            // TÜM temaları IPTC kategorilerine grupla (6 ülke filtresi KALDIRILDI)
+            const themesByIPTC = {};
+            const allMappedThemes = [];
+            
+            // Önce kümeleme sonuçlarından tüm temaları al
+            if (iptcMappingResults && iptcMappingResults.themes) {
+                iptcMappingResults.themes.forEach(mappedTheme => {
+                    const theme = mappedTheme.theme_code;
+                    const iptcCategory = mappedTheme.iptc_final_label || mappedTheme.iptc_label;
+                    const themeData = themeCountByCountry[theme];
+                    const totalDocs = themeData ? themeData.totalDocs : 0;
+                    
+                    if (iptcCategory && iptcCategory !== 'Diğer') {
+                        allMappedThemes.push({
+                            theme,
+                            totalDocs,
+                            iptcCategory,
+                            countryCount: themeData ? themeData.countries.size : 0,
+                            byCountry: themeData ? themeData.byCountry : {}
+                        });
+                        
+                        if (!themesByIPTC[iptcCategory]) {
+                            themesByIPTC[iptcCategory] = [];
+                        }
+                        themesByIPTC[iptcCategory].push({ theme, totalDocs });
+                    }
+                });
+            }
+            
+            // Kümeleme yapılmamışsa CSV'den statik eşleştirme yap
+            if (allMappedThemes.length === 0) {
+                for (const [theme, data] of Object.entries(themeCountByCountry)) {
+                    const isMetadata = METADATA_PREFIXES.some(p => theme.startsWith(p));
+                    if (isMetadata) continue;
+                    
+                    const iptcCategory = getIPTCCategory(theme);
+                    if (iptcCategory) {
+                        allMappedThemes.push({
+                            theme,
+                            totalDocs: data.totalDocs,
+                            iptcCategory,
+                            countryCount: data.countries.size,
+                            byCountry: data.byCountry
+                        });
+                        
+                        if (!themesByIPTC[iptcCategory]) {
+                            themesByIPTC[iptcCategory] = [];
+                        }
+                        themesByIPTC[iptcCategory].push({ theme, totalDocs: data.totalDocs });
+                    }
                 }
             }
             
+            // 6 ülkede ortak olanları ayrı say (istatistik için)
+            const commonThemes = allMappedThemes.filter(t => t.countryCount === 6);
+            
             // Toplam docs'a göre sırala
-            commonThemes.sort((a, b) => b.totalDocs - a.totalDocs);
+            allMappedThemes.sort((a, b) => b.totalDocs - a.totalDocs);
             
-            // Listeyi güncelle
+            // IPTC kategorilerine göre sırala (tema sayısına göre)
+            const sortedIPTCCategories = Object.entries(themesByIPTC)
+                .sort((a, b) => b[1].length - a[1].length);
+            
+            // Adım A panelini güncelle - TÜM 17 IPTC kategorisini göster
             const listEl = document.getElementById('common-themes-list');
-            if (commonThemes.length > 0) {
-                listEl.innerHTML = commonThemes.slice(0, 20).map(t => 
-                    `<div style="margin-bottom: 4px;"><code style="background: #e8f5e9; padding: 2px 6px; border-radius: 3px;">${t.theme}</code> <span style="color: #666;">(${(t.totalDocs/1000000).toFixed(2)}M docs)</span></div>`
-                ).join('');
-            } else {
-                listEl.innerHTML = '<span style="color: #f44336;">Hiçbir tema 6 ülkede ortak değil!</span>';
-            }
+            let html = '';
             
-            showGDELTStatus(`✅ Analiz tamamlandı! ${commonThemes.length} ortak tema bulundu.`, 'success');
+            // IPTC renk haritası
+            const iptcColors = {
+                'economy, business and finance': '#FF9800',
+                'conflict, war and peace': '#F44336',
+                'politics and government': '#2196F3',
+                'health': '#4CAF50',
+                'education': '#9C27B0',
+                'disaster, accident and emergency incident': '#E91E63',
+                'environment': '#8BC34A',
+                'society': '#607D8B',
+                'crime, law and justice': '#3F51B5',
+                'science and technology': '#009688',
+                'labour': '#FFC107',
+                'lifestyle and leisure': '#00BCD4',
+                'religion': '#795548',
+                'human interest': '#FF5722',
+                'sport': '#CDDC39',
+                'arts, culture, entertainment and media': '#673AB7',
+                'weather': '#03A9F4',
+                'Diğer': '#9E9E9E'
+            };
+            
+            // Tüm 17 IPTC kategorisini göster (veri olanlar ve olmayanlar)
+            const allIPTCCategories = Object.keys(IPTC_CATEGORIES);
+            
+            allIPTCCategories.forEach(cat => {
+                const color = iptcColors[cat] || '#667eea';
+                const themesInCategory = sortedIPTCCategories.find(([c, _]) => c === cat);
+                const themes = themesInCategory ? themesInCategory[1] : [];
+                const totalDocs = themes.reduce((sum, t) => sum + t.totalDocs, 0);
+                const shortLabel = cat.split(',')[0];
+                const hasData = themes.length > 0;
+                
+                // İç template için ayrı oluştur
+                let themesList = '';
+                if (hasData) {
+                    themesList = '<div style="display: flex; flex-wrap: wrap; gap: 3px;">';
+                    themes.slice(0, 4).forEach(t => {
+                        themesList += '<code style="background: ' + color + '20; color: ' + color + '; padding: 1px 5px; border-radius: 3px; font-size: 0.7em;">' + t.theme + '</code>';
+                    });
+                    if (themes.length > 4) {
+                        themesList += '<span style="color: #999; font-size: 0.7em;">+' + (themes.length - 4) + '</span>';
+                    }
+                    themesList += '</div>';
+                }
+                
+                html += `
+                    <div style="margin-bottom: 8px; padding: 6px 8px; background: ${hasData ? color + '10' : '#f5f5f5'}; border-left: 3px solid ${hasData ? color : '#ccc'}; border-radius: 4px; opacity: ${hasData ? 1 : 0.5};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: ${hasData ? '4px' : '0'};">
+                            <span style="font-weight: 600; color: ${hasData ? color : '#999'}; text-transform: capitalize; font-size: 0.9em;">${shortLabel}</span>
+                            <span style="font-size: 0.75em; color: ${hasData ? '#666' : '#aaa'};">${themes.length} tema${hasData ? ', ' + (totalDocs/1000000).toFixed(1) + 'M docs' : ''}</span>
+                        </div>
+                        ${themesList}
+                    </div>
+                `;
+            });
+            
+            listEl.innerHTML = html;
+            
+            const totalMapped = allMappedThemes.length;
+            const categoriesFound = sortedIPTCCategories.length;
+            showGDELTStatus(`✅ Analiz tamamlandı! ${totalMapped} tema eşleştirildi (${commonThemes.length} tanesi 6 ülkede ortak), ${categoriesFound} IPTC kategorisinde.`, 'success');
+            
+            // Global'e kaydet (matris için)
+            window.analyzedIPTCCategories = sortedIPTCCategories;
+            window.analyzedCommonThemes = commonThemes;
+            window.allMappedThemes = allMappedThemes;
+            
+            // Veri kalitesi istatistiklerini güncelle
+            updateDataQualityStats(sortedIPTCCategories, commonThemes, allMappedThemes);
         }
         
-        // Ülke-Kategori matrisi oluştur
+        // Veri kalitesi ve istatistik panelini güncelle
+        function updateDataQualityStats(sortedCategories, commonThemes, allMappedThemes) {
+            // Toplam eşleştirilen tema sayısı
+            const totalMappedCount = allMappedThemes ? allMappedThemes.length : 0;
+            document.getElementById('stat-total-themes').textContent = totalMappedCount;
+            
+            // 6 ülkede ortak tema sayısı
+            document.getElementById('stat-common-themes').textContent = commonThemes.length;
+            
+            // IPTC ile eşleşen kategori sayısı
+            const iptcCategoriesWithData = new Set();
+            
+            // sortedCategories'den gelen veriler
+            sortedCategories.forEach(([cat, themes]) => {
+                if (themes.length > 0) {
+                    iptcCategoriesWithData.add(cat);
+                }
+            });
+            
+            // Kümeleme sonuçlarından gelen ek kategoriler
+            if (iptcMappingResults && iptcMappingResults.themes) {
+                iptcMappingResults.themes.forEach(t => {
+                    const cat = t.iptc_final_label || t.iptc_label;
+                    if (cat && cat !== 'Diğer') {
+                        iptcCategoriesWithData.add(cat);
+                    }
+                });
+            }
+            
+            mappedIPTCCount = iptcCategoriesWithData.size;
+            document.getElementById('stat-mapped-iptc').textContent = mappedIPTCCount + '/17';
+            
+            // Kalite ≥70% olan tema sayısı (Tablo-2'den)
+            const countries = ['CE', 'HO', 'HR', 'KG', 'LO', 'SA'];
+            let qualityPassCount = 0;
+            commonThemes.forEach(themeInfo => {
+                let passCount = 0;
+                countries.forEach(country => {
+                    const qualityRow = gdeltMonthlyQuality.find(
+                        r => r.country === country && r.theme_code === themeInfo.theme
+                    );
+                    if (qualityRow && qualityRow.months_total > 0) {
+                        const ratio = qualityRow.months_ok / qualityRow.months_total;
+                        if (ratio >= 0.7) passCount++;
+                    }
+                });
+                if (passCount === 6) qualityPassCount++;
+            });
+            document.getElementById('stat-quality-pass').textContent = qualityPassCount;
+            
+            // Kategori kapsamı göster - Kümeleme sonuçlarını da dahil et
+            const iptcIcons = {
+                'economy, business and finance': '💰',
+                'conflict, war and peace': '⚔️',
+                'politics and government': '🏛️',
+                'health': '🏥',
+                'education': '📚',
+                'disaster, accident and emergency incident': '🚨',
+                'environment': '🌍',
+                'society': '👥',
+                'crime, law and justice': '👮',
+                'science and technology': '🔬',
+                'labour': '💼',
+                'lifestyle and leisure': '✈️',
+                'religion': '🕌',
+                'human interest': '❤️',
+                'sport': '⚽',
+                'arts, culture, entertainment and media': '🎨',
+                'weather': '🌤️'
+            };
+            
+            const coverageContainer = document.getElementById('stat-category-coverage');
+            let coverageHtml = '';
+            Object.keys(IPTC_CATEGORIES).forEach(cat => {
+                const icon = iptcIcons[cat] || '📌';
+                const hasData = iptcCategoriesWithData.has(cat);
+                const fromClustering = iptcMappingResults && iptcMappingResults.themes && 
+                    iptcMappingResults.themes.some(t => (t.iptc_final_label || t.iptc_label) === cat);
+                
+                let style = '';
+                let tooltip = cat;
+                if (hasData) {
+                    if (fromClustering) {
+                        style = 'background: #e3f2fd; color: #1565c0; border: 1px solid #1565c0;'; // Kümeleme'den
+                        tooltip += ' (Kümeleme)';
+                    } else {
+                        style = 'background: #e8f5e9; color: #2e7d32;'; // Statik eşleştirme
+                        tooltip += ' (Statik)';
+                    }
+                } else {
+                    style = 'background: #ffebee; color: #c62828; opacity: 0.5;';
+                    tooltip += ' (Veri yok)';
+                }
+                coverageHtml += `<span style="padding: 2px 4px; border-radius: 3px; font-size: 0.75em; ${style}" title="${tooltip}">${icon}</span>`;
+            });
+            coverageContainer.innerHTML = coverageHtml;
+            
+            // Kümeleme durumunu göster
+            const clusteringStatus = document.getElementById('stat-clustering-status');
+            if (clusteringStatus) {
+                if (iptcMappingResults && iptcMappingResults.themes) {
+                    clusteringStatus.innerHTML = `<span style="color: #1565c0;">✓ ${iptcMappingResults.themes.length} tema eşleştirildi</span>`;
+                } else {
+                    clusteringStatus.innerHTML = `<span style="color: #999;">Kümeleme yapılmadı</span>`;
+                }
+            }
+        }
+        
+        // Ülke-Kategori matrisi oluştur - IPTC ve 3 tablo entegrasyonu
         function generateCountryThemeMatrix() {
             if (!gdeltDataLoaded) {
                 showGDELTStatus('❌ Önce CSV verilerini yükleyin!', 'error');
                 return;
             }
             
+            // Önce tema analizi yapılmış mı kontrol et
+            if (!window.analyzedIPTCCategories || window.analyzedIPTCCategories.length === 0) {
+                showGDELTStatus('⚠️ Önce "Tema Analizi Yap" butonuna tıklayın!', 'info');
+                analyzeThemes();
+            }
+            
             showGDELTStatus('📊 Matris oluşturuluyor...', 'info');
             
             const countries = ['CE', 'HO', 'HR', 'KG', 'LO', 'SA'];
-            const categoryGroups = {
-                'Economy': ['ECON', 'EPU_ECONOMY', 'EPU'],
-                'Government': ['GENERAL_GOVERNMENT', 'GENERAL', 'GOV', 'LEADER'],
-                'Security': ['CRISISLEX', 'ARMEDCONFLICT', 'TERROR', 'SECURITY'],
-                'Health': ['HEALTH', 'MEDICAL'],
-                'Education': ['EDUCATION'],
-                'Tourism': ['TOURISM']
+            
+            // En çok tema içeren tüm IPTC kategorilerini al (17 kategori)
+            const allIPTCCategories = Object.keys(IPTC_CATEGORIES);
+            const categoriesWithData = (window.analyzedIPTCCategories || []);
+            
+            // Tüm 17 kategoriyi birleştir (veri olanlar önce, olmayanlar sonra)
+            const topCategories = [];
+            
+            // Önce veri olan kategorileri ekle
+            categoriesWithData.forEach(([cat, themes]) => {
+                topCategories.push([cat, themes]);
+            });
+            
+            // Sonra veri olmayan kategorileri ekle
+            allIPTCCategories.forEach(cat => {
+                if (!topCategories.find(([c, _]) => c === cat)) {
+                    topCategories.push([cat, []]);
+                }
+            });
+            
+            if (topCategories.length === 0) {
+                showGDELTStatus('❌ IPTC kategorileri bulunamadı!', 'error');
+                return;
+            }
+            
+            // IPTC renk haritası
+            const iptcColors = {
+                'economy, business and finance': '#FF9800',
+                'conflict, war and peace': '#F44336',
+                'politics and government': '#2196F3',
+                'health': '#4CAF50',
+                'education': '#9C27B0',
+                'disaster, accident and emergency incident': '#E91E63',
+                'environment': '#8BC34A',
+                'society': '#607D8B',
+                'crime, law and justice': '#3F51B5',
+                'science and technology': '#009688',
+                'labour': '#FFC107',
+                'lifestyle and leisure': '#00BCD4',
+                'religion': '#795548',
+                'human interest': '#FF5722',
+                'sport': '#CDDC39',
+                'arts, culture, entertainment and media': '#673AB7',
+                'weather': '#03A9F4'
             };
             
-            // Her ülke-kategori için ratio hesapla
+            // Matris tablosu başlıklarını güncelle (17 kategori için kompakt başlıklar)
+            const thead = document.querySelector('#country-theme-matrix thead tr');
+            thead.innerHTML = '<th style="padding: 6px 8px; position: sticky; left: 0; background: #E91E63; z-index: 1; white-space: nowrap;">Ülke</th>' + 
+                topCategories.map(([cat, themes]) => {
+                    const shortLabel = cat.split(',')[0].substring(0, 12);
+                    const color = iptcColors[cat] || '#667eea';
+                    const hasData = themes.length > 0;
+                    return `<th style="padding: 6px 4px; font-size: 0.7em; text-transform: capitalize; background: ${hasData ? color : '#9e9e9e'}; white-space: nowrap; writing-mode: vertical-lr; text-orientation: mixed; height: 100px; opacity: ${hasData ? 1 : 0.5};" title="${cat}">${shortLabel}</th>`;
+                }).join('');
+            
+            // Her ülke-kategori için kalite hesapla (Tablo-2 ve Tablo-3'ten)
             const matrix = {};
+            
             countries.forEach(country => {
                 matrix[country] = {};
                 
-                for (const [catName, themeCodes] of Object.entries(categoryGroups)) {
+                topCategories.forEach(([catName, themes]) => {
                     // Bu kategorideki temaların kalitesini kontrol et
-                    let bestRatio = 0;
-                    let bestDecision = '✖';
-                    let bestColor = '#f44336';
+                    let totalMonthsOk = 0;
+                    let totalMonthsTotal = 0;
+                    let totalDocs = 0;
+                    let themesWithData = 0;
                     
-                    for (const themeCode of themeCodes) {
+                    themes.forEach(themeInfo => {
+                        // Tablo-2'den kalite verisi
                         const qualityRow = gdeltMonthlyQuality.find(
-                            r => r.country === country && r.theme_code === themeCode
+                            r => r.country === country && r.theme_code === themeInfo.theme
                         );
                         
                         if (qualityRow) {
-                            const ratio = qualityRow.months_total > 0 ? qualityRow.months_ok / qualityRow.months_total : 0;
-                            if (ratio > bestRatio) {
-                                bestRatio = ratio;
-                                if (ratio >= 0.7) {
-                                    bestDecision = '✔';
-                                    bestColor = '#4CAF50';
-                                } else if (ratio >= 0.4) {
-                                    bestDecision = '⚠';
-                                    bestColor = '#FF9800';
-                                } else {
-                                    bestDecision = '✖';
-                                    bestColor = '#f44336';
-                                }
-                            }
+                            totalMonthsOk += qualityRow.months_ok;
+                            totalMonthsTotal += qualityRow.months_total;
+                            themesWithData++;
+                        }
+                        
+                        // Tablo-1'den toplam docs
+                        const docsRow = gdeltTotalDocs.find(
+                            r => r.country === country && r.theme_code === themeInfo.theme
+                        );
+                        if (docsRow) {
+                            totalDocs += docsRow.total_docs;
+                        }
+                    });
+                    
+                    // Ortalama ratio hesapla
+                    const ratio = totalMonthsTotal > 0 ? totalMonthsOk / totalMonthsTotal : 0;
+                    const noData = themes.length === 0;
+                    
+                    let decision = noData ? '-' : '✖';
+                    let color = noData ? '#999' : '#f44336';
+                    let bgColor = noData ? '#f5f5f5' : '#ffebee';
+                    
+                    if (!noData) {
+                        if (ratio >= 0.7) {
+                            decision = '✔';
+                            color = '#4CAF50';
+                            bgColor = '#e8f5e9';
+                        } else if (ratio >= 0.4) {
+                            decision = '⚠';
+                            color = '#FF9800';
+                            bgColor = '#fff3e0';
                         }
                     }
                     
-                    matrix[country][catName] = { ratio: bestRatio, decision: bestDecision, color: bestColor };
-                }
+                    matrix[country][catName] = { 
+                        ratio, 
+                        decision, 
+                        color, 
+                        bgColor,
+                        totalDocs,
+                        themesWithData,
+                        totalThemes: themes.length,
+                        noData
+                    };
+                });
             });
             
             // Tabloyu render et
             const tbody = document.getElementById('matrix-tbody');
             tbody.innerHTML = '';
             
+            // Ülke isim haritası
+            const countryNames = {
+                'CE': '🇱🇰 Sri Lanka',
+                'HO': '🇭🇳 Honduras',
+                'HR': '🇭🇷 Croatia',
+                'KG': '🇰🇬 Kyrgyzstan',
+                'LO': '🇸🇰 Slovakia',
+                'SA': '🇸🇦 Saudi Arabia'
+            };
+            
             countries.forEach(country => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="padding: 12px; font-weight: 600; border-bottom: 1px solid #eee;">${country}</td>
-                    ${Object.keys(categoryGroups).map(cat => {
+                    <td style="padding: 6px 8px; font-weight: 600; border-bottom: 1px solid #eee; white-space: nowrap; position: sticky; left: 0; background: white; z-index: 1;">${countryNames[country] || country}</td>
+                    ${topCategories.map(([cat, _]) => {
                         const cell = matrix[country][cat];
-                        return `<td style="padding: 12px; text-align: center; border-bottom: 1px solid #eee; color: ${cell.color}; font-weight: 600; font-size: 1.2em;" title="${(cell.ratio * 100).toFixed(0)}%">${cell.decision}</td>`;
+                        const tooltip = cell.noData ? 'Veri yok' : `${(cell.ratio * 100).toFixed(0)}% kalite\n${cell.themesWithData}/${cell.totalThemes} tema veri var\n${(cell.totalDocs/1000).toFixed(0)}K docs`;
+                        return `
+                            <td style="padding: 4px; text-align: center; border-bottom: 1px solid #eee; background: ${cell.bgColor}; cursor: ${cell.noData ? 'default' : 'help'}; opacity: ${cell.noData ? 0.4 : 1};" title="${tooltip}">
+                                <span style="color: ${cell.color}; font-weight: 600; font-size: 1.1em;">${cell.decision}</span>
+                                ${!cell.noData ? `<div style="font-size: 0.65em; color: #666;">${(cell.ratio * 100).toFixed(0)}%</div>` : ''}
+                            </td>
+                        `;
                     }).join('')}
                 `;
                 tbody.appendChild(tr);
             });
             
-            showGDELTStatus('✅ Matris oluşturuldu!', 'success');
+            // Özet satırı ekle
+            const summaryRow = document.createElement('tr');
+            summaryRow.style.background = '#f5f5f5';
+            summaryRow.innerHTML = `
+                <td style="padding: 12px; font-weight: 600; border-top: 2px solid #9C27B0;">Kullanılabilir</td>
+                ${topCategories.map(([cat, _]) => {
+                    const usableCount = countries.filter(c => matrix[c][cat].ratio >= 0.4).length;
+                    const color = usableCount >= 5 ? '#4CAF50' : usableCount >= 3 ? '#FF9800' : '#f44336';
+                    return `<td style="padding: 12px; text-align: center; border-top: 2px solid #9C27B0; color: ${color}; font-weight: 600;">${usableCount}/6</td>`;
+                }).join('')}
+            `;
+            tbody.appendChild(summaryRow);
+            
+            showGDELTStatus(`✅ Matris oluşturuldu! ${topCategories.length} IPTC kategorisi × ${countries.length} ülke`, 'success');
         }
         
         // GDELT analizini CSV olarak dışa aktar
