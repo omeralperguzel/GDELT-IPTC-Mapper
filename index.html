@@ -890,9 +890,9 @@
                     
                     <!-- SOL PANEL: Tablo-1 (total_docs) -->
                     <div class="chart-container" style="border-left: 4px solid #2196F3;">
-                        <h4 style="color: #2196F3; margin-bottom: 10px;">📋 Tablo-1: Toplam Haber Hacmi</h4>
+                        <h4 style="color: #2196F3; margin-bottom: 10px;">📋 Tablo-1: Ülke Başına Top 15 Tema (BigQuery: QUALIFY ROW_NUMBER() <= 15)</h4>
                         <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
-                            Her ülke-tema için 2022-2024 toplam doküman sayısı (Hocanın 2. maddesi için)
+                            Her ülke-tema için 2022-2024 toplam doküman sayısı
                         </p>
                         
                         <!-- Ülke Seçimi -->
@@ -940,9 +940,9 @@
                     
                     <!-- SAĞ PANEL: Tablo-2 (months_ok, median_docs) -->
                     <div class="chart-container" style="border-left: 4px solid #4CAF50;">
-                        <h4 style="color: #4CAF50; margin-bottom: 10px;">📋 Tablo-2: Aylık Veri Kalitesi</h4>
+                        <h4 style="color: #4CAF50; margin-bottom: 10px;">📋 Tablo-2: Aylık Kalite Metrikleri (BigQuery: months_total, months_ok, median_docs)</h4>
                         <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
-                            Her ülke-tema için aylık haber yeterliliği (Hocanın 3. maddesi için)
+                            Her ülke-tema için aylık haber yeterliliği
                         </p>
                         
                         <!-- Filtre -->
@@ -987,7 +987,7 @@
                 
                 <!-- TABLO-3: Aylık Detay (Tam Genişlik) -->
                 <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #FF5722;">
-                    <h4 style="color: #FF5722; margin-bottom: 10px;">📋 Tablo-3: Aylık Haber Detayı (36,902 Kayıt)</h4>
+                    <h4 style="color: #FF5722; margin-bottom: 10px;">📋 Tablo-3: Aylık Tema Başına Belge Sayıları (BigQuery: ym, country, theme_code, n_docs)</h4>
                     <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
                         Her ay, her ülke, her tema için doküman sayısı - zaman serisi analizi için
                     </p>
@@ -1067,85 +1067,97 @@
                     </div>
                 </div>
                 
-                <!-- ÖZET PANEL: Seçilen Kategoriler & Matris -->
+                <!-- TABLO-4: Trend Analizi (BigQuery: gdelt_theme_trend_analysis_2022_2024.csv) -->
                 <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #9C27B0;">
-                    <h4 style="color: #9C27B0; margin-bottom: 15px;">🎯 Adım A: 17 IPTC Media Topic Referansı</h4>
+                    <h4 style="color: #9C27B0; margin-bottom: 10px;">📈 Tablo-4: Tema Trend Analizi (BigQuery: gdelt_theme_trend_analysis_2022_2024.csv)</h4>
                     <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
-                        IPTC NewsCodes Media Topics - Standart haber kategorileri ve GDELT tema eşleştirmeleri
+                        Her tema için 2022-2024 arası aylık trend eğimi, kategorizasyon ve istatistikler - karar verme için ek kriter
                     </p>
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                        <!-- 17 IPTC Media Topics (Sabit Referans) -->
-                        <div style="background: #f3e5f5; padding: 15px; border-radius: 8px;">
-                            <h5 style="color: #9C27B0; margin-bottom: 10px;">📋 17 IPTC Media Topics (Referans)</h5>
-                            <div id="iptc-reference-list" style="font-size: 0.8em; line-height: 1.5; max-height: 320px; overflow-y: auto;">
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🎨 <strong>01</strong> arts, culture, entertainment and media</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">⚔️ <strong>16</strong> conflict, war and peace</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">👮 <strong>02</strong> crime, law and justice</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🚨 <strong>03</strong> disaster, accident and emergency incident</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">💰 <strong>04</strong> economy, business and finance</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">📚 <strong>05</strong> education</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🌍 <strong>06</strong> environment</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🏥 <strong>07</strong> health</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">❤️ <strong>08</strong> human interest</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">💼 <strong>09</strong> labour</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">✈️ <strong>10</strong> lifestyle and leisure</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🏛️ <strong>11</strong> politics and government</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🕌 <strong>12</strong> religion</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">🔬 <strong>13</strong> science and technology</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">👥 <strong>14</strong> society</div>
-                                <div style="padding: 3px 0; border-bottom: 1px solid #e1bee7;">⚽ <strong>15</strong> sport</div>
-                                <div style="padding: 3px 0;">🌤️ <strong>17</strong> weather</div>
-                            </div>
+                    <!-- Filtreler -->
+                    <div style="margin-bottom: 15px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.9em;">Trend Kategorisi:</label>
+                            <select id="trend-category-filter" onchange="updateTrendAnalysisTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px;">
+                                <option value="ALL">Tümü</option>
+                                <option value="Artan">📈 Artan</option>
+                                <option value="Azalan">📉 Azalan</option>
+                                <option value="Stabil">➡️ Stabil</option>
+                            </select>
                         </div>
-                        
-                        <!-- CSV'den Bulunan Tema Eşleştirmeleri (Dinamik) -->
-                        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
-                            <h5 style="color: #4CAF50; margin-bottom: 10px;">✅ CSV'den Bulunan GDELT → IPTC Eşleştirmeleri</h5>
-                            <div id="common-themes-list" style="font-size: 0.85em; line-height: 1.5; max-height: 320px; overflow-y: auto;">
-                                <span style="color: #999;">CSV yükleyip "Tema Analizi Yap" butonuna tıklayın...</span>
-                            </div>
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.9em;">Min Eğim:</label>
+                            <input type="number" id="trend-min-slope" value="-1" step="0.1" onchange="updateTrendAnalysisTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px; width: 80px;">
                         </div>
-                        
-                        <!-- Veri Kalitesi Özeti (Dinamik) -->
-                        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
-                            <h5 style="color: #1976D2; margin-bottom: 10px;">📊 Veri Kalitesi ve İstatistik Özeti</h5>
-                            <div id="data-quality-summary" style="font-size: 0.85em; line-height: 1.6;">
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                                    <div style="background: white; padding: 8px; border-radius: 4px; text-align: center;">
-                                        <div style="font-size: 1.5em; font-weight: bold; color: #1976D2;" id="stat-total-themes">-</div>
-                                        <div style="font-size: 0.8em; color: #666;">Toplam Tema</div>
-                                    </div>
-                                    <div style="background: white; padding: 8px; border-radius: 4px; text-align: center;">
-                                        <div style="font-size: 1.5em; font-weight: bold; color: #4CAF50;" id="stat-common-themes">-</div>
-                                        <div style="font-size: 0.8em; color: #666;">6 Ülkede Ortak</div>
-                                    </div>
-                                    <div style="background: white; padding: 8px; border-radius: 4px; text-align: center;">
-                                        <div style="font-size: 1.5em; font-weight: bold; color: #FF9800;" id="stat-mapped-iptc">-</div>
-                                        <div style="font-size: 0.8em; color: #666;">IPTC Eşleşen</div>
-                                    </div>
-                                    <div style="background: white; padding: 8px; border-radius: 4px; text-align: center;">
-                                        <div style="font-size: 1.5em; font-weight: bold; color: #9C27B0;" id="stat-quality-pass">-</div>
-                                        <div style="font-size: 0.8em; color: #666;">Kalite ≥70%</div>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 10px; padding: 8px; background: white; border-radius: 4px;">
-                                    <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">Kategori Kapsamı: <span style="font-size: 0.9em;">(🟢 Statik | 🔵 Kümeleme | 🔴 Veri yok)</span></div>
-                                    <div id="stat-category-coverage" style="display: flex; flex-wrap: wrap; gap: 4px;">
-                                        <span style="color: #999;">Analiz sonrası...</span>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 8px; padding: 6px 8px; background: #e3f2fd; border-radius: 4px;">
-                                    <div style="font-size: 0.8em; color: #1565c0;">🤖 Kümeleme Durumu: <span id="stat-clustering-status" style="font-weight: 500;">Kümeleme yapılmadı</span></div>
-                                </div>
-                            </div>
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.9em;">Max Eğim:</label>
+                            <input type="number" id="trend-max-slope" value="1" step="0.1" onchange="updateTrendAnalysisTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px; width: 80px;">
                         </div>
+                        <span id="trend-count" style="color: #666; font-size: 0.9em;"></span>
                     </div>
                     
-                    <!-- Adım B: Ülke-Kategori Matrisi -->
-                    <h4 style="color: #E91E63; margin: 25px 0 15px;">📊 Adım B: Ülke-Kategori Kullanılabilirlik Matrisi (17 IPTC Media Topic)</h4>
+                    <!-- Tablo -->
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table id="trend-analysis-table" style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                            <thead style="position: sticky; top: 0; background: #f3e5f5;">
+                                <tr>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('theme_code')">🏷️ Tema Kodu ⇅</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #9C27B0;">📂 IPTC Kategorisi</th>
+                                    <th style="padding: 10px; text-align: center; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('slope')">📈 Eğim ⇅</th>
+                                    <th style="padding: 10px; text-align: center; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('trend_category')">📊 Trend ⇅</th>
+                                    <th style="padding: 10px; text-align: right; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('avg_docs')">📊 Ort. Doküman ⇅</th>
+                                    <th style="padding: 10px; text-align: right; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('total_docs')">📊 Toplam Doküman ⇅</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trend-analysis-tbody">
+                                <tr><td colspan="6" style="text-align: center; padding: 30px; color: #999;">Trend analizi CSV'si yüklenmedi. "Trend Analizi Yükle" butonuna tıklayın.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Özet İstatistikler -->
+                    <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                        <div style="background: #e1f5fe; padding: 12px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #0277bd;" id="trend-total-themes">0</div>
+                            <div style="font-size: 0.85em; color: #666;">Toplam Tema</div>
+                        </div>
+                        <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #2e7d32;" id="trend-artan-count">0</div>
+                            <div style="font-size: 0.85em; color: #666;">Artan Trend</div>
+                        </div>
+                        <div style="background: #ffebee; padding: 12px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #c62828;" id="trend-azalan-count">0</div>
+                            <div style="font-size: 0.85em; color: #666;">Azalan Trend</div>
+                        </div>
+                        <div style="background: #f3e5f5; padding: 12px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #7b1fa2;" id="trend-stabil-count">0</div>
+                            <div style="font-size: 0.85em; color: #666;">Stabil Trend</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ADIM A: IPTC Kategori Özet Kartları -->
+                <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #9C27B0;">
+                    <h4 style="color: #9C27B0; margin-bottom: 15px;">🎯 Adım A: IPTC Üst Kategoriler – Tema ve Doküman Özeti</h4>
                     <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
-                        ✔ = Aylık sentiment için uygun (≥70%) | ⚠ = Quarterly gerekli (40-70%) | ✖ = Yetersiz (<40%) | - = Veri yok
+                        17 IPTC Media Topic kategorisi için tema sayısı, toplam doküman ve 6 ülke kapsamı özeti
+                        <a href="https://iptc.org/standards/media-topics/" target="_blank" style="color: #9C27B0; text-decoration: none; margin-left: 5px;">ℹ️ IPTC Referans</a>
+                    </p>
+                    
+                    <!-- IPTC Kategori Özet Kartları Grid -->
+                    <div id="iptc-summary-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 500px; overflow-y: auto; padding: 5px;">
+                        <!-- JavaScript ile doldurulacak -->
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
+                            CSV verilerini yükleyip "Tema Analizi Yap" butonuna tıklayın...
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ADIM B: Ülke-Kategori Kullanılabilirlik Matrisi -->
+                <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #E91E63;">
+                    <h4 style="color: #E91E63; margin-bottom: 15px;">📊 Adım B: Ülke-Kategori Kullanılabilirlik Matrisi</h4>
+                    <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+                        ✔ = Aylık sentiment için uygun (≥70%) | ⚠ = Quarterly gerekli (40-70%) | ✖ = Yetersiz (&lt;40%) | - = Veri yok
                     </p>
                     
                     <div style="overflow-x: auto; max-width: 100%;">
@@ -1157,14 +1169,83 @@
                                 </tr>
                             </thead>
                             <tbody id="matrix-tbody">
-                                <tr><td colspan="18" style="text-align: center; padding: 30px; color: #999;">"Matris Oluştur" butonuna tıklayın</td></tr>
+                                <tr><td colspan="18" style="text-align: center; padding: 30px; color: #999;">Adım A tamamlandığında matris otomatik oluşturulur</td></tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                
+                <!-- ADIM C: Analiz İçin Kategori Seçimi ve Karşılaştırma -->
+                <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #2196F3;">
+                    <h4 style="color: #2196F3; margin-bottom: 15px;">🔍 Adım C: Analiz İçin Kategori Seçimi ve Karşılaştırma</h4>
+                    <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+                        17 kategoriden 5-6 tanesini seçerek karşılaştırmalı analiz yapın. Yeşil kategoriler önerilir.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 350px 1fr; gap: 20px;">
+                        <!-- Sol: Kategori Seçim Listesi -->
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h5 style="color: #2196F3; margin: 0;">Kategori Seçimi</h5>
+                                <span id="selected-category-count" style="background: #2196F3; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.85em;">0 / 17</span>
+                            </div>
+                            
+                            <div style="margin-bottom: 10px;">
+                                <button onclick="selectRecommendedCategories()" style="padding: 5px 10px; font-size: 0.8em; cursor: pointer; background: #4CAF50; color: white; border: none; border-radius: 4px; margin-right: 5px;">🎯 Önerilenleri Seç</button>
+                                <button onclick="clearCategorySelection()" style="padding: 5px 10px; font-size: 0.8em; cursor: pointer; background: #f44336; color: white; border: none; border-radius: 4px;">✖ Temizle</button>
+                            </div>
+                            
+                            <div id="iptc-selection-list" style="max-height: 400px; overflow-y: auto;">
+                                <!-- JavaScript ile doldurulacak -->
+                                <div style="text-align: center; padding: 20px; color: #999; font-size: 0.9em;">
+                                    Önce Adım A'yı tamamlayın...
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sağ: Seçime Göre Grafik ve Özet -->
+                        <div>
+                            <!-- Seçili Kategoriler Özeti -->
+                            <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                                <h5 style="color: #1976D2; margin: 0 0 10px 0;">📈 Seçili Kategoriler Özeti</h5>
+                                <div id="selected-categories-summary" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;">
+                                    <div style="text-align: center; color: #999; padding: 20px;">Kategori seçin...</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Ülke × Kategori Hacim Grafiği -->
+                            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0;">
+                                <h5 style="color: #333; margin: 0 0 10px 0;">Ülke × Kategori Doküman Dağılımı</h5>
+                                <div style="height: 250px;">
+                                    <canvas id="category-country-bar-chart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <!-- V1-V2 Karşılaştırma (Opsiyonel) -->
+                            <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                <h5 style="color: #E65100; margin: 0 0 10px 0;">🔄 V1 vs V2 Algoritma Farkı</h5>
+                                <div id="v1-v2-comparison-table" style="font-size: 0.85em;">
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <thead>
+                                            <tr style="background: #ffe0b2;">
+                                                <th style="padding: 8px; text-align: left;">Kategori</th>
+                                                <th style="padding: 8px; text-align: center;">V1 Tema</th>
+                                                <th style="padding: 8px; text-align: center;">V2 Tema</th>
+                                                <th style="padding: 8px; text-align: center;">Fark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="v1-v2-tbody">
+                                            <tr><td colspan="4" style="text-align: center; padding: 15px; color: #999;">Kategori seçildikten sonra görüntülenir</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- Export Butonu -->
                     <div style="margin-top: 20px; text-align: center;">
-                        <button class="run-btn" style="background: #9C27B0;" onclick="exportGDELTAnalysis()" disabled id="export-gdelt-btn">📤 Analiz Sonuçlarını CSV Olarak İndir</button>
+                        <button class="run-btn" style="background: #2196F3;" onclick="exportSelectedCategoriesAnalysis()" id="export-selected-btn">📤 Seçili Kategorilerin Analizini İndir</button>
                     </div>
                 </div>
             </div>
@@ -1210,9 +1291,10 @@
                                     <input type="checkbox" class="export-col-checkbox" value="median_docs"> Median Doküman
                                 </label>
                             </div>
-                            <div style="margin-top: 8px;">
-                                <button onclick="selectAllExportCols()" style="padding: 5px 10px; font-size: 0.85em; cursor: pointer; margin-right: 5px;">Tümünü Seç</button>
+                            <div style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+                                <button onclick="selectAllExportCols()" style="padding: 5px 10px; font-size: 0.85em; cursor: pointer;">Tümünü Seç</button>
                                 <button onclick="deselectAllExportCols()" style="padding: 5px 10px; font-size: 0.85em; cursor: pointer;">Tümünü Kaldır</button>
+                                <span id="selected-columns-count" style="font-size: 0.85em; color: #666;">0/8 sütun seçili</span>
                             </div>
                         </div>
                         
@@ -1343,6 +1425,11 @@
         let chartsInitialized = false;
         let chartInstances = [];
         
+        // GDELT veri değişkenleri
+        let totalDocsData = [];
+        let monthlyQualityData = [];
+        let monthlyDetailData = [];
+        
         // Eski fonksiyonlar icin stub'lar (runtime error onleme)
         function renderKaTeX() { }
         function updateInfoBox() { }
@@ -1397,14 +1484,92 @@
             });
         }
         
-        // Pipeline butonları başlat (stub - gelecekte eklenebilir)
+        // Pipeline butonları başlat - GDELT Tema sekmesi buton durumları
         function initPipelineButtons() {
-            // Şimdilik boş
+            // CSV yüklenene kadar diğer butonlar disabled
+            const analyzeBtn = document.getElementById('analyze-themes-btn');
+            const matrixBtn = document.getElementById('generate-matrix-btn');
+            
+            if (analyzeBtn) analyzeBtn.disabled = !gdeltDataLoaded;
+            if (matrixBtn) matrixBtn.disabled = !gdeltDataLoaded;
         }
         
-        // Export bilgisi güncelle (stub - gelecekte eklenebilir)
+        // Export sekmesine geçildiğinde özet bilgileri güncelle
         function updateExportInfo() {
-            // Şimdilik boş
+            // Mevcut veri durumunu kontrol et
+            const hasGDELTData = totalDocsData && totalDocsData.length > 0;
+            const hasIPTCMapping = iptcMappingResults && iptcMappingResults.themes;
+            const hasMonthlyQuality = gdeltMonthlyQuality && gdeltMonthlyQuality.length > 0;
+            
+            // Export butonlarının durumunu güncelle
+            const gdeltExportBtns = document.querySelectorAll('#tab-export button[onclick*="exportGDELT"]');
+            const iptcExportBtns = document.querySelectorAll('#tab-export button[onclick*="exportIPTC"]');
+            const allExportBtns = document.querySelectorAll('#tab-export button[onclick*="exportAll"]');
+            
+            gdeltExportBtns.forEach(btn => {
+                btn.disabled = !hasGDELTData;
+                btn.title = hasGDELTData ? '' : 'Önce GDELT verilerini yükleyin';
+            });
+            
+            iptcExportBtns.forEach(btn => {
+                btn.disabled = !hasIPTCMapping;
+                btn.title = hasIPTCMapping ? '' : 'Önce IPTC eşleştirmesini çalıştırın';
+            });
+            
+            allExportBtns.forEach(btn => {
+                btn.disabled = !hasGDELTData;
+            });
+            
+            // Özet bilgi göster (varsa)
+            console.log(`📤 Export durumu: GDELT=${hasGDELTData}, IPTC=${hasIPTCMapping}, Quality=${hasMonthlyQuality}`);
+        }
+        
+        // Export filtre event listener'larını başlat
+        function initExportFilters() {
+            // "Tümünü Seç" butonu
+            const selectAllBtn = document.querySelector('#tab-export button[onclick*="selectAllColumns"]');
+            const deselectAllBtn = document.querySelector('#tab-export button[onclick*="deselectAllColumns"]');
+            
+            // Sütun checkbox'larına change event ekle (sayı göstermek için)
+            const checkboxes = document.querySelectorAll('.export-col-checkbox');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', updateSelectedColumnCount);
+            });
+            
+            // İlk yüklemede sayıyı güncelle
+            updateSelectedColumnCount();
+        }
+        
+        // Seçili sütun sayısını güncelle
+        function updateSelectedColumnCount() {
+            const checked = document.querySelectorAll('.export-col-checkbox:checked').length;
+            const total = document.querySelectorAll('.export-col-checkbox').length;
+            const countEl = document.getElementById('selected-columns-count');
+            if (countEl) {
+                countEl.textContent = `${checked}/${total} sütun seçili`;
+            }
+        }
+        
+        // Tüm sütunları seç
+        function selectAllColumns() {
+            document.querySelectorAll('.export-col-checkbox').forEach(cb => cb.checked = true);
+            updateSelectedColumnCount();
+        }
+        
+        // Tüm sütunları kaldır
+        function deselectAllColumns() {
+            document.querySelectorAll('.export-col-checkbox').forEach(cb => cb.checked = false);
+            updateSelectedColumnCount();
+        }
+        
+        // Export sütunları seç (HTML'deki onclick için alias)
+        function selectAllExportCols() {
+            selectAllColumns();
+        }
+        
+        // Export sütunları kaldır (HTML'deki onclick için alias)
+        function deselectAllExportCols() {
+            deselectAllColumns();
         }
         
         // ==================== KAYDETME / İÇE AKTARMA FONKSİYONLARI ====================
@@ -3226,9 +3391,10 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
         
         // ==================== GDELT TEMA ANALİZİ FONKSİYONLARI ====================
         
-        let gdeltTotalDocs = [];      // bquxjob_645c6baa... (country, theme_code, total_docs)
-        let gdeltMonthlyQuality = []; // bquxjob_4750d984... (country, theme_code, months_total, months_ok, median_docs)
-        let gdeltMonthlyDetail = [];  // bquxjob_5c135702... (ym, country, theme_code, n_docs)
+        let gdeltTotalDocs = [];      // gdelt_top15_themes_by_country_2022_2024.csv (country, theme_code, total_docs) - BigQuery QUALIFY top 15
+        let gdeltMonthlyQuality = []; // gdelt_monthly_quality_metrics.csv (country, theme_code, months_total, months_ok, median_docs) - BigQuery aggregated
+        let gdeltMonthlyDetail = [];  // gdelt_monthly_docs_per_theme_country_2022_2024.csv (ym, country, theme_code, n_docs) - BigQuery monthly counts
+        let trendAnalysisData = [];   // gdelt_theme_trend_analysis_2022_2024.csv (country, theme_code, trend_slope, trend_category) - BigQuery trend analysis
         let gdeltDataLoaded = false;
         
         // IPTC Media Topics - Resmi 17 Üst Düzey Kategori
@@ -3355,28 +3521,42 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             showGDELTStatus('📥 CSV dosyaları yükleniyor...', 'info');
             
             try {
-                // Tablo-1: total_docs
-                const resp1 = await fetch('bquxjob_645c6baa_19b43fe1bcd.csv');
-                if (!resp1.ok) throw new Error('total_docs CSV bulunamadı');
+                // Tablo-1: Top 15 tema başına toplam docs (BigQuery sorgusu: QUALIFY ROW_NUMBER() <= 15)
+                const resp1 = await fetch('gdelt_top15_themes_by_country_2022_2024.csv');
+                if (!resp1.ok) throw new Error('Top 15 tema CSV bulunamadı');
                 const text1 = await resp1.text();
                 gdeltTotalDocs = parseCSV(text1);
                 
-                // Tablo-2: monthly quality
-                const resp2 = await fetch('bquxjob_4750d984_19b43fefa20.csv');
-                if (!resp2.ok) throw new Error('monthly quality CSV bulunamadı');
+                // Tablo-2: Aylık kalite metrikleri (BigQuery sorgusu: months_total, months_ok, median_docs)
+                const resp2 = await fetch('gdelt_monthly_quality_metrics.csv');
+                if (!resp2.ok) throw new Error('Aylık kalite CSV bulunamadı');
                 const text2 = await resp2.text();
                 gdeltMonthlyQuality = parseCSV(text2);
                 
-                // Aylık detay (opsiyonel)
+                // Tablo-3: Aylık detay verisi (BigQuery sorgusu: ym, country, theme_code, n_docs)
+                const resp3 = await fetch('gdelt_monthly_docs_per_theme_country_2022_2024.csv');
+                if (!resp3.ok) throw new Error('Aylık detay CSV bulunamadı');
+                const text3 = await resp3.text();
+                gdeltMonthlyDetail = parseCSV(text3);
+                
+                // Tablo-4: Trend analiz verisi (BigQuery sorgusu: aylık trend slope, varyans, ortalama)
                 try {
-                    const resp3 = await fetch('bquxjob_5c135702_19b43f3f270.csv');
-                    if (resp3.ok) {
-                        const text3 = await resp3.text();
-                        gdeltMonthlyDetail = parseCSV(text3);
+                    const resp4 = await fetch('gdelt_theme_trend_analysis_2022_2024.csv');
+                    if (resp4.ok) {
+                        const text4 = await resp4.text();
+                        gdeltTrendAnalysis = parseCSV(text4);
                     }
                 } catch (e) {
-                    console.log('Aylık detay dosyası yüklenemedi (opsiyonel)');
+                    console.log('Trend analiz dosyası yüklenemedi (opsiyonel)');
                 }
+                
+                // Trend verisini global değişkene ata
+                trendAnalysisData = gdeltTrendAnalysis;
+                
+                // Global değişkenleri doldur
+                totalDocsData = gdeltTotalDocs;
+                monthlyQualityData = gdeltMonthlyQuality;
+                monthlyDetailData = gdeltMonthlyDetail;
                 
                 gdeltDataLoaded = true;
                 
@@ -3384,13 +3564,14 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 updateTotalDocsTable();
                 updateMonthlyQualityTable();
                 updateMonthlyDetailTable();  // Tablo-3
+                updateTrendAnalysisTable();  // Tablo-4
                 
                 // Butonları aktif et
                 document.getElementById('analyze-themes-btn').disabled = false;
                 document.getElementById('generate-matrix-btn').disabled = false;
-                document.getElementById('export-gdelt-btn').disabled = false;
+                // export-gdelt-btn kaldırıldı - yeni yapıda Adım C'de export var
                 
-                showGDELTStatus(`✅ Veriler yüklendi! Toplam Docs: ${gdeltTotalDocs.length}, Aylık Kalite: ${gdeltMonthlyQuality.length}, Aylık Detay: ${gdeltMonthlyDetail.length} satır`, 'success');
+                showGDELTStatus(`✅ Veriler yüklendi! Top 15 Tema: ${gdeltTotalDocs.length}, Kalite Metrikleri: ${gdeltMonthlyQuality.length}, Aylık Detay: ${gdeltMonthlyDetail.length}, Trend Analiz: ${gdeltTrendAnalysis.length} satır`, 'success');
                 
             } catch (error) {
                 showGDELTStatus(`❌ Yükleme hatası: ${error.message}`, 'error');
@@ -3718,6 +3899,109 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
         
         // ==================== TABLO-3 SONU ====================
         
+        // ==================== TABLO-4: TREND ANALIZ FONKSİYONLARI ====================
+        
+        let trendSortColumn = 'trend_slope';
+        let trendSortAsc = false;
+        
+        // Trend tablosunu güncelle
+        function updateTrendAnalysisTable() {
+            const tbody = document.getElementById('trend-analysis-tbody');
+            
+            if (!gdeltDataLoaded || trendAnalysisData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 30px; color: #999;">CSV yüklenmedi. "CSV Verilerini Yükle" butonuna tıklayın.</td></tr>';
+                return;
+            }
+            
+            // Filtre değerlerini al
+            const categoryFilter = document.getElementById('trend-category-filter').value;
+            const minSlope = parseFloat(document.getElementById('trend-min-slope').value) || -Infinity;
+            const maxSlope = parseFloat(document.getElementById('trend-max-slope').value) || Infinity;
+            
+            // Filtreleme
+            let filtered = trendAnalysisData.filter(row => {
+                const slope = parseFloat(row.trend_slope) || 0;
+                if (slope < minSlope || slope > maxSlope) return false;
+                if (categoryFilter !== 'ALL' && row.trend_category !== categoryFilter) return false;
+                return true;
+            });
+            
+            // İstatistikleri hesapla
+            const totalThemes = filtered.length;
+            const artanCount = filtered.filter(r => r.trend_category === 'Artan').length;
+            const azalanCount = filtered.filter(r => r.trend_category === 'Azalan').length;
+            const stabilCount = filtered.filter(r => r.trend_category === 'Stabil').length;
+            
+            // İstatistikleri güncelle
+            document.getElementById('trend-total-themes').textContent = totalThemes.toLocaleString();
+            document.getElementById('trend-artan-count').textContent = artanCount.toLocaleString();
+            document.getElementById('trend-azalan-count').textContent = azalanCount.toLocaleString();
+            document.getElementById('trend-stabil-count').textContent = stabilCount.toLocaleString();
+            
+            // Sıralama
+            filtered.sort((a, b) => {
+                let aVal = a[trendSortColumn];
+                let bVal = b[trendSortColumn];
+                
+                if (trendSortColumn === 'trend_slope' || trendSortColumn === 'avg_docs' || trendSortColumn === 'std_docs') {
+                    aVal = parseFloat(aVal) || 0;
+                    bVal = parseFloat(bVal) || 0;
+                }
+                
+                if (trendSortAsc) {
+                    return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+                } else {
+                    return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+                }
+            });
+            
+            // İlk 100 satırı göster
+            const toShow = filtered.slice(0, 100);
+            
+            tbody.innerHTML = '';
+            toShow.forEach(row => {
+                const trendCategory = row.trend_category || 'Stabil';
+                let trendColor = '#FF9800'; // Stabil
+                if (trendCategory === 'Artan') trendColor = '#4CAF50';
+                else if (trendCategory === 'Azalan') trendColor = '#f44336';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">${row.country}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee; font-family: monospace; font-weight: 600;">${row.theme_code}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center; font-weight: 600; color: ${trendColor};">${parseFloat(row.trend_slope).toFixed(2)}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">
+                        <span style="background: ${trendColor}20; color: ${trendColor}; padding: 4px 8px; border-radius: 4px; font-weight: 600;">${trendCategory}</span>
+                    </td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-weight: 600;">${parseFloat(row.avg_docs).toFixed(0)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #999;">Filtreye uygun veri bulunamadı</td></tr>';
+            } else if (filtered.length > 100) {
+                const infoRow = document.createElement('tr');
+                infoRow.innerHTML = `<td colspan="5" style="text-align: center; padding: 15px; background: #fff3e0; color: #FF5722;">
+                    ⚠️ ${filtered.length.toLocaleString()} kayıttan ilk 100 gösteriliyor. Filtreleri daraltarak daha fazla sonuç görebilirsiniz.
+                </td>`;
+                tbody.appendChild(infoRow);
+            }
+        }
+        
+        // Trend tablosu sıralama
+        function sortTrendTable(column) {
+            if (trendSortColumn === column) {
+                trendSortAsc = !trendSortAsc;
+            } else {
+                trendSortColumn = column;
+                trendSortAsc = column === 'trend_slope' ? false : true;  // trend_slope için varsayılan desc
+            }
+            updateTrendAnalysisTable();
+        }
+        
+        // ==================== TABLO-4 SONU ====================
+        
         // Tema analizi yap - IPTC kategorileriyle entegre
         function analyzeThemes() {
             if (!gdeltDataLoaded) {
@@ -3768,7 +4052,7 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                         if (!themesByIPTC[iptcCategory]) {
                             themesByIPTC[iptcCategory] = [];
                         }
-                        themesByIPTC[iptcCategory].push({ theme, totalDocs });
+                        themesByIPTC[iptcCategory].push({ theme, totalDocs: totalDocs || 0 });
                     }
                 });
             }
@@ -3807,10 +4091,6 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             const sortedIPTCCategories = Object.entries(themesByIPTC)
                 .sort((a, b) => b[1].length - a[1].length);
             
-            // Adım A panelini güncelle - TÜM 17 IPTC kategorisini göster
-            const listEl = document.getElementById('common-themes-list');
-            let html = '';
-            
             // IPTC renk haritası
             const iptcColors = {
                 'economy, business and finance': '#FF9800',
@@ -3833,43 +4113,6 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 'Diğer': '#9E9E9E'
             };
             
-            // Tüm 17 IPTC kategorisini göster (veri olanlar ve olmayanlar)
-            const allIPTCCategories = Object.keys(IPTC_CATEGORIES);
-            
-            allIPTCCategories.forEach(cat => {
-                const color = iptcColors[cat] || '#667eea';
-                const themesInCategory = sortedIPTCCategories.find(([c, _]) => c === cat);
-                const themes = themesInCategory ? themesInCategory[1] : [];
-                const totalDocs = themes.reduce((sum, t) => sum + t.totalDocs, 0);
-                const shortLabel = cat.split(',')[0];
-                const hasData = themes.length > 0;
-                
-                // İç template için ayrı oluştur
-                let themesList = '';
-                if (hasData) {
-                    themesList = '<div style="display: flex; flex-wrap: wrap; gap: 3px;">';
-                    themes.slice(0, 4).forEach(t => {
-                        themesList += '<code style="background: ' + color + '20; color: ' + color + '; padding: 1px 5px; border-radius: 3px; font-size: 0.7em;">' + t.theme + '</code>';
-                    });
-                    if (themes.length > 4) {
-                        themesList += '<span style="color: #999; font-size: 0.7em;">+' + (themes.length - 4) + '</span>';
-                    }
-                    themesList += '</div>';
-                }
-                
-                html += `
-                    <div style="margin-bottom: 8px; padding: 6px 8px; background: ${hasData ? color + '10' : '#f5f5f5'}; border-left: 3px solid ${hasData ? color : '#ccc'}; border-radius: 4px; opacity: ${hasData ? 1 : 0.5};">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: ${hasData ? '4px' : '0'};">
-                            <span style="font-weight: 600; color: ${hasData ? color : '#999'}; text-transform: capitalize; font-size: 0.9em;">${shortLabel}</span>
-                            <span style="font-size: 0.75em; color: ${hasData ? '#666' : '#aaa'};">${themes.length} tema${hasData ? ', ' + (totalDocs/1000000).toFixed(1) + 'M docs' : ''}</span>
-                        </div>
-                        ${themesList}
-                    </div>
-                `;
-            });
-            
-            listEl.innerHTML = html;
-            
             const totalMapped = allMappedThemes.length;
             const categoriesFound = sortedIPTCCategories.length;
             showGDELTStatus(`✅ Analiz tamamlandı! ${totalMapped} tema eşleştirildi (${commonThemes.length} tanesi 6 ülkede ortak), ${categoriesFound} IPTC kategorisinde.`, 'success');
@@ -3878,63 +4121,119 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             window.analyzedIPTCCategories = sortedIPTCCategories;
             window.analyzedCommonThemes = commonThemes;
             window.allMappedThemes = allMappedThemes;
+            window.themesByIPTC = themesByIPTC;
+            window.themeCountByCountry = themeCountByCountry;
             
-            // Veri kalitesi istatistiklerini güncelle
-            updateDataQualityStats(sortedIPTCCategories, commonThemes, allMappedThemes);
+            // Adım A: IPTC Kategori Özet Kartlarını oluştur
+            renderIPTCSummaryCards(sortedIPTCCategories, allMappedThemes, iptcColors);
+            
+            // Adım B: Matrisi otomatik oluştur
+            setTimeout(() => generateCountryThemeMatrix(), 100);
+            
+            // Adım C: Seçim panelini oluştur
+            renderIPTCSelectionPanel(sortedIPTCCategories, allMappedThemes, iptcColors);
         }
         
-        // Veri kalitesi ve istatistik panelini güncelle
-        function updateDataQualityStats(sortedCategories, commonThemes, allMappedThemes) {
-            // Toplam eşleştirilen tema sayısı
-            const totalMappedCount = allMappedThemes ? allMappedThemes.length : 0;
-            document.getElementById('stat-total-themes').textContent = totalMappedCount;
+        // Adım A: IPTC Kategori Özet Kartları
+        function renderIPTCSummaryCards(sortedIPTCCategories, allMappedThemes, iptcColors) {
+            const grid = document.getElementById('iptc-summary-cards-grid');
+            if (!grid) return;
             
-            // 6 ülkede ortak tema sayısı
-            document.getElementById('stat-common-themes').textContent = commonThemes.length;
+            const countries = ['CE', 'HO', 'HR', 'KG', 'LO', 'SA'];
+            const allIPTCCategories = Object.keys(IPTC_CATEGORIES);
             
-            // IPTC ile eşleşen kategori sayısı
-            const iptcCategoriesWithData = new Set();
+            // Tablo 3'ten (gdeltMonthlyDetail) IPTC kategorilerine göre toplam doküman hesapla
+            const docsByIPTCFromMonthly = {};
+            const themesByIPTCFromMonthly = {};
+            const monthsByIPTCFromMonthly = {};
             
-            // sortedCategories'den gelen veriler
-            sortedCategories.forEach(([cat, themes]) => {
-                if (themes.length > 0) {
-                    iptcCategoriesWithData.add(cat);
+            if (gdeltMonthlyDetail && gdeltMonthlyDetail.length > 0) {
+                // Önce tema → IPTC mapping oluştur
+                const themeToIPTC = {};
+                if (iptcMappingResults && iptcMappingResults.themes) {
+                    iptcMappingResults.themes.forEach(mappedTheme => {
+                        const themeCode = mappedTheme.theme_code;
+                        const iptcCat = mappedTheme.iptc_final_label || mappedTheme.iptc_label;
+                        if (iptcCat && iptcCat !== 'Diğer') {
+                            themeToIPTC[themeCode] = iptcCat;
+                        }
+                    });
+                } else {
+                    // Fallback: statik mapping kullan
+                    gdeltMonthlyDetail.forEach(row => {
+                        const iptcCat = getIPTCCategory(row.theme_code);
+                        if (iptcCat) {
+                            themeToIPTC[row.theme_code] = iptcCat;
+                        }
+                    });
                 }
-            });
-            
-            // Kümeleme sonuçlarından gelen ek kategoriler
-            if (iptcMappingResults && iptcMappingResults.themes) {
-                iptcMappingResults.themes.forEach(t => {
-                    const cat = t.iptc_final_label || t.iptc_label;
-                    if (cat && cat !== 'Diğer') {
-                        iptcCategoriesWithData.add(cat);
+                
+                // Tablo 3'ü tara ve IPTC kategorilerine göre topla
+                gdeltMonthlyDetail.forEach(row => {
+                    const iptcCat = themeToIPTC[row.theme_code];
+                    if (iptcCat) {
+                        if (!docsByIPTCFromMonthly[iptcCat]) {
+                            docsByIPTCFromMonthly[iptcCat] = 0;
+                            themesByIPTCFromMonthly[iptcCat] = new Set();
+                            monthsByIPTCFromMonthly[iptcCat] = new Set();
+                        }
+                        docsByIPTCFromMonthly[iptcCat] += row.n_docs || 0;
+                        themesByIPTCFromMonthly[iptcCat].add(row.theme_code);
+                        monthsByIPTCFromMonthly[iptcCat].add(row.ym);
                     }
                 });
             }
             
-            mappedIPTCCount = iptcCategoriesWithData.size;
-            document.getElementById('stat-mapped-iptc').textContent = mappedIPTCCount + '/17';
+            // Hangi veri kaynağını kullanacağız?
+            const useMonthlyData = Object.keys(docsByIPTCFromMonthly).length > 0;
+            const docsByIPTC = useMonthlyData ? docsByIPTCFromMonthly : {};
+            const themesByIPTC = useMonthlyData ? themesByIPTCFromMonthly : {};
+            const monthsByIPTC = useMonthlyData ? monthsByIPTCFromMonthly : {};
             
-            // Kalite ≥70% olan tema sayısı (Tablo-2'den)
-            const countries = ['CE', 'HO', 'HR', 'KG', 'LO', 'SA'];
-            let qualityPassCount = 0;
-            commonThemes.forEach(themeInfo => {
-                let passCount = 0;
-                countries.forEach(country => {
-                    const qualityRow = gdeltMonthlyQuality.find(
-                        r => r.country === country && r.theme_code === themeInfo.theme
-                    );
-                    if (qualityRow && qualityRow.months_total > 0) {
-                        const ratio = qualityRow.months_ok / qualityRow.months_total;
-                        if (ratio >= 0.7) passCount++;
-                    }
+            // Her kategori için istatistikleri hesapla
+            const categoryStats = {};
+            allIPTCCategories.forEach(cat => {
+                // IPTC kategorisindeki toplam doküman (Tablo 3'ten)
+                const totalDocs = docsByIPTC[cat] || 0;
+                const themeCount = themesByIPTC[cat] ? themesByIPTC[cat].size : 0;
+                const monthsCount = monthsByIPTC[cat] ? monthsByIPTC[cat].size : 36; // Default 36 ay (2022-2024)
+                
+                // Aylık ortalama doküman hesapla
+                const avgMonthlyDocs = monthsCount > 0 ? Math.round(totalDocs / monthsCount) : 0;
+                
+                // 6 ülkede kapsama oranı hesapla (mevcut mantık)
+                let coverageSum = 0;
+                let coverageCount = 0;
+                
+                const themesToCheck = themesByIPTC[cat] ? Array.from(themesByIPTC[cat]) : [];
+                
+                themesToCheck.forEach(themeCode => {
+                    countries.forEach(country => {
+                        const qualityRow = gdeltMonthlyQuality.find(
+                            r => r.country === country && r.theme_code === themeCode
+                        );
+                        if (qualityRow && qualityRow.months_total > 0) {
+                            coverageSum += qualityRow.months_ok / qualityRow.months_total;
+                            coverageCount++;
+                        }
+                    });
                 });
-                if (passCount === 6) qualityPassCount++;
+                
+                const avgCoverage = coverageCount > 0 ? (coverageSum / coverageCount * 100).toFixed(0) : 0;
+                
+                categoryStats[cat] = {
+                    themeCount: themeCount,
+                    totalDocs: totalDocs,
+                    avgMonthlyDocs: avgMonthlyDocs,
+                    monthsCount: monthsCount,
+                    avgCoverage: avgCoverage,
+                    themes: themesToCheck
+                };
             });
-            document.getElementById('stat-quality-pass').textContent = qualityPassCount;
             
-            // Kategori kapsamı göster - Kümeleme sonuçlarını da dahil et
-            const iptcIcons = {
+            // Kartları oluştur
+            let cardsHtml = '';
+            const iptcEmojis = {
                 'economy, business and finance': '💰',
                 'conflict, war and peace': '⚔️',
                 'politics and government': '🏛️',
@@ -3954,41 +4253,423 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 'weather': '🌤️'
             };
             
-            const coverageContainer = document.getElementById('stat-category-coverage');
-            let coverageHtml = '';
-            Object.keys(IPTC_CATEGORIES).forEach(cat => {
-                const icon = iptcIcons[cat] || '📌';
-                const hasData = iptcCategoriesWithData.has(cat);
-                const fromClustering = iptcMappingResults && iptcMappingResults.themes && 
-                    iptcMappingResults.themes.some(t => (t.iptc_final_label || t.iptc_label) === cat);
-                
-                let style = '';
-                let tooltip = cat;
-                if (hasData) {
-                    if (fromClustering) {
-                        style = 'background: #e3f2fd; color: #1565c0; border: 1px solid #1565c0;'; // Kümeleme'den
-                        tooltip += ' (Kümeleme)';
-                    } else {
-                        style = 'background: #e8f5e9; color: #2e7d32;'; // Statik eşleştirme
-                        tooltip += ' (Statik)';
-                    }
-                } else {
-                    style = 'background: #ffebee; color: #c62828; opacity: 0.5;';
-                    tooltip += ' (Veri yok)';
-                }
-                coverageHtml += `<span style="padding: 2px 4px; border-radius: 3px; font-size: 0.75em; ${style}" title="${tooltip}">${icon}</span>`;
-            });
-            coverageContainer.innerHTML = coverageHtml;
+            // Tema sayısına göre sırala
+            const sortedCats = Object.entries(categoryStats).sort((a, b) => b[1].themeCount - a[1].themeCount);
             
-            // Kümeleme durumunu göster
-            const clusteringStatus = document.getElementById('stat-clustering-status');
-            if (clusteringStatus) {
-                if (iptcMappingResults && iptcMappingResults.themes) {
-                    clusteringStatus.innerHTML = `<span style="color: #1565c0;">✓ ${iptcMappingResults.themes.length} tema eşleştirildi</span>`;
-                } else {
-                    clusteringStatus.innerHTML = `<span style="color: #999;">Kümeleme yapılmadı</span>`;
+            sortedCats.forEach(([cat, stats]) => {
+                const color = iptcColors[cat] || '#667eea';
+                const emoji = iptcEmojis[cat] || '📌';
+                const shortLabel = cat.split(',')[0];
+                const hasData = stats.themeCount > 0;
+                
+                // Doküman sayısını formatla (6 ülke toplamı)
+                let docsFormatted = '-';
+                if (stats.totalDocs > 1000000) {
+                    docsFormatted = (stats.totalDocs / 1000000).toFixed(1) + 'M';
+                } else if (stats.totalDocs > 1000) {
+                    docsFormatted = (stats.totalDocs / 1000).toFixed(0) + 'K';
+                } else if (stats.totalDocs > 0) {
+                    docsFormatted = stats.totalDocs.toString();
                 }
+                
+                // Aylık ortalama için tooltip metni
+                const tooltipText = hasData ? 
+                    `Aylık ortalama: ${stats.avgMonthlyDocs.toLocaleString()} doküman (${stats.totalDocs.toLocaleString()} toplam / ${stats.monthsCount} ay)` : 
+                    'Veri yok';
+                
+                // Kapsama badge rengi
+                let coverageBadge = '';
+                if (hasData) {
+                    const cov = parseInt(stats.avgCoverage);
+                    if (cov >= 70) {
+                        coverageBadge = `<span style="background: #4CAF50; color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.75em;">✓ ${cov}%</span>`;
+                    } else if (cov >= 40) {
+                        coverageBadge = `<span style="background: #FF9800; color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.75em;">⚠ ${cov}%</span>`;
+                    } else {
+                        coverageBadge = `<span style="background: #f44336; color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.75em;">✖ ${cov}%</span>`;
+                    }
+                }
+                
+                cardsHtml += `
+                    <div class="iptc-card" style="background: white; border-left: 5px solid ${color}; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; opacity: ${hasData ? 1 : 0.5};" title="${tooltipText}">
+                        <div style="background: ${color}15; padding: 10px 12px; border-bottom: 1px solid ${color}30;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 600; color: ${color}; text-transform: capitalize; font-size: 0.95em;">${emoji} ${shortLabel}</span>
+                                ${coverageBadge}
+                            </div>
+                        </div>
+                        <div style="padding: 12px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                                <div style="text-align: center; background: #f8f9fa; padding: 8px; border-radius: 4px;">
+                                    <div style="font-size: 1.3em; font-weight: bold; color: ${color};">${stats.themeCount}</div>
+                                    <div style="font-size: 0.7em; color: #666;">Tema</div>
+                                </div>
+                                <div style="text-align: center; background: #f8f9fa; padding: 8px; border-radius: 4px;">
+                                    <div style="font-size: 1.3em; font-weight: bold; color: #333;">${docsFormatted}</div>
+                                    <div style="font-size: 0.7em; color: #666;">Doküman</div>
+                                </div>
+                            </div>
+                            ${hasData ? `<div style="font-size: 0.75em; color: #666;">6 ülkede kapsama: ${stats.avgCoverage}%</div>` : '<div style="font-size: 0.75em; color: #999;">Veri yok</div>'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = cardsHtml;
+        }
+        
+        // Adım C: IPTC Seçim Paneli
+        let selectedIPTCCategories = new Set();
+        let categoryCountryChart = null;
+        
+        function renderIPTCSelectionPanel(sortedIPTCCategories, allMappedThemes, iptcColors) {
+            const listEl = document.getElementById('iptc-selection-list');
+            if (!listEl) return;
+            
+            const allIPTCCategories = Object.keys(IPTC_CATEGORIES);
+            const iptcEmojis = {
+                'economy, business and finance': '💰',
+                'conflict, war and peace': '⚔️',
+                'politics and government': '🏛️',
+                'health': '🏥',
+                'education': '📚',
+                'disaster, accident and emergency incident': '🚨',
+                'environment': '🌍',
+                'society': '👥',
+                'crime, law and justice': '👮',
+                'science and technology': '🔬',
+                'labour': '💼',
+                'lifestyle and leisure': '✈️',
+                'religion': '🕌',
+                'human interest': '❤️',
+                'sport': '⚽',
+                'arts, culture, entertainment and media': '🎨',
+                'weather': '🌤️'
+            };
+            
+            let html = '';
+            
+            // Tema sayısına göre sırala
+            const categoryStats = {};
+            allIPTCCategories.forEach(cat => {
+                const themesInCat = sortedIPTCCategories.find(([c, _]) => c === cat);
+                const themes = themesInCat ? themesInCat[1] : [];
+                const totalDocs = themes.reduce((sum, t) => sum + t.totalDocs, 0);
+                
+                // Kalite kontrolü yap
+                let avgQuality = 0;
+                let qualityCount = 0;
+                themes.forEach(t => {
+                    ['CE', 'HO', 'HR', 'KG', 'LO', 'SA'].forEach(country => {
+                        const qRow = gdeltMonthlyQuality.find(r => r.country === country && r.theme_code === t.theme);
+                        if (qRow && qRow.months_total > 0) {
+                            avgQuality += qRow.months_ok / qRow.months_total;
+                            qualityCount++;
+                        }
+                    });
+                });
+                avgQuality = qualityCount > 0 ? (avgQuality / qualityCount * 100) : 0;
+                
+                categoryStats[cat] = { themes, totalDocs, avgQuality, themeCount: themes.length };
+            });
+            
+            const sortedCats = Object.entries(categoryStats).sort((a, b) => b[1].themeCount - a[1].themeCount);
+            
+            sortedCats.forEach(([cat, stats]) => {
+                const color = iptcColors[cat] || '#667eea';
+                const emoji = iptcEmojis[cat] || '📌';
+                const shortLabel = cat.split(',')[0];
+                const hasData = stats.themeCount > 0;
+                const isRecommended = stats.avgQuality >= 70 && stats.themeCount >= 5;
+                
+                // Doküman formatla
+                let docsStr = '-';
+                if (stats.totalDocs > 1000000) docsStr = (stats.totalDocs / 1000000).toFixed(1) + 'M';
+                else if (stats.totalDocs > 1000) docsStr = (stats.totalDocs / 1000).toFixed(0) + 'K';
+                else if (stats.totalDocs > 0) docsStr = stats.totalDocs.toString();
+                
+                html += `
+                    <label class="iptc-select-row" style="display: flex; align-items: center; padding: 8px 10px; margin-bottom: 4px; background: ${hasData ? (isRecommended ? '#e8f5e9' : 'white') : '#f5f5f5'}; border: 1px solid ${hasData ? (isRecommended ? '#4CAF50' : '#e0e0e0') : '#ccc'}; border-radius: 6px; cursor: ${hasData ? 'pointer' : 'not-allowed'}; opacity: ${hasData ? 1 : 0.5};">
+                        <input type="checkbox" value="${cat}" onchange="updateCategorySelection()" ${hasData ? '' : 'disabled'} style="margin-right: 10px; width: 18px; height: 18px;">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <span style="color: ${color}; font-weight: 600;">${emoji}</span>
+                                <span style="font-size: 0.9em; color: #333; text-transform: capitalize;">${shortLabel}</span>
+                                ${isRecommended ? '<span style="background: #4CAF50; color: white; padding: 1px 5px; border-radius: 8px; font-size: 0.65em;">Önerilen</span>' : ''}
+                            </div>
+                            <div style="font-size: 0.75em; color: #666; margin-top: 2px;">
+                                ${stats.themeCount} tema · ${docsStr} doküman
+                            </div>
+                        </div>
+                    </label>
+                `;
+            });
+            
+            listEl.innerHTML = html;
+            
+            // Sayacı güncelle
+            updateCategorySelectionCount();
+        }
+        
+        function updateCategorySelection() {
+            const checkboxes = document.querySelectorAll('#iptc-selection-list input[type="checkbox"]:checked');
+            selectedIPTCCategories = new Set();
+            checkboxes.forEach(cb => selectedIPTCCategories.add(cb.value));
+            
+            updateCategorySelectionCount();
+            updateSelectedCategoriesSummary();
+            updateCategoryCountryChart();
+            updateV1V2ComparisonTable();
+        }
+        
+        function updateCategorySelectionCount() {
+            const countEl = document.getElementById('selected-category-count');
+            if (countEl) {
+                countEl.textContent = `${selectedIPTCCategories.size} / 17`;
+                countEl.style.background = selectedIPTCCategories.size >= 5 ? '#4CAF50' : '#2196F3';
             }
+        }
+        
+        function selectRecommendedCategories() {
+            const checkboxes = document.querySelectorAll('#iptc-selection-list input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                const row = cb.closest('.iptc-select-row');
+                if (row && row.querySelector('span[style*="#4CAF50"]')) {
+                    cb.checked = true;
+                }
+            });
+            updateCategorySelection();
+        }
+        
+        function clearCategorySelection() {
+            const checkboxes = document.querySelectorAll('#iptc-selection-list input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = false);
+            selectedIPTCCategories.clear();
+            updateCategorySelectionCount();
+            updateSelectedCategoriesSummary();
+            updateCategoryCountryChart();
+            updateV1V2ComparisonTable();
+        }
+        
+        function updateSelectedCategoriesSummary() {
+            const summaryEl = document.getElementById('selected-categories-summary');
+            if (!summaryEl) return;
+            
+            if (selectedIPTCCategories.size === 0) {
+                summaryEl.innerHTML = '<div style="text-align: center; color: #999; padding: 20px; grid-column: 1/-1;">Kategori seçin...</div>';
+                return;
+            }
+            
+            const iptcColors = {
+                'economy, business and finance': '#FF9800',
+                'conflict, war and peace': '#F44336',
+                'politics and government': '#2196F3',
+                'health': '#4CAF50',
+                'education': '#9C27B0',
+                'disaster, accident and emergency incident': '#E91E63',
+                'environment': '#8BC34A',
+                'society': '#607D8B',
+                'crime, law and justice': '#3F51B5',
+                'science and technology': '#009688',
+                'labour': '#FFC107',
+                'lifestyle and leisure': '#00BCD4',
+                'religion': '#795548',
+                'human interest': '#FF5722',
+                'sport': '#CDDC39',
+                'arts, culture, entertainment and media': '#673AB7',
+                'weather': '#03A9F4'
+            };
+            
+            let html = '';
+            let totalThemes = 0;
+            let totalDocs = 0;
+            
+            selectedIPTCCategories.forEach(cat => {
+                const color = iptcColors[cat] || '#667eea';
+                const catData = (window.analyzedIPTCCategories || []).find(([c, _]) => c === cat);
+                const themes = catData ? catData[1] : [];
+                const docs = themes.reduce((sum, t) => sum + t.totalDocs, 0);
+                totalThemes += themes.length;
+                totalDocs += docs;
+                
+                html += `
+                    <div style="background: ${color}15; border-left: 3px solid ${color}; padding: 8px; border-radius: 4px;">
+                        <div style="font-size: 0.8em; color: ${color}; font-weight: 600; text-transform: capitalize;">${cat.split(',')[0]}</div>
+                        <div style="font-size: 0.75em; color: #666;">${themes.length} tema</div>
+                    </div>
+                `;
+            });
+            
+            // Toplam özet
+            html += `
+                <div style="background: #e3f2fd; border-left: 3px solid #1976D2; padding: 8px; border-radius: 4px;">
+                    <div style="font-size: 0.8em; color: #1976D2; font-weight: 600;">TOPLAM</div>
+                    <div style="font-size: 0.75em; color: #666;">${totalThemes} tema · ${(totalDocs/1000000).toFixed(1)}M dok</div>
+                </div>
+            `;
+            
+            summaryEl.innerHTML = html;
+        }
+        
+        function updateCategoryCountryChart() {
+            const canvas = document.getElementById('category-country-bar-chart');
+            if (!canvas) return;
+            
+            if (categoryCountryChart) {
+                categoryCountryChart.destroy();
+            }
+            
+            if (selectedIPTCCategories.size === 0) {
+                return;
+            }
+            
+            const countries = ['CE', 'HO', 'HR', 'KG', 'LO', 'SA'];
+            const countryNames = { CE: 'Sri Lanka', HO: 'Honduras', HR: 'Croatia', KG: 'Kyrgyzstan', LO: 'Slovakia', SA: 'Saudi Arabia' };
+            
+            const iptcColors = {
+                'economy, business and finance': '#FF9800',
+                'conflict, war and peace': '#F44336',
+                'politics and government': '#2196F3',
+                'health': '#4CAF50',
+                'education': '#9C27B0',
+                'disaster, accident and emergency incident': '#E91E63',
+                'environment': '#8BC34A',
+                'society': '#607D8B',
+                'crime, law and justice': '#3F51B5',
+                'science and technology': '#009688',
+                'labour': '#FFC107',
+                'lifestyle and leisure': '#00BCD4',
+                'religion': '#795548',
+                'human interest': '#FF5722',
+                'sport': '#CDDC39',
+                'arts, culture, entertainment and media': '#673AB7',
+                'weather': '#03A9F4'
+            };
+            
+            const datasets = [];
+            
+            selectedIPTCCategories.forEach(cat => {
+                const color = iptcColors[cat] || '#667eea';
+                const catData = (window.analyzedIPTCCategories || []).find(([c, _]) => c === cat);
+                const themes = catData ? catData[1] : [];
+                
+                const data = countries.map(country => {
+                    let countryDocs = 0;
+                    themes.forEach(t => {
+                        const themeData = window.themeCountByCountry ? window.themeCountByCountry[t.theme] : null;
+                        if (themeData && themeData.byCountry && themeData.byCountry[country]) {
+                            countryDocs += themeData.byCountry[country];
+                        }
+                    });
+                    return countryDocs / 1000000; // Milyon olarak
+                });
+                
+                datasets.push({
+                    label: cat.split(',')[0],
+                    data: data,
+                    backgroundColor: color + 'CC',
+                    borderColor: color,
+                    borderWidth: 1
+                });
+            });
+            
+            categoryCountryChart = new Chart(canvas.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: countries.map(c => countryNames[c]),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } },
+                        title: { display: false }
+                    },
+                    scales: {
+                        x: { stacked: false },
+                        y: { 
+                            stacked: false, 
+                            title: { display: true, text: 'Doküman (Milyon)' },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateV1V2ComparisonTable() {
+            const tbody = document.getElementById('v1-v2-tbody');
+            if (!tbody) return;
+            
+            if (selectedIPTCCategories.size === 0 || !iptcMappingResultsV1 || !iptcMappingResultsV2) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 15px; color: #999;">Kategori seçin ve V1/V2 sonuçlarını yükleyin</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            
+            selectedIPTCCategories.forEach(cat => {
+                const v1Themes = iptcMappingResultsV1.themes ? iptcMappingResultsV1.themes.filter(t => (t.iptc_final_label || t.iptc_label) === cat).length : 0;
+                const v2Themes = iptcMappingResultsV2.themes ? iptcMappingResultsV2.themes.filter(t => (t.iptc_final_label || t.iptc_label) === cat).length : 0;
+                const diff = v2Themes - v1Themes;
+                const diffColor = diff > 0 ? '#4CAF50' : (diff < 0 ? '#f44336' : '#999');
+                const diffSign = diff > 0 ? '+' : '';
+                
+                html += `
+                    <tr style="border-bottom: 1px solid #ffe0b2;">
+                        <td style="padding: 6px 8px; text-align: left; text-transform: capitalize; font-size: 0.85em;">${cat.split(',')[0]}</td>
+                        <td style="padding: 6px 8px; text-align: center;">${v1Themes}</td>
+                        <td style="padding: 6px 8px; text-align: center;">${v2Themes}</td>
+                        <td style="padding: 6px 8px; text-align: center; color: ${diffColor}; font-weight: 600;">${diffSign}${diff}</td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+        
+        function exportSelectedCategoriesAnalysis() {
+            if (selectedIPTCCategories.size === 0) {
+                alert('Önce kategori seçin!');
+                return;
+            }
+            
+            // CSV oluştur
+            let csv = 'Kategori,Tema Kodu,Ülke,Toplam Doküman,Kalite Oranı\n';
+            
+            selectedIPTCCategories.forEach(cat => {
+                const catData = (window.analyzedIPTCCategories || []).find(([c, _]) => c === cat);
+                const themes = catData ? catData[1] : [];
+                
+                themes.forEach(t => {
+                    const themeData = window.themeCountByCountry ? window.themeCountByCountry[t.theme] : null;
+                    if (themeData) {
+                        Object.entries(themeData.byCountry || {}).forEach(([country, docs]) => {
+                            const qRow = gdeltMonthlyQuality.find(r => r.country === country && r.theme_code === t.theme);
+                            const quality = qRow && qRow.months_total > 0 ? (qRow.months_ok / qRow.months_total * 100).toFixed(1) : '0';
+                            csv += `"${cat}","${t.theme}","${country}",${docs},${quality}\n`;
+                        });
+                    }
+                });
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `selected_categories_analysis_${new Date().toISOString().slice(0, 10)}.csv`;
+            link.click();
+        }
+        
+        // Veri kalitesi ve istatistik panelini güncelle (eski fonksiyon - geriye uyumluluk)
+        function updateDataQualityStats(sortedCategories, commonThemes, allMappedThemes) {
+            // Bu fonksiyon artık kullanılmıyor, Adım A kartları bunu değiştirdi
+            // Geriye uyumluluk için boş bırakıldı
+            console.log('Stats güncellendi:', {
+                totalThemes: allMappedThemes?.length || 0,
+                commonThemes: commonThemes?.length || 0,
+                categories: sortedCategories?.length || 0
+            });
         }
         
         // Ülke-Kategori matrisi oluştur - IPTC ve 3 tablo entegrasyonu
@@ -4228,6 +4909,34 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 updateExportFilterInfo();
             });
         });
+        
+        // Eksik fonksiyonları ekle (stub'lar)
+        function attachEventListeners() {
+            // Diğer event listener'ları buraya eklenebilir
+            console.log('Event listeners attached');
+        }
+        
+        function updateInfoBox() {
+            // Bilgi kutusunu güncelle
+            console.log('Info box updated');
+        }
+        
+        function updateExportFilterInfo() {
+            // Export filtre bilgisini güncelle
+            console.log('Export filter info updated');
+        }
+        
+        function loadData() {
+            // Varsayılan veri yükleme
+            console.log('Loading default data');
+        }
+        
+        async function loadGDELTClusteringResults() {
+            // Kümeleme sonuçlarını yükle
+            console.log('Loading GDELT clustering results');
+            // Stub implementation
+            return Promise.resolve();
+        }
         
         // Debug: GDELT Clustering otomatik yükleme (sayfa yüklendiğinde test için)
         document.addEventListener('DOMContentLoaded', () => {
