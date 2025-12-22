@@ -1,0 +1,204 @@
+{
+  "metadata": {
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "pca_components": 20,
+    "n_clusters": 8,
+    "total_themes": 18,
+    "algorithm": "Agglomerative Clustering (Ward linkage)"
+  },
+  "cluster_labels": {
+    "0": {
+      "iptc_label": "Conflict",
+      "iptc_description": "Conflict, War & Peace",
+      "dominant_issue": "CONFLICT / WAR / PEACE",
+      "sample_themes": [
+        "CRISISLEX",
+        "USPEC",
+        "SOC",
+        "EDUCATION",
+        "KILL"
+      ],
+      "theme_count": 5
+    },
+    "1": {
+      "iptc_label": "Politics",
+      "iptc_description": "Politics & Government",
+      "dominant_issue": "POLITICS / GOVERNMENT",
+      "sample_themes": [
+        "TAX",
+        "LEADER"
+      ],
+      "theme_count": 2
+    },
+    "2": {
+      "iptc_label": "Conflict",
+      "iptc_description": "Conflict, War & Peace",
+      "dominant_issue": "CONFLICT / WAR / PEACE",
+      "sample_themes": [
+        "WB",
+        "ARMEDCONFLICT"
+      ],
+      "theme_count": 2
+    },
+    "3": {
+      "iptc_label": "Economy",
+      "iptc_description": "Economy, Business & Finance",
+      "dominant_issue": "ECONOMY / FINANCE",
+      "sample_themes": [
+        "EPU",
+        "MEDIA"
+      ],
+      "theme_count": 2
+    },
+    "4": {
+      "iptc_label": "Health",
+      "iptc_description": "Health & Medical Science",
+      "dominant_issue": "HEALTH & MEDICAL SCIENCE",
+      "sample_themes": [
+        "UNGP",
+        "MEDICAL"
+      ],
+      "theme_count": 2
+    },
+    "5": {
+      "iptc_label": "Society",
+      "iptc_description": "Social Issues & Community",
+      "dominant_issue": "GENERAL / UNCATEGORIZED",
+      "sample_themes": [
+        "GENERAL",
+        "MANMADE"
+      ],
+      "theme_count": 2
+    },
+    "6": {
+      "iptc_label": "Economy",
+      "iptc_description": "Economy, Business & Finance",
+      "dominant_issue": "ECONOMY / FINANCE",
+      "sample_themes": [
+        "ECON",
+        "AFFECT"
+      ],
+      "theme_count": 2
+    },
+    "7": {
+      "iptc_label": "Society",
+      "iptc_description": "Social Issues & Community",
+      "dominant_issue": "Unknown",
+      "sample_themes": [
+        "ENV"
+      ],
+      "theme_count": 1
+    }
+  },
+  "themes": [
+    {
+      "theme_code": "TAX",
+      "cluster": 1,
+      "issue_category": null,
+      "text_repr": "TAX"
+    },
+    {
+      "theme_code": "WB",
+      "cluster": 2,
+      "issue_category": null,
+      "text_repr": "WB"
+    },
+    {
+      "theme_code": "EPU",
+      "cluster": 3,
+      "issue_category": "ECONOMY / FINANCE",
+      "text_repr": "EPU - ECONOMY / FINANCE - Economic policy uncertainty"
+    },
+    {
+      "theme_code": "CRISISLEX",
+      "cluster": 0,
+      "issue_category": "CONFLICT / WAR / PEACE",
+      "text_repr": "CRISISLEX - CONFLICT / WAR / PEACE - Crisis events and conflicts"
+    },
+    {
+      "theme_code": "USPEC",
+      "cluster": 0,
+      "issue_category": null,
+      "text_repr": "USPEC"
+    },
+    {
+      "theme_code": "GENERAL",
+      "cluster": 5,
+      "issue_category": "GENERAL / UNCATEGORIZED",
+      "text_repr": "GENERAL - GENERAL / UNCATEGORIZED - General news and events"
+    },
+    {
+      "theme_code": "UNGP",
+      "cluster": 4,
+      "issue_category": null,
+      "text_repr": "UNGP"
+    },
+    {
+      "theme_code": "LEADER",
+      "cluster": 1,
+      "issue_category": "POLITICS / GOVERNMENT",
+      "text_repr": "LEADER - POLITICS / GOVERNMENT - Political leadership changes"
+    },
+    {
+      "theme_code": "SOC",
+      "cluster": 0,
+      "issue_category": null,
+      "text_repr": "SOC"
+    },
+    {
+      "theme_code": "ECON",
+      "cluster": 6,
+      "issue_category": "ECONOMY / FINANCE",
+      "text_repr": "ECON - ECONOMY / FINANCE - Economic events and financial news"
+    },
+    {
+      "theme_code": "MEDIA",
+      "cluster": 3,
+      "issue_category": "LIFESTYLE / ENTERTAINMENT",
+      "text_repr": "MEDIA - LIFESTYLE / ENTERTAINMENT - Media and journalism"
+    },
+    {
+      "theme_code": "MANMADE",
+      "cluster": 5,
+      "issue_category": "ENVIRONMENT / NATURAL HAZARDS",
+      "text_repr": "MANMADE - ENVIRONMENT / NATURAL HAZARDS - Man-made hazards and accidents"
+    },
+    {
+      "theme_code": "EDUCATION",
+      "cluster": 0,
+      "issue_category": "EDUCATION & SCIENCE",
+      "text_repr": "EDUCATION - EDUCATION & SCIENCE - Education and learning"
+    },
+    {
+      "theme_code": "MEDICAL",
+      "cluster": 4,
+      "issue_category": "HEALTH & MEDICAL SCIENCE",
+      "text_repr": "MEDICAL - HEALTH & MEDICAL SCIENCE - Medical procedures and health science"
+    },
+    {
+      "theme_code": "ARMEDCONFLICT",
+      "cluster": 2,
+      "issue_category": "CONFLICT / WAR / PEACE",
+      "text_repr": "ARMEDCONFLICT - CONFLICT / WAR / PEACE - Armed conflicts and military operations"
+    },
+    {
+      "theme_code": "AFFECT",
+      "cluster": 6,
+      "issue_category": "SOCIETY / SOCIAL ISSUES",
+      "text_repr": "AFFECT - SOCIETY / SOCIAL ISSUES - Emotional content and sentiment"
+    },
+    {
+      "theme_code": "KILL",
+      "cluster": 0,
+      "issue_category": "CONFLICT / WAR / PEACE",
+      "text_repr": "KILL - CONFLICT / WAR / PEACE - Death and violence"
+    },
+    {
+      "theme_code": "ENV",
+      "cluster": 7,
+      "issue_category": null,
+      "text_repr": "ENV"
+    }
+  ],
+  "explained_variance": 1.0000001192092896
+}

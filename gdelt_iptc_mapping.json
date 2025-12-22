@@ -1,0 +1,408 @@
+{
+  "metadata": {
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_dim": 384,
+    "method": "IPTC Media Topics cosine similarity mapping",
+    "reference": "IPTC NewsCodes 2025-10-10",
+    "total_themes": 18,
+    "iptc_categories": 10
+  },
+  "summary": {
+    "total_themes": 18,
+    "iptc_categories_used": 10,
+    "avg_similarity": 0.4285909831523895,
+    "avg_confidence": 0.14822500944137573,
+    "low_confidence_count": 10,
+    "themes_per_iptc": {
+      "economy, business and finance": 3,
+      "conflict, war and peace": 3,
+      "human interest": 3,
+      "arts, culture, entertainment and media": 2,
+      "politics and government": 2,
+      "society": 1,
+      "disaster, accident and emergency incident": 1,
+      "education": 1,
+      "science and technology": 1,
+      "environment": 1
+    },
+    "avg_similarity_per_iptc": {
+      "arts, culture, entertainment and media": 0.3804941177368164,
+      "conflict, war and peace": 0.6376213431358337,
+      "disaster, accident and emergency incident": 0.6805230975151062,
+      "economy, business and finance": 0.42658472061157227,
+      "education": 0.5698575973510742,
+      "environment": 0.249970942735672,
+      "human interest": 0.32735785841941833,
+      "politics and government": 0.2889683246612549,
+      "science and technology": 0.47657766938209534,
+      "society": 0.224092036485672
+    }
+  },
+  "iptc_categories": {
+    "arts, culture, entertainment and media": {
+      "medtop_id": 1000000,
+      "definition": "All forms of arts, entertainment, cultural heritage and media",
+      "theme_count": 2,
+      "themes": [
+        "WB",
+        "MEDIA"
+      ],
+      "avg_similarity": 0.3804941177368164
+    },
+    "crime, law and justice": {
+      "medtop_id": 2000000,
+      "definition": "The establishment and/or statement of the rules of behaviour in society, the enforcement of these rules, breaches of the rules, the punishment of offenders and the organisations and bodies involved in these activities",
+      "theme_count": 0,
+      "themes": [],
+      "avg_similarity": 0
+    },
+    "disaster, accident and emergency incident": {
+      "medtop_id": 3000000,
+      "definition": "Man made or natural event resulting in loss of life or injury to living creatures and/or damage to inanimate objects or property",
+      "theme_count": 1,
+      "themes": [
+        "MANMADE"
+      ],
+      "avg_similarity": 0.6805230975151062
+    },
+    "economy, business and finance": {
+      "medtop_id": 4000000,
+      "definition": "All matters concerning the planning, production and exchange of wealth",
+      "theme_count": 3,
+      "themes": [
+        "TAX",
+        "EPU",
+        "ECON"
+      ],
+      "avg_similarity": 0.42658472061157227
+    },
+    "education": {
+      "medtop_id": 5000000,
+      "definition": "All aspects of furthering knowledge, formally or informally",
+      "theme_count": 1,
+      "themes": [
+        "EDUCATION"
+      ],
+      "avg_similarity": 0.5698575973510742
+    },
+    "environment": {
+      "medtop_id": 6000000,
+      "definition": "The protection, damage, and condition of the ecosystem of the planet Earth and its surroundings",
+      "theme_count": 1,
+      "themes": [
+        "ENV"
+      ],
+      "avg_similarity": 0.249970942735672
+    },
+    "health": {
+      "medtop_id": 7000000,
+      "definition": "All aspects of physical and mental well-being",
+      "theme_count": 0,
+      "themes": [],
+      "avg_similarity": 0
+    },
+    "human interest": {
+      "medtop_id": 8000000,
+      "definition": "Item that discusses individuals, groups, animals, plants or other objects in an emotional way",
+      "theme_count": 3,
+      "themes": [
+        "USPEC",
+        "GENERAL",
+        "AFFECT"
+      ],
+      "avg_similarity": 0.32735785841941833
+    },
+    "labour": {
+      "medtop_id": 9000000,
+      "definition": "Social aspects, organisations, rules and conditions affecting the employment of human effort for the generation of wealth or provision of services and the economic support of the unemployed",
+      "theme_count": 0,
+      "themes": [],
+      "avg_similarity": 0
+    },
+    "lifestyle and leisure": {
+      "medtop_id": 10000000,
+      "definition": "Activities undertaken for pleasure, relaxation or recreation outside paid employment, including eating and travel",
+      "theme_count": 0,
+      "themes": [],
+      "avg_similarity": 0
+    },
+    "politics and government": {
+      "medtop_id": 11000000,
+      "definition": "Local, regional, national and international exercise of power, the day-to-day running of government, and the relationships between governing bodies and states",
+      "theme_count": 2,
+      "themes": [
+        "UNGP",
+        "LEADER"
+      ],
+      "avg_similarity": 0.2889683246612549
+    },
+    "religion": {
+      "medtop_id": 12000000,
+      "definition": "Belief systems and institutions and people who provide moral guidance to followers",
+      "theme_count": 0,
+      "themes": [],
+      "avg_similarity": 0
+    },
+    "science and technology": {
+      "medtop_id": 13000000,
+      "definition": "All aspects pertaining to human understanding of and methodical study and research of natural, formal and social sciences",
+      "theme_count": 1,
+      "themes": [
+        "MEDICAL"
+      ],
+      "avg_similarity": 0.47657766938209534
+    },
+    "society": {
+      "medtop_id": 14000000,
+      "definition": "The concerns, issues, affairs and institutions relevant to human social interactions, problems and welfare",
+      "theme_count": 1,
+      "themes": [
+        "SOC"
+      ],
+      "avg_similarity": 0.224092036485672
+    },
+    "sport": {
+      "medtop_id": 15000000,
+      "definition": "Competitive activity or skill that involves physical and/or mental effort and organisations and bodies involved in these activities",
+      "theme_count": 0,
+      "themes": [],
+      "avg_similarity": 0
+    },
+    "conflict, war and peace": {
+      "medtop_id": 16000000,
+      "definition": "Acts of socially or politically motivated protest or violence, military activities, geopolitical conflicts, as well as resolution efforts",
+      "theme_count": 3,
+      "themes": [
+        "CRISISLEX",
+        "ARMEDCONFLICT",
+        "KILL"
+      ],
+      "avg_similarity": 0.6376213431358337
+    },
+    "weather": {
+      "medtop_id": 17000000,
+      "definition": "The study and prediction and reporting of meteorological phenomena",
+      "theme_count": 0,
+      "themes": [],
+      "avg_similarity": 0
+    }
+  },
+  "themes": [
+    {
+      "theme_code": "TAX",
+      "issue_category": null,
+      "iptc_id": 4000000,
+      "iptc_label": "economy, business and finance",
+      "iptc_definition": "All matters concerning the planning, production and exchange of wealth",
+      "similarity": 0.21193626523017883,
+      "iptc_label_2nd": "lifestyle and leisure",
+      "similarity_2nd": 0.21001562476158142,
+      "confidence": 0.0019206404685974121,
+      "cluster_id": 5
+    },
+    {
+      "theme_code": "WB",
+      "issue_category": null,
+      "iptc_id": 1000000,
+      "iptc_label": "arts, culture, entertainment and media",
+      "iptc_definition": "All forms of arts, entertainment, cultural heritage and media",
+      "similarity": 0.11273130774497986,
+      "iptc_label_2nd": "society",
+      "similarity_2nd": 0.1057131290435791,
+      "confidence": 0.007018178701400757,
+      "cluster_id": 1
+    },
+    {
+      "theme_code": "EPU",
+      "issue_category": "ECONOMY / FINANCE",
+      "iptc_id": 4000000,
+      "iptc_label": "economy, business and finance",
+      "iptc_definition": "All matters concerning the planning, production and exchange of wealth",
+      "similarity": 0.4928927719593048,
+      "iptc_label_2nd": "society",
+      "similarity_2nd": 0.16475656628608704,
+      "confidence": 0.3281362056732178,
+      "cluster_id": 6
+    },
+    {
+      "theme_code": "CRISISLEX",
+      "issue_category": "CONFLICT / WAR / PEACE",
+      "iptc_id": 16000000,
+      "iptc_label": "conflict, war and peace",
+      "iptc_definition": "Acts of socially or politically motivated protest or violence, military activities, geopolitical conflicts, as well as resolution efforts",
+      "similarity": 0.5937538146972656,
+      "iptc_label_2nd": "disaster, accident and emergency incident",
+      "similarity_2nd": 0.333559513092041,
+      "confidence": 0.2601943016052246,
+      "cluster_id": 7
+    },
+    {
+      "theme_code": "USPEC",
+      "issue_category": null,
+      "iptc_id": 8000000,
+      "iptc_label": "human interest",
+      "iptc_definition": "Item that discusses individuals, groups, animals, plants or other objects in an emotional way",
+      "similarity": 0.16000650823116302,
+      "iptc_label_2nd": "science and technology",
+      "similarity_2nd": 0.08928424119949341,
+      "confidence": 0.07072226703166962,
+      "cluster_id": 1
+    },
+    {
+      "theme_code": "GENERAL",
+      "issue_category": "GENERAL / UNCATEGORIZED",
+      "iptc_id": 8000000,
+      "iptc_label": "human interest",
+      "iptc_definition": "Item that discusses individuals, groups, animals, plants or other objects in an emotional way",
+      "similarity": 0.3344321846961975,
+      "iptc_label_2nd": "disaster, accident and emergency incident",
+      "similarity_2nd": 0.2883549928665161,
+      "confidence": 0.046077191829681396,
+      "cluster_id": 2
+    },
+    {
+      "theme_code": "UNGP",
+      "issue_category": null,
+      "iptc_id": 11000000,
+      "iptc_label": "politics and government",
+      "iptc_definition": "Local, regional, national and international exercise of power, the day-to-day running of government, and the relationships between governing bodies and states",
+      "similarity": 0.13947588205337524,
+      "iptc_label_2nd": "economy, business and finance",
+      "similarity_2nd": 0.132208913564682,
+      "confidence": 0.007266968488693237,
+      "cluster_id": 1
+    },
+    {
+      "theme_code": "LEADER",
+      "issue_category": "POLITICS / GOVERNMENT",
+      "iptc_id": 11000000,
+      "iptc_label": "politics and government",
+      "iptc_definition": "Local, regional, national and international exercise of power, the day-to-day running of government, and the relationships between governing bodies and states",
+      "similarity": 0.4384607970714569,
+      "iptc_label_2nd": "conflict, war and peace",
+      "similarity_2nd": 0.2796315550804138,
+      "confidence": 0.1588292419910431,
+      "cluster_id": 0
+    },
+    {
+      "theme_code": "SOC",
+      "issue_category": null,
+      "iptc_id": 14000000,
+      "iptc_label": "society",
+      "iptc_definition": "The concerns, issues, affairs and institutions relevant to human social interactions, problems and welfare",
+      "similarity": 0.224092036485672,
+      "iptc_label_2nd": "sport",
+      "similarity_2nd": 0.19512763619422913,
+      "confidence": 0.02896440029144287,
+      "cluster_id": 3
+    },
+    {
+      "theme_code": "ECON",
+      "issue_category": "ECONOMY / FINANCE",
+      "iptc_id": 4000000,
+      "iptc_label": "economy, business and finance",
+      "iptc_definition": "All matters concerning the planning, production and exchange of wealth",
+      "similarity": 0.5749250650405884,
+      "iptc_label_2nd": "labour",
+      "similarity_2nd": 0.21873271465301514,
+      "confidence": 0.35619235038757324,
+      "cluster_id": 6
+    },
+    {
+      "theme_code": "MEDIA",
+      "issue_category": "LIFESTYLE / ENTERTAINMENT",
+      "iptc_id": 1000000,
+      "iptc_label": "arts, culture, entertainment and media",
+      "iptc_definition": "All forms of arts, entertainment, cultural heritage and media",
+      "similarity": 0.6482569575309753,
+      "iptc_label_2nd": "lifestyle and leisure",
+      "similarity_2nd": 0.39063674211502075,
+      "confidence": 0.2576202154159546,
+      "cluster_id": 2
+    },
+    {
+      "theme_code": "MANMADE",
+      "issue_category": "ENVIRONMENT / NATURAL HAZARDS",
+      "iptc_id": 3000000,
+      "iptc_label": "disaster, accident and emergency incident",
+      "iptc_definition": "Man made or natural event resulting in loss of life or injury to living creatures and/or damage to inanimate objects or property",
+      "similarity": 0.6805230975151062,
+      "iptc_label_2nd": "environment",
+      "similarity_2nd": 0.5192663073539734,
+      "confidence": 0.1612567901611328,
+      "cluster_id": 0
+    },
+    {
+      "theme_code": "EDUCATION",
+      "issue_category": "EDUCATION & SCIENCE",
+      "iptc_id": 5000000,
+      "iptc_label": "education",
+      "iptc_definition": "All aspects of furthering knowledge, formally or informally",
+      "similarity": 0.5698575973510742,
+      "iptc_label_2nd": "science and technology",
+      "similarity_2nd": 0.48717162013053894,
+      "confidence": 0.08268597722053528,
+      "cluster_id": 4
+    },
+    {
+      "theme_code": "MEDICAL",
+      "issue_category": "HEALTH & MEDICAL SCIENCE",
+      "iptc_id": 13000000,
+      "iptc_label": "science and technology",
+      "iptc_definition": "All aspects pertaining to human understanding of and methodical study and research of natural, formal and social sciences",
+      "similarity": 0.47657766938209534,
+      "iptc_label_2nd": "health",
+      "similarity_2nd": 0.3949759304523468,
+      "confidence": 0.08160173892974854,
+      "cluster_id": 4
+    },
+    {
+      "theme_code": "ARMEDCONFLICT",
+      "issue_category": "CONFLICT / WAR / PEACE",
+      "iptc_id": 16000000,
+      "iptc_label": "conflict, war and peace",
+      "iptc_definition": "Acts of socially or politically motivated protest or violence, military activities, geopolitical conflicts, as well as resolution efforts",
+      "similarity": 0.650344729423523,
+      "iptc_label_2nd": "society",
+      "similarity_2nd": 0.2938825190067291,
+      "confidence": 0.3564622104167938,
+      "cluster_id": 7
+    },
+    {
+      "theme_code": "AFFECT",
+      "issue_category": "SOCIETY / SOCIAL ISSUES",
+      "iptc_id": 8000000,
+      "iptc_label": "human interest",
+      "iptc_definition": "Item that discusses individuals, groups, animals, plants or other objects in an emotional way",
+      "similarity": 0.4876348078250885,
+      "iptc_label_2nd": "society",
+      "similarity_2nd": 0.46951109170913696,
+      "confidence": 0.018123716115951538,
+      "cluster_id": 2
+    },
+    {
+      "theme_code": "KILL",
+      "issue_category": "CONFLICT / WAR / PEACE",
+      "iptc_id": 16000000,
+      "iptc_label": "conflict, war and peace",
+      "iptc_definition": "Acts of socially or politically motivated protest or violence, military activities, geopolitical conflicts, as well as resolution efforts",
+      "similarity": 0.6687655448913574,
+      "iptc_label_2nd": "arts, culture, entertainment and media",
+      "similarity_2nd": 0.295596718788147,
+      "confidence": 0.37316882610321045,
+      "cluster_id": 7
+    },
+    {
+      "theme_code": "ENV",
+      "issue_category": null,
+      "iptc_id": 6000000,
+      "iptc_label": "environment",
+      "iptc_definition": "The protection, damage, and condition of the ecosystem of the planet Earth and its surroundings",
+      "similarity": 0.249970942735672,
+      "iptc_label_2nd": "education",
+      "similarity_2nd": 0.17816197872161865,
+      "confidence": 0.07180896401405334,
+      "cluster_id": 3
+    }
+  ]
+}

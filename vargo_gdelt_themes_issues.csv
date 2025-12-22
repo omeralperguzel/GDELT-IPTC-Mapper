@@ -1,0 +1,32 @@
+theme_code,issue_category,description
+ECON,ECONOMY / FINANCE,Economic events and financial news
+EPU,ECONOMY / FINANCE,Economic policy uncertainty
+ENGAGE,ECONOMY / FINANCE,Business engagement and partnerships
+CRISISLEX,CONFLICT / WAR / PEACE,Crisis events and conflicts
+ARMEDCONFLICT,CONFLICT / WAR / PEACE,Armed conflicts and military operations
+TERROR,CONFLICT / WAR / PEACE,Terrorism and terror-related events
+SECURITY,CONFLICT / WAR / PEACE,Security issues and defense
+MILITARY,CONFLICT / WAR / PEACE,Military operations and news
+HEALTH,HEALTH & MEDICAL SCIENCE,Health and medical events
+MEDICAL,HEALTH & MEDICAL SCIENCE,Medical procedures and health science
+EDUCATION,EDUCATION & SCIENCE,Education and learning
+SCIENCE,EDUCATION & SCIENCE,Scientific discoveries and research
+LEADER,POLITICS / GOVERNMENT,Political leadership changes
+ELECTION,POLITICS / GOVERNMENT,Elections and voting
+DEMOCRACY,POLITICS / GOVERNMENT,Democratic processes
+LEGISLATION,POLITICS / GOVERNMENT,Laws and legislation
+GOVERNMENT,POLITICS / GOVERNMENT,Government operations
+GENERAL_GOVERNMENT,POLITICS / GOVERNMENT,General government activities
+TOURISM,LIFESTYLE / ENTERTAINMENT,Tourism and travel
+RELIGION,LIFESTYLE / ENTERTAINMENT,Religious activities
+CULTURE,LIFESTYLE / ENTERTAINMENT,Cultural events
+MEDIA,LIFESTYLE / ENTERTAINMENT,Media and journalism
+AFFECT,SOCIETY / SOCIAL ISSUES,Emotional content and sentiment
+KILL,CONFLICT / WAR / PEACE,Death and violence
+MANMADE,ENVIRONMENT / NATURAL HAZARDS,Man-made hazards and accidents
+DISASTER,ENVIRONMENT / NATURAL HAZARDS,Natural disasters
+ENVIRONMENT,ENVIRONMENT / NATURAL HAZARDS,Environmental issues
+NATURAL,ENVIRONMENT / NATURAL HAZARDS,Natural resources and nature
+AGRICULTURE,ECONOMY / FINANCE,Agricultural activities
+GENERAL,GENERAL / UNCATEGORIZED,General news and events
+OTHER,GENERAL / UNCATEGORIZED,Other categories

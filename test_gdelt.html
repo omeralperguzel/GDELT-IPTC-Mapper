@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDELT Tema Kümelemesi - Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .cluster-card {
+            border: 2px solid;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .cluster-card h3 {
+            margin: 0 0 10px 0;
+        }
+        .themes-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .theme-badge {
+            background: #e0e0e0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 GDELT Tema Semantik Kümelemesi - Test Sayfası</h1>
+        
+        <button onclick="loadJSON()">📥 JSON'u Yükle</button>
+        <button onclick="clearDisplay()">🗑️ Temizle</button>
+        
+        <div id="status"></div>
+        <div id="metadata"></div>
+        <div id="clusters"></div>
+        <div id="raw-json"></div>
+    </div>
+
+    <script>
+        async function loadJSON() {
+            const statusDiv = document.getElementById('status');
+            try {
+                statusDiv.innerHTML = '<div class="status info">⏳ JSON yükleniyor...</div>';
+                
+                const response = await fetch('gdelt_theme_clusters.json');
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                
+                const data = await response.json();
+                statusDiv.innerHTML = '<div class="status success">✅ JSON başarıyla yüklendi!</div>';
+                
+                displayMetadata(data);
+                displayClusters(data);
+                displayRawJSON(data);
+                
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="status error">❌ Hata: ${error.message}</div>`;
+                console.error('Error:', error);
+            }
+        }
+        
+        function displayMetadata(data) {
+            const metaDiv = document.getElementById('metadata');
+            if (data.metadata) {
+                const meta = data.metadata;
+                metaDiv.innerHTML = `
+                    <div class="status info">
+                        <h3>📊 Metadata</h3>
+                        <p><strong>Model:</strong> ${meta.model}</p>
+                        <p><strong>PCA Bileşenleri:</strong> ${meta.pca_components}</p>
+                        <p><strong>Küme Sayısı:</strong> ${meta.n_clusters}</p>
+                        <p><strong>Toplam Tema:</strong> ${meta.total_themes}</p>
+                        <p><strong>Algoritma:</strong> ${meta.algorithm}</p>
+                        <p><strong>Varyans:</strong> ${data.explained_variance ? (data.explained_variance * 100).toFixed(1) + '%' : 'N/A'}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function displayClusters(data) {
+            const clustersDiv = document.getElementById('clusters');
+            if (!data.cluster_labels) {
+                clustersDiv.innerHTML = '<p>Cluster labels bulunamadı</p>';
+                return;
+            }
+            
+            let html = '<h2>📈 Kümeler</h2>';
+            
+            Object.entries(data.cluster_labels).forEach(([clusterID, clusterData]) => {
+                html += `
+                    <div class="cluster-card" style="border-color: ${getClusterColor(clusterID)}">
+                        <h3>Küme ${clusterID}: ${clusterData.iptc_label}</h3>
+                        <p><strong>IPTC:</strong> ${clusterData.iptc_description}</p>
+                        <p><strong>Dominant Issue:</strong> ${clusterData.dominant_issue}</p>
+                        <p><strong>Tema Sayısı:</strong> ${clusterData.theme_count}</p>
+                        <div class="themes-list">
+                            ${clusterData.sample_themes.map(t => `<div class="theme-badge">${t}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            clustersDiv.innerHTML = html;
+        }
+        
+        function displayRawJSON(data) {
+            const rawDiv = document.getElementById('raw-json');
+            rawDiv.innerHTML = `
+                <h2>📄 Raw JSON (İlk 50 satır)</h2>
+                <pre>${JSON.stringify(data, null, 2).split('\n').slice(0, 50).join('\n')}...</pre>
+            `;
+        }
+        
+        function getClusterColor(clusterID) {
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
+            return colors[clusterID % colors.length];
+        }
+        
+        function clearDisplay() {
+            document.getElementById('status').innerHTML = '';
+            document.getElementById('metadata').innerHTML = '';
+            document.getElementById('clusters').innerHTML = '';
+            document.getElementById('raw-json').innerHTML = '';
+        }
+        
+        // Sayfa yüklendiğinde otomatik yüklemeyi dene
+        window.addEventListener('load', () => {
+            loadJSON();
+        });
+    </script>
+</body>
+</html>

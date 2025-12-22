@@ -1,0 +1,55 @@
+medtop_id,label,definition,level,parent_id
+01000000,"arts, culture, entertainment and media","All forms of arts, entertainment, cultural heritage and media",1,
+02000000,"crime, law and justice","The establishment and/or statement of the rules of behaviour in society, the enforcement of these rules, breaches of the rules, the punishment of offenders and the organisations and bodies involved in these activities",1,
+03000000,"disaster, accident and emergency incident","Man made or natural event resulting in loss of life or injury to living creatures and/or damage to inanimate objects or property",1,
+04000000,"economy, business and finance","All matters concerning the planning, production and exchange of wealth",1,
+05000000,education,"All aspects of furthering knowledge, formally or informally",1,
+06000000,environment,"The protection, damage, and condition of the ecosystem of the planet Earth and its surroundings",1,
+07000000,health,All aspects of physical and mental well-being,1,
+08000000,human interest,"Item that discusses individuals, groups, animals, plants or other objects in an emotional way",1,
+09000000,labour,"Social aspects, organisations, rules and conditions affecting the employment of human effort for the generation of wealth or provision of services and the economic support of the unemployed",1,
+10000000,lifestyle and leisure,"Activities undertaken for pleasure, relaxation or recreation outside paid employment, including eating and travel",1,
+11000000,politics and government,"Local, regional, national and international exercise of power, the day-to-day running of government, and the relationships between governing bodies and states",1,
+12000000,religion,Belief systems and institutions and people who provide moral guidance to followers,1,
+13000000,science and technology,"All aspects pertaining to human understanding of and methodical study and research of natural, formal and social sciences",1,
+14000000,society,"The concerns, issues, affairs and institutions relevant to human social interactions, problems and welfare",1,
+15000000,sport,Competitive activity or skill that involves physical and/or mental effort and organisations and bodies involved in these activities,1,
+16000000,"conflict, war and peace","Acts of socially or politically motivated protest or violence, military activities, geopolitical conflicts, as well as resolution efforts",1,
+17000000,weather,The study and prediction and reporting of meteorological phenomena,1,
+20000053,act of terror,Act of violence often resulting in casualties designed to raise fear and anxiety in a population,2,16000000
+20000056,armed conflict,Disputes between opposing groups involving the use of weapons but not necessarily formally declared wars,2,16000000
+20000062,war,Armed hostilities by one group or geopolitical entity against another,2,16000000
+20000065,civil unrest,"Rallies, strikes, demonstrations, riots or other disturbances by a population",2,16000000
+20000073,peace process,Organized actions to end a war or conflict usually involving peace negotiations and agreements,2,16000000
+20000082,crime,"Violations of laws by individuals, companies or organisations",2,02000000
+20000103,terrorism,Violence against people to create fear in order to achieve political or ideological objectives,2,02000000
+20000139,accident and emergency incident,A sudden unexpected event that causes unwanted consequences or requires immediate action,2,03000000
+20000148,disaster,A sudden unplanned event that causes great damage or loss of life,2,03000000
+20000151,natural disaster,Destructive incidents caused by nature such as earthquakes and floods,2,03000000
+20000170,business information,Information about individual business entities including companies and corporations and charities,2,04000000
+20000344,economy,"Production, consumption, distribution and trade activities affecting regions or countries as a whole",2,04000000
+20000346,economic trends and indicators,The behaviour and performance of the economy as a whole,2,04000000
+20000398,parents group,Group of parents set up to support educational activities of their children,2,05000000
+20000400,school,A building or institution in which education is provided,2,05000000
+20000418,climate change,All issues relating to extreme changes in climate including rising global temperature,2,06000000
+20000420,conservation,"Preservation of the natural world such as wilderness areas, flora and fauna",2,06000000
+20000424,environmental pollution,The contamination of natural resources by harmful substances,2,06000000
+20000446,disease and condition,Any health conditions affecting humans,2,07000000
+20000449,epidemic and pandemic,"A disease that affects a large number of people within a community, population or region",2,07000000
+20000458,mental health and disorder,"The psychological well-being of an individual and the diseases and disorders that affect mood, thinking and behaviour",2,07000000
+20000509,employment,"The state of having work usually paid for a company, organisation or individual",2,09000000
+20000524,labour relations,The relationship between workers and employers,2,09000000
+20000574,election,The selection of government representatives by the casting of votes by the populace,2,11000000
+20000593,government,The systems and institutions and people who run a political entity,2,11000000
+20000621,government policy,An overall plan or course of action set out by a government intended to influence and guide decisions,2,11000000
+20000638,international relations,Relations between nations through negotiation and treaty or diplomacy,2,11000000
+20000710,biomedical science,The application of biology-based science to medical fields,2,13000000
+20000717,natural science,"The sciences that deal with matter, energy and the physical world",2,13000000
+20000756,technology and engineering,The study and practice of industrial or applied sciences,2,13000000
+20000768,communities,A group of individuals actively sharing a common value or interest,2,14000000
+20000775,discrimination,Unfair treatment of or policies or practices against individuals or groups of people,2,14000000
+20000780,family,A group of people related genetically or by a legal bond,2,14000000
+20000799,social condition,The circumstances or state of affairs affecting a persons life welfare and relations with others in a society,2,14000000
+20000802,social problem,"Issues related to human rights, human welfare and other areas of societal concern",2,14000000
+20001128,weather forecast,The long or short-term meteorological prediction and reporting of the upcoming weather,2,17000000
+20001129,weather phenomena,Short or long-term meteorological phenomena worthy of study reporting or public advisory,2,17000000
