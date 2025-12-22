@@ -501,13 +501,13 @@ def run_full_mapping(output_dir: str = ".") -> dict:
         output_data["iptc_categories"][cat_label]["themes"].append(r['theme_code'])
     
     # Save JSON
-    json_path = output_path / "gdelt_iptc_mapping.json"
+    json_path = output_path / "gdelt_iptc_mapping_v2.json"
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, ensure_ascii=False, indent=2)
     print(f"  [OK] JSON: {json_path.name}")
     
     # Save CSV
-    csv_path = output_path / "gdelt_themes_iptc.csv"
+    csv_path = output_path / "gdelt_themes_iptc_v2.csv"
     pd.DataFrame(final_results).to_csv(csv_path, index=False)
     print(f"  [OK] CSV: {csv_path.name}")
     

@@ -366,9 +366,11 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 # Scripti sec
                 if algorithm == 'v1':
                     script_name = 'gdelt_iptc_mapping.py'
+                    json_filename = 'gdelt_iptc_mapping_v1.json'
                     print("[*] V1 Algoritma: Sadece Embedding (sentence-transformers)")
                 else:
                     script_name = 'gdelt_iptc_mapping_v2.py'
+                    json_filename = 'gdelt_iptc_mapping_v2.json'
                     print("[*] V2 Algoritma: Iki Katmanli Fusion (Kural + Embedding)")
                 
                 script_path = Path(__file__).parent / script_name
@@ -399,8 +401,8 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 
                 print(f"[OK] {algorithm.upper()} Mapping tamamlandi")
                 
-                # JSON sonuclarini yukle
-                json_path = Path(__file__).parent / 'gdelt_iptc_mapping.json'
+                # JSON sonuclarini yukle (versiyon-spesifik dosya)
+                json_path = Path(__file__).parent / json_filename
                 if json_path.exists():
                     with open(json_path, 'r', encoding='utf-8') as f:
                         mapping_data = json.load(f)

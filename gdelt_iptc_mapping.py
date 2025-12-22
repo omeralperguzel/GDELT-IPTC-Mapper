@@ -59,8 +59,8 @@ GDELT_CSV_FILES = [
 ]
 
 # Output
-OUTPUT_JSON = "gdelt_iptc_mapping.json"
-OUTPUT_CSV = "gdelt_themes_iptc.csv"
+OUTPUT_JSON = "gdelt_iptc_mapping_v1.json"
+OUTPUT_CSV = "gdelt_themes_iptc_v1.csv"
 
 
 # ============================================================================

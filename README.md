@@ -1,6 +1,6 @@
 # 🌐 GDELT Theme → IPTC Media Topics Mapper
 
-Semantic embedding-based classification of GDELT news themes into IPTC Media Topics categories using Sentence-Transformers.
+Semantic embedding-based classification of GDELT news themes into IPTC Media Topics categories using Sentence-Transformers with dual algorithm support.
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -34,25 +34,44 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 1. **Standardize** GDELT's proprietary theme codes to industry-standard IPTC categories
 2. **Enable** cross-country comparative analysis of news coverage
 3. **Provide** an interactive dashboard for exploring theme distributions
-4. **Export** results in multiple formats (CSV, XLSX, JSON, LaTeX)
+4. **Compare** two different mapping algorithms (V1 vs V2)
+5. **Export** results in multiple formats (CSV, XLSX, JSON, LaTeX)
 
 ---
 
 ## ✨ Features
 
-### 🔬 Semantic Mapping
+### 🔬 Dual Algorithm Support
 
-- Sentence-Transformer embeddings (all-MiniLM-L6-v2)
-- Cosine similarity-based nearest neighbor assignment
-- Confidence scores and second-best matches
-- Support for 17 IPTC top-level categories
+#### V1: Embedding-Only Approach
+
+- Pure semantic similarity using Sentence-Transformers
+- Direct cosine similarity matching
+- Best for themes with clear semantic meaning
+
+#### V2: Two-Layer Fusion Approach
+
+- **Layer 1**: Rule-based keyword matching for common patterns
+- **Layer 2**: Embedding-based NN for remaining themes
+- Higher accuracy through combined approach
+- Configurable fusion weights
 
 ### 📊 Interactive Dashboard
 
 - Real-time data visualization with Chart.js
-- Country and theme filtering
+- **Side-by-side t-SNE scatter plots** for V1 vs V2 comparison
+- Country and theme filtering (6 countries)
 - IPTC category color-coded displays
+- Three data tables (Total Docs, Monthly Quality, Monthly Detail)
 - Responsive design
+
+### 📈 Visualization Charts
+
+- t-SNE 2D theme distribution (real coordinates from sklearn)
+- IPTC category pie/doughnut charts
+- Theme count by category
+- Similarity score distribution
+- Country-wise document volume
 
 ### 📤 Export Capabilities
 
@@ -64,10 +83,11 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 
 ### 🔧 Analysis Tools
 
-- Document volume analysis
+- Document volume analysis by country
 - Monthly quality metrics
 - Theme distribution statistics
 - IPTC category summaries
+- Algorithm comparison metrics
 
 ---
 
@@ -111,28 +131,48 @@ http://localhost:5000
 
 ### 1. Load Data
 
-Navigate to the **GDELT Tema** tab and click **"📥 CSV Verilerini Yükle"** to load the BigQuery CSV files.
+Navigate to the **GDELT Tema** tab and click **"📥 CSV Verilerini Yükle"** to load the BigQuery CSV files:
+
+- Table 1: Total document counts by country-theme
+- Table 2: Monthly quality metrics
+- Table 3: Monthly detail data
 
 ### 2. Run IPTC Mapping
 
-Go to the **Kümeleme** tab and click **"🚀 IPTC Eşleştirme Çalıştır"** to generate semantic mappings.
+Go to the **Kümeleme** tab and choose an algorithm:
 
-### 3. Explore Results
+| Button          | Algorithm        | Description              |
+| --------------- | ---------------- | ------------------------ |
+| **V1 Çalıştır** | Embedding Only   | Pure semantic similarity |
+| **V2 Çalıştır** | Two-Layer Fusion | Rule + Embedding hybrid  |
+
+Or load existing results with **V1 Yükle** / **V2 Yükle** buttons.
+
+### 3. Switch Active Results
+
+Use the dropdown menu to select which algorithm's results to use for theme analysis:
+
+- V1 results for embedding-based grouping
+- V2 results for rule+embedding fusion grouping
+
+### 4. Explore Results
 
 - View theme-IPTC mappings in the results table
 - Check similarity scores and confidence levels
 - Filter by country or IPTC category
+- Compare V1 vs V2 assignments
 
-### 4. Generate Charts
+### 5. Generate Charts
 
-Switch to the **Grafikler** tab and click **"🔄 Grafikleri Oluştur"** to visualize:
+Switch to the **Grafikler** tab to visualize:
 
+- **t-SNE 2D Scatter Plots** (V1 and V2 side-by-side)
 - IPTC category distribution
 - Country-wise theme volumes
 - Top themes by document count
 - Similarity score analysis
 
-### 5. Export Data
+### 6. Export Data
 
 Use the **Dışarı Aktar** tab to download:
 
@@ -148,21 +188,34 @@ Use the **Dışarı Aktar** tab to download:
 ```
 GDELT-IPTC-Mapper/
 │
-├── index.html                    # Main dashboard (HTML/CSS/JS)
-├── run_server.py                 # Python HTTP server with API
-├── gdelt_iptc_mapping.py         # Semantic mapping pipeline
-├── analysis.py                   # Data analysis utilities
+├── 🖥️ Core Application
+│   ├── index.html                    # Main dashboard (HTML/CSS/JS)
+│   ├── run_server.py                 # Python HTTP server with API
+│   └── analysis.py                   # Data analysis utilities
 │
-├── 📊 Data Files
-│   ├── bquxjob_645c6baa_*.csv   # Total docs per country-theme
-│   ├── bquxjob_4750d984_*.csv   # Monthly quality metrics
-│   └── bquxjob_5c135702_*.csv   # Monthly detail data
+├── 🤖 Mapping Algorithms
+│   ├── gdelt_iptc_mapping.py         # V1: Embedding-only pipeline
+│   ├── gdelt_iptc_mapping_v2.py      # V2: Two-layer fusion pipeline
+│   └── gdelt_theme_clustering.py     # Alternative clustering approach
 │
-├── 📋 Mapping Files
-│   ├── vargo_gdelt_themes_issues.csv  # GDELT theme → Issue mapping
-│   ├── iptc_mediatopics.csv           # IPTC taxonomy (17 categories)
-│   ├── gdelt_iptc_mapping.json        # Mapping results
-│   └── gdelt_themes_iptc.csv          # Theme-IPTC pairs
+├── 📊 Data Files (BigQuery Exports)
+│   ├── bquxjob_645c6baa_*.csv        # Total docs per country-theme
+│   ├── bquxjob_4750d984_*.csv        # Monthly quality metrics
+│   └── bquxjob_5c135702_*.csv        # Monthly detail data
+│
+├── 📋 Mapping Reference Files
+│   ├── vargo_gdelt_themes_issues.csv # GDELT theme → Issue mapping
+│   └── iptc_mediatopics.csv          # IPTC taxonomy (17 categories)
+│
+├── 📤 Output Files
+│   ├── gdelt_iptc_mapping_v1.json    # V1 mapping results
+│   ├── gdelt_iptc_mapping_v2.json    # V2 mapping results
+│   ├── gdelt_themes_iptc_v1.csv      # V1 theme-IPTC pairs
+│   ├── gdelt_themes_iptc_v2.csv      # V2 theme-IPTC pairs
+│   └── gdelt_theme_clusters.json     # Clustering results
+│
+├── 💾 Saved Analyses
+│   └── saved_analyses/               # Auto-saved analysis states
 │
 ├── .gitignore
 ├── LICENSE
@@ -177,64 +230,102 @@ GDELT-IPTC-Mapper/
 
 GDELT GKG data is queried from Google BigQuery for 6 countries (2022-2024):
 
-- 🇱🇰 Sri Lanka (CE)
-- 🇭🇳 Honduras (HO)
-- 🇭🇷 Croatia (HR)
-- 🇰🇬 Kyrgyzstan (KG)
-- 🇸🇰 Slovakia (LO)
-- 🇸🇦 Saudi Arabia (SA)
+| Code | Country      | Flag |
+| ---- | ------------ | ---- |
+| CE   | Sri Lanka    | 🇱🇰   |
+| HO   | Honduras     | 🇭🇳   |
+| HR   | Croatia      | 🇭🇷   |
+| KG   | Kyrgyzstan   | 🇰🇬   |
+| LO   | Slovakia     | 🇸🇰   |
+| SA   | Saudi Arabia | 🇸🇦   |
 
-### 2. Theme Representation
+### 2. Algorithm Comparison
 
-Each GDELT theme is converted to a text representation:
+#### V1: Embedding-Only Pipeline
 
-```python
-"ECON - Economy / Finance: Economic events and financial news"
+```
+GDELT Theme → Text Representation → Sentence-BERT → Cosine Similarity → IPTC Match
 ```
 
-### 3. Embedding Generation
+1. Convert theme code to descriptive text
+2. Generate 384-dim embedding with all-MiniLM-L6-v2
+3. Compute cosine similarity with all 17 IPTC category embeddings
+4. Assign to highest similarity category
 
-Text representations are encoded using Sentence-BERT:
+#### V2: Two-Layer Fusion Pipeline
+
+```
+GDELT Theme → [Rule Check] → Match? → Use Rule Result
+                    ↓ No
+              [Embedding NN] → IPTC Match
+```
+
+1. **Layer 1 (Rules)**: Check keyword patterns for common themes
+
+   - TAX*\*, ECON*\* → economy, business and finance
+   - EPU*\*, GOV*\* → politics and government
+   - HEALTH*\*, DISEASE*\* → health
+   - etc.
+
+2. **Layer 2 (Embedding)**: For unmatched themes, use semantic similarity
+
+3. **Fusion**: Combine results with rule priority
+
+### 3. t-SNE Visualization
+
+Real 2D coordinates are computed using sklearn:
 
 ```python
-from sentence_transformers import SentenceTransformer
-model = SentenceTransformer('all-MiniLM-L6-v2')
-embeddings = model.encode(theme_texts)
+from sklearn.manifold import TSNE
+from sklearn.decomposition import PCA
+
+# PCA pre-reduction: 384 → 50 dimensions
+pca = PCA(n_components=50)
+reduced = pca.fit_transform(embeddings)
+
+# t-SNE: 50 → 2 dimensions
+tsne = TSNE(n_components=2, perplexity=30, max_iter=1000)
+coords_2d = tsne.fit_transform(reduced)
 ```
 
 ### 4. Similarity Calculation
 
-Cosine similarity is computed between each theme and all 17 IPTC categories:
+Cosine similarity between theme and IPTC embeddings:
 
 $$\text{similarity}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}$$
-
-### 5. Category Assignment
-
-Each theme is assigned to its nearest IPTC category:
-
-```python
-best_match = argmax(cosine_similarity(theme_embedding, iptc_embeddings))
-```
 
 ### Architecture Diagram
 
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   GDELT GKG     │────▶│  Text Repr.     │────▶│  Sentence-BERT  │
-│   (18 themes)   │     │  Generation     │     │  Encoding       │
-└─────────────────┘     └─────────────────┘     └────────┬────────┘
-                                                         │
-                                                         ▼
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Dashboard     │◀────│  JSON/CSV       │◀────│  Cosine Sim.    │
-│   (HTML/JS)     │     │  Results        │     │  Matching       │
-└─────────────────┘     └─────────────────┘     └────────┬────────┘
-                                                         │
-                                                         ▼
-                                                ┌─────────────────┐
-                                                │  IPTC Topics    │
-                                                │  (17 categories)│
-                                                └─────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                        GDELT GKG Themes                         │
+└─────────────────────────────┬───────────────────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              ▼                               ▼
+┌─────────────────────────┐     ┌─────────────────────────┐
+│   V1: Embedding Only    │     │   V2: Two-Layer Fusion  │
+├─────────────────────────┤     ├─────────────────────────┤
+│ • Text Representation   │     │ • Rule-based matching   │
+│ • Sentence-BERT encode  │     │ • Keyword patterns      │
+│ • Cosine similarity     │     │ • Embedding fallback    │
+│ • Direct NN assignment  │     │ • Combined scoring      │
+└───────────┬─────────────┘     └───────────┬─────────────┘
+            │                               │
+            ▼                               ▼
+┌─────────────────────────┐     ┌─────────────────────────┐
+│ gdelt_iptc_mapping_v1   │     │ gdelt_iptc_mapping_v2   │
+│        .json            │     │        .json            │
+└───────────┬─────────────┘     └───────────┬─────────────┘
+            │                               │
+            └───────────────┬───────────────┘
+                            ▼
+              ┌─────────────────────────┐
+              │    Interactive Dashboard │
+              │  • Side-by-side t-SNE   │
+              │  • Algorithm comparison │
+              │  • Export capabilities  │
+              └─────────────────────────┘
 ```
 
 ---
@@ -246,7 +337,7 @@ best_match = argmax(cosine_similarity(theme_embedding, iptc_embeddings))
 - **Source**: [GDELT Project](https://www.gdeltproject.org/)
 - **Access**: Google BigQuery (`gdelt-bq.gdeltv2.gkg`)
 - **Period**: 2022-2024
-- **Themes**: 18 unique theme codes
+- **Countries**: 6 (CE, HO, HR, KG, LO, SA)
 
 ### IPTC Media Topics
 
@@ -280,21 +371,27 @@ best_match = argmax(cosine_similarity(theme_embedding, iptc_embeddings))
 
 ### Tab Overview
 
-| Tab                 | Description                                            |
-| ------------------- | ------------------------------------------------------ |
-| 📰 **GDELT Tema**   | Load CSV data, view theme tables, filter by country    |
-| 📈 **Grafikler**    | Interactive charts (bar, horizontal bar, distribution) |
-| 🤖 **Kümeleme**     | Run IPTC mapping, view similarity scores               |
-| 📤 **Dışarı Aktar** | Export data in multiple formats                        |
+| Tab                 | Description                                                                  |
+| ------------------- | ---------------------------------------------------------------------------- |
+| 📰 **GDELT Tema**   | Load CSV data, view 3 data tables, filter by 6 countries, run theme analysis |
+| 📈 **Grafikler**    | Interactive charts including side-by-side t-SNE V1/V2 scatter plots          |
+| 🤖 **Kümeleme**     | Run V1 or V2 algorithm, load results, switch active mapping                  |
+| 📤 **Dışarı Aktar** | Export data in XLSX, CSV, JSON, LaTeX formats                                |
 
-### Screenshots
+### Kümeleme Tab Features
 
-The dashboard provides:
+- **Dual Algorithm Buttons**: Run V1 or V2 independently
+- **Status Indicators**: Show loaded theme counts for each version
+- **Active Mapping Selector**: Choose which results to use for analysis
+- **Progress Tracker**: 6-step pipeline visualization
 
-- Dark navy theme with modern UI
-- Color-coded IPTC categories
-- Sortable and filterable tables
-- Responsive chart visualizations
+### Charts Tab Features
+
+- **t-SNE V1 Scatter**: 2D projection of V1 embeddings
+- **t-SNE V2 Scatter**: 2D projection of V2 embeddings
+- **IPTC Category Distribution**: Doughnut chart
+- **Theme Count by Category**: Bar chart
+- **Similarity Score Distribution**: Histogram
 
 ---
 
@@ -308,12 +405,51 @@ The dashboard provides:
 | GET    | `/*.csv`                | Serve CSV data files     |
 | GET    | `/*.json`               | Serve JSON results       |
 | POST   | `/api/run-iptc-mapping` | Execute mapping pipeline |
+| POST   | `/api/analyze`          | Run data analysis        |
+| POST   | `/api/save`             | Save analysis state      |
+| POST   | `/api/load`             | Load saved analysis      |
+| POST   | `/api/list-saved`       | List saved analyses      |
 
-### Example Request
+### IPTC Mapping API
 
 ```bash
+# Run V1 algorithm (embedding only)
 curl -X POST http://localhost:5000/api/run-iptc-mapping \
-  -H "Content-Type: application/json"
+  -H "Content-Type: application/json" \
+  -d '{"algorithm": "v1"}'
+
+# Run V2 algorithm (two-layer fusion)
+curl -X POST http://localhost:5000/api/run-iptc-mapping \
+  -H "Content-Type: application/json" \
+  -d '{"algorithm": "v2"}'
+```
+
+### Response Format
+
+```json
+{
+  "metadata": {
+    "total_themes": 285,
+    "iptc_categories": 17,
+    "algorithm": "v2",
+    "algorithm_name": "Two-Layer Fusion"
+  },
+  "themes": [
+    {
+      "theme_code": "ECON_BANKRUPTCY",
+      "iptc_final_label": "economy, business and finance",
+      "nn_score": 0.72,
+      "tsne_x": 45.2,
+      "tsne_y": 32.8
+    }
+  ],
+  "iptc_categories": {
+    "economy, business and finance": {
+      "theme_count": 45,
+      "themes": ["ECON_BANKRUPTCY", "TAX_FNCACT", ...]
+    }
+  }
+}
 ```
 
 ---
@@ -329,6 +465,8 @@ curl -X POST http://localhost:5000/api/run-iptc-mapping \
 3. **Vargo, C. J., & Guo, L. (2017)**. "Networks, Big Data, and Intermedia Agenda Setting". _Journalism & Mass Communication Quarterly_.
 
 4. **Reimers, N., & Gurevych, I. (2019)**. "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks". _EMNLP 2019_.
+
+5. **van der Maaten, L., & Hinton, G. (2008)**. "Visualizing Data using t-SNE". _Journal of Machine Learning Research_.
 
 ### Data Sources
 
@@ -357,6 +495,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - GDELT Project for providing open access to global news data
 - IPTC for the standardized Media Topics taxonomy
 - Hugging Face for the Sentence-Transformers library
+- scikit-learn for t-SNE implementation
 - TED University CMPE490 course
 
 ---

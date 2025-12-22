@@ -694,16 +694,31 @@
                 <!-- Kümeleme Grafikleri Bölümü -->
                 <h3 style="color: #667eea; margin: 40px 0 20px; text-align: center;">🤖 Kümeleme Sonuç Grafikleri</h3>
                 <p style="text-align: center; color: #666; margin-bottom: 25px;">
-                    Kümeleme çalıştırıldıktan sonra oluşturulur
+                    Her iki algoritmanın t-SNE sonuçlarını karşılaştırın
                 </p>
                 
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <h3>🎯 t-SNE 2D Tema Dağılımı</h3>
-                        <div class="chart-wrapper">
-                            <canvas id="tsne-scatter-chart"></canvas>
+                <!-- t-SNE Karşılaştırma Bölümü -->
+                <div style="background: #f0f4f8; border-radius: 10px; padding: 20px; margin-bottom: 25px;">
+                    <h4 style="color: #333; margin-bottom: 15px; text-align: center;">🎯 t-SNE 2D Tema Dağılımı Karşılaştırması</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="chart-container" style="margin: 0;">
+                            <h3 style="color: #667eea;">V1: Sadece Embedding</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="tsne-scatter-chart-v1"></canvas>
+                            </div>
+                            <div id="tsne-v1-info" style="text-align: center; font-size: 0.8em; color: #666; margin-top: 5px;">V1 sonuçlarını yükleyin</div>
+                        </div>
+                        <div class="chart-container" style="margin: 0;">
+                            <h3 style="color: #FF9800;">V2: İki Katmanlı Fusion</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="tsne-scatter-chart-v2"></canvas>
+                            </div>
+                            <div id="tsne-v2-info" style="text-align: center; font-size: 0.8em; color: #666; margin-top: 5px;">V2 sonuçlarını yükleyin</div>
                         </div>
                     </div>
+                </div>
+                
+                <div class="charts-grid">
                     <div class="chart-container">
                         <h3>📊 IPTC Kategori Tema Sayısı</h3>
                         <div class="chart-wrapper">
@@ -748,23 +763,41 @@
                 </p>
                 
                 <!-- Algoritma Seçimi -->
-                <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; max-width: 700px; margin: 0 auto 25px;">
-                    <h4 style="color: #333; margin-bottom: 15px;">Algoritma Secimi</h4>
-                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 20px; border: 2px solid #667eea; border-radius: 8px; background: white; transition: all 0.3s;" class="algo-option">
-                            <input type="radio" name="iptc-algorithm" value="v2" checked style="width: 18px; height: 18px;">
-                            <div style="text-align: left;">
-                                <strong style="color: #667eea;">V2: İki Katmanlı Fusion</strong>
-                                <div style="font-size: 0.8em; color: #666;">Kural tabanlı + Embedding NN (Önerilen)</div>
+                <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; max-width: 800px; margin: 0 auto 25px;">
+                    <h4 style="color: #333; margin-bottom: 15px;">Algoritma Seçimi ve Çalıştırma</h4>
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15px; border: 2px solid #667eea; border-radius: 8px; background: white; min-width: 280px;">
+                            <div style="text-align: center;">
+                                <strong style="color: #667eea; font-size: 1.1em;">V1: Sadece Embedding</strong>
+                                <div style="font-size: 0.8em; color: #666; margin-top: 5px;">Cosine similarity NN mapping</div>
                             </div>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 20px; border: 2px solid #ddd; border-radius: 8px; background: white; transition: all 0.3s;" class="algo-option">
-                            <input type="radio" name="iptc-algorithm" value="v1" style="width: 18px; height: 18px;">
-                            <div style="text-align: left;">
-                                <strong style="color: #666;">V1: Sadece Embedding</strong>
-                                <div style="font-size: 0.8em; color: #999;">Cosine similarity NN</div>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="run-btn" style="background: #667eea; padding: 8px 16px; font-size: 0.9em;" onclick="runIPTCMappingV1()">🚀 V1 Çalıştır</button>
+                                <button class="run-btn" style="background: #4CAF50; padding: 8px 16px; font-size: 0.9em;" onclick="loadIPTCMappingResultsV1()">📥 V1 Yükle</button>
                             </div>
-                        </label>
+                            <div id="v1-status" style="font-size: 0.8em; color: #999;">Yüklenmedi</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15px; border: 2px solid #FF9800; border-radius: 8px; background: white; min-width: 280px;">
+                            <div style="text-align: center;">
+                                <strong style="color: #FF9800; font-size: 1.1em;">V2: İki Katmanlı Fusion</strong>
+                                <div style="font-size: 0.8em; color: #666; margin-top: 5px;">Kural tabanlı + Embedding NN (Önerilen)</div>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="run-btn" style="background: #FF9800; padding: 8px 16px; font-size: 0.9em;" onclick="runIPTCMappingV2()">🚀 V2 Çalıştır</button>
+                                <button class="run-btn" style="background: #4CAF50; padding: 8px 16px; font-size: 0.9em;" onclick="loadIPTCMappingResultsV2()">📥 V2 Yükle</button>
+                            </div>
+                            <div id="v2-status" style="font-size: 0.8em; color: #999;">Yüklenmedi</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Aktif Algoritma Seçimi -->
+                    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                        <label style="font-weight: 600; color: #2e7d32; margin-right: 15px;">📊 GDELT Tema ve Grafikler için Aktif Sonuç:</label>
+                        <select id="active-mapping-select" onchange="switchActiveMapping()" style="padding: 10px 15px; border-radius: 5px; border: 2px solid #4CAF50; font-size: 1em; font-weight: 600;">
+                            <option value="v2">V2 - İki Katmanlı Fusion</option>
+                            <option value="v1">V1 - Sadece Embedding</option>
+                        </select>
+                        <span id="active-mapping-info" style="margin-left: 15px; color: #666; font-size: 0.9em;">V2 sonuçları kullanılıyor</span>
                     </div>
                 </div>
                 
@@ -796,16 +829,15 @@
                         </div>
                         <div class="progress-step" data-step="5" style="padding: 8px 0; color: #666; display: flex; align-items: center; gap: 10px;">
                             <span class="step-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #6b7280; color: white; font-size: 12px; font-weight: bold;">5</span>
+                            <span class="step-text">t-SNE 2D koordinat hesaplama</span>
+                        </div>
+                        <div class="progress-step" data-step="6" style="padding: 8px 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                            <span class="step-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #6b7280; color: white; font-size: 12px; font-weight: bold;">6</span>
                             <span class="step-text">Sonuclari kaydetme</span>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Kontrol Paneli -->
-                <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center;">
-                    <button class="run-btn" id="iptc-mapping-btn" onclick="runIPTCMapping()">🚀 IPTC Eşleştirme Çalıştır</button>
-                    <button class="run-btn" style="background: #4CAF50;" id="iptc-load-results-btn" onclick="loadIPTCMappingResults()">📥 Sonuçları Yükle</button>
-                </div>
                 <div id="iptc-mapping-status" class="status-message" style="max-width: 800px; margin: 0 auto 20px;"></div>
                 
                 <!-- IPTC Kategori Kartları Grid -->
@@ -1363,6 +1395,16 @@
                     switchTab(tabName);
                 });
             });
+        }
+        
+        // Pipeline butonları başlat (stub - gelecekte eklenebilir)
+        function initPipelineButtons() {
+            // Şimdilik boş
+        }
+        
+        // Export bilgisi güncelle (stub - gelecekte eklenebilir)
+        function updateExportInfo() {
+            // Şimdilik boş
         }
         
         // ==================== KAYDETME / İÇE AKTARMA FONKSİYONLARI ====================
@@ -2004,79 +2046,207 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
         
         // ==================== GDELT TEMA KÜMELEMESİ FONKSİYONLARI ====================
         
-        let iptcMappingResults = null;
+        // Her iki algoritmanın sonuçlarını ayrı sakla
+        let iptcMappingResultsV1 = null;
+        let iptcMappingResultsV2 = null;
+        let iptcMappingResults = null;  // Aktif sonuç (v1 veya v2)
+        let activeMapping = 'v2';  // Varsayılan olarak v2
         
-        // IPTC eşleştirmesini çalıştır
-        async function runIPTCMapping() {
-            const btn = document.getElementById('iptc-mapping-btn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading-spinner"></span>Eşleştiriliyor...';
-            
-            // Progress container'ı göster
+        // V1 algoritmasını çalıştır
+        async function runIPTCMappingV1() {
             showIPTCProgress();
-            showIPTCMappingStatus('🚀 Python script çalıştırılıyor...', 'info');
+            showIPTCMappingStatus('🚀 V1 (Sadece Embedding) çalıştırılıyor...', 'info');
+            document.getElementById('v1-status').innerHTML = '<span class="loading-spinner" style="width:16px;height:16px;display:inline-block;"></span> Çalışıyor...';
             
             try {
-                // Adım 1: Başlatma
                 updateIPTCProgressStep(1, 'active');
                 
-                // Python script'i çalıştır API üzerinden
                 const response = await fetch('/api/run-iptc-mapping', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ algorithm: 'v1' })
                 });
                 
                 if (!response.ok) {
-                    // Fallback: mevcut JSON dosyasını yükle
-                    hideIPTCProgress();
-                    showIPTCMappingStatus('⚠️ API kullanılamıyor. Terminalde şu komutu çalıştırın: python gdelt_iptc_mapping.py', 'info');
-                    loadIPTCMappingResults();
-                    return;
+                    throw new Error('API hatası: ' + response.status);
                 }
                 
-                // Tüm adımları tamamlandı olarak işaretle (API tek seferde çalışıyor)
-                for (let i = 1; i <= 5; i++) {
+                const data = await response.json();
+                iptcMappingResultsV1 = data;
+                
+                // Tüm adımları tamamla
+                for (let i = 1; i <= 6; i++) {
                     updateIPTCProgressStep(i, 'completed');
                 }
                 
-                const data = await response.json();
-                iptcMappingResults = data;
+                const themeCount = data.themes ? data.themes.length : 0;
+                document.getElementById('v1-status').innerHTML = `<span style="color: #4CAF50;">✓ ${themeCount} tema</span>`;
                 
-                // Progress container'ı gizle
                 setTimeout(() => hideIPTCProgress(), 1000);
+                showIPTCMappingStatus(`✅ V1 tamamlandı! ${themeCount} tema eşleştirildi.`, 'success');
                 
-                // Sonuçları göster
-                displayIPTCMappingResults(data);
+                // Eğer aktif mapping v1 ise sonuçları göster
+                if (activeMapping === 'v1') {
+                    iptcMappingResults = iptcMappingResultsV1;
+                    displayIPTCMappingResults(data);
+                }
                 
-                showIPTCMappingStatus(
-                    `✅ IPTC eşleştirme tamamlandı! ${data.metadata.total_themes} tema → ${data.metadata.iptc_categories} IPTC kategorisi`,
-                    'success'
-                );
+                // t-SNE grafiğini güncelle
+                createTSNEScatterChartV1();
+                
             } catch (error) {
-                console.log('Fallback: loading from file...');
                 hideIPTCProgress();
-                loadIPTCMappingResults();
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '🚀 IPTC Eşleştirme Çalıştır';
+                document.getElementById('v1-status').innerHTML = '<span style="color: #f44336;">❌ Hata</span>';
+                showIPTCMappingStatus('❌ V1 hatası: ' + error.message, 'error');
             }
         }
         
-        // IPTC sonuçlarını dosyadan yükle
-        async function loadIPTCMappingResults() {
+        // V2 algoritmasını çalıştır
+        async function runIPTCMappingV2() {
+            showIPTCProgress();
+            showIPTCMappingStatus('🚀 V2 (İki Katmanlı Fusion) çalıştırılıyor...', 'info');
+            document.getElementById('v2-status').innerHTML = '<span class="loading-spinner" style="width:16px;height:16px;display:inline-block;"></span> Çalışıyor...';
+            
             try {
-                const response = await fetch('gdelt_iptc_mapping.json');
+                updateIPTCProgressStep(1, 'active');
+                
+                const response = await fetch('/api/run-iptc-mapping', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ algorithm: 'v2' })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('API hatası: ' + response.status);
+                }
+                
+                const data = await response.json();
+                iptcMappingResultsV2 = data;
+                
+                // Tüm adımları tamamla
+                for (let i = 1; i <= 6; i++) {
+                    updateIPTCProgressStep(i, 'completed');
+                }
+                
+                const themeCount = data.themes ? data.themes.length : 0;
+                document.getElementById('v2-status').innerHTML = `<span style="color: #4CAF50;">✓ ${themeCount} tema</span>`;
+                
+                setTimeout(() => hideIPTCProgress(), 1000);
+                showIPTCMappingStatus(`✅ V2 tamamlandı! ${themeCount} tema eşleştirildi.`, 'success');
+                
+                // Eğer aktif mapping v2 ise sonuçları göster
+                if (activeMapping === 'v2') {
+                    iptcMappingResults = iptcMappingResultsV2;
+                    displayIPTCMappingResults(data);
+                }
+                
+                // t-SNE grafiğini güncelle
+                createTSNEScatterChartV2();
+                
+            } catch (error) {
+                hideIPTCProgress();
+                document.getElementById('v2-status').innerHTML = '<span style="color: #f44336;">❌ Hata</span>';
+                showIPTCMappingStatus('❌ V2 hatası: ' + error.message, 'error');
+            }
+        }
+        
+        // V1 sonuçlarını yükle
+        async function loadIPTCMappingResultsV1() {
+            try {
+                const response = await fetch('gdelt_iptc_mapping_v1.json');
                 if (!response.ok) throw new Error('File not found');
                 const data = await response.json();
-                iptcMappingResults = data;
-                displayIPTCMappingResults(data);
-                showIPTCMappingStatus('✅ IPTC eşleştirme sonuçları yüklendi', 'success');
+                iptcMappingResultsV1 = data;
+                
+                const themeCount = data.themes ? data.themes.length : data.metadata?.total_themes || 0;
+                document.getElementById('v1-status').innerHTML = `<span style="color: #4CAF50;">✓ ${themeCount} tema yüklendi</span>`;
+                
+                showIPTCMappingStatus('✅ V1 sonuçları yüklendi!', 'success');
+                
+                // Eğer aktif mapping v1 ise sonuçları göster
+                if (activeMapping === 'v1') {
+                    iptcMappingResults = iptcMappingResultsV1;
+                    displayIPTCMappingResults(data);
+                }
+                
+                // t-SNE grafiğini güncelle
+                createTSNEScatterChartV1();
+                
             } catch (error) {
-                showIPTCMappingStatus(
-                    '❌ Sonuçlar yüklenemedi. Önce terminalde çalıştırın: python gdelt_iptc_mapping.py',
-                    'error'
-                );
+                document.getElementById('v1-status').innerHTML = '<span style="color: #f44336;">❌ Dosya bulunamadı</span>';
+                showIPTCMappingStatus('❌ V1 sonuçları bulunamadı. Terminalde çalıştırın: python gdelt_iptc_mapping.py', 'error');
             }
+        }
+        
+        // V2 sonuçlarını yükle
+        async function loadIPTCMappingResultsV2() {
+            try {
+                const response = await fetch('gdelt_iptc_mapping_v2.json');
+                if (!response.ok) throw new Error('File not found');
+                const data = await response.json();
+                iptcMappingResultsV2 = data;
+                
+                const themeCount = data.themes ? data.themes.length : data.metadata?.total_themes || 0;
+                document.getElementById('v2-status').innerHTML = `<span style="color: #4CAF50;">✓ ${themeCount} tema yüklendi</span>`;
+                
+                showIPTCMappingStatus('✅ V2 sonuçları yüklendi!', 'success');
+                
+                // Eğer aktif mapping v2 ise sonuçları göster
+                if (activeMapping === 'v2') {
+                    iptcMappingResults = iptcMappingResultsV2;
+                    displayIPTCMappingResults(data);
+                }
+                
+                // t-SNE grafiğini güncelle
+                createTSNEScatterChartV2();
+                
+            } catch (error) {
+                document.getElementById('v2-status').innerHTML = '<span style="color: #f44336;">❌ Dosya bulunamadı</span>';
+                showIPTCMappingStatus('❌ V2 sonuçları bulunamadı. Terminalde çalıştırın: python gdelt_iptc_mapping_v2.py', 'error');
+            }
+        }
+        
+        // Aktif mapping'i değiştir
+        function switchActiveMapping() {
+            const select = document.getElementById('active-mapping-select');
+            activeMapping = select.value;
+            
+            const infoEl = document.getElementById('active-mapping-info');
+            
+            if (activeMapping === 'v1') {
+                if (iptcMappingResultsV1) {
+                    iptcMappingResults = iptcMappingResultsV1;
+                    displayIPTCMappingResults(iptcMappingResultsV1);
+                    infoEl.innerHTML = '<span style="color: #4CAF50;">✓ V1 sonuçları kullanılıyor</span>';
+                } else {
+                    infoEl.innerHTML = '<span style="color: #f44336;">V1 sonuçları yüklenmedi!</span>';
+                }
+            } else {
+                if (iptcMappingResultsV2) {
+                    iptcMappingResults = iptcMappingResultsV2;
+                    displayIPTCMappingResults(iptcMappingResultsV2);
+                    infoEl.innerHTML = '<span style="color: #4CAF50;">✓ V2 sonuçları kullanılıyor</span>';
+                } else {
+                    infoEl.innerHTML = '<span style="color: #f44336;">V2 sonuçları yüklenmedi!</span>';
+                }
+            }
+        }
+        
+        // Eski fonksiyonları uyumluluk için koru
+        async function runIPTCMapping() {
+            if (activeMapping === 'v1') {
+                runIPTCMappingV1();
+            } else {
+                runIPTCMappingV2();
+            }
+        }
+        
+        async function loadIPTCMappingResults() {
+            // Her iki sonucu da yüklemeye çalış
+            await Promise.all([
+                loadIPTCMappingResultsV1().catch(() => {}),
+                loadIPTCMappingResultsV2().catch(() => {})
+            ]);
         }
         
         // IPTC eşleştirme sonuçlarını göster
@@ -2682,10 +2852,10 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             showStatus('✅ Kümeleme grafikleri oluşturuldu!', 'success');
         }
         
-        // t-SNE 2D Scatter Plot (Gerçek koordinatlar JSON'dan okunur)
-        function createTSNEScatterChart() {
-            const canvas = document.getElementById('tsne-scatter-chart');
-            if (!canvas) return;
+        // t-SNE Scatter Plot - Genel helper fonksiyon
+        function createTSNEScatterChartBase(canvasId, data, titlePrefix, chartColor) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas || !data || !data.themes) return null;
             
             const ctx = canvas.getContext('2d');
             
@@ -2694,11 +2864,11 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             const categoryThemes = {};
             
             // Gerçek t-SNE koordinatları var mı kontrol et
-            const hasRealCoords = iptcMappingResults.themes.some(t => 
+            const hasRealCoords = data.themes.some(t => 
                 typeof t.tsne_x === 'number' && typeof t.tsne_y === 'number'
             );
             
-            iptcMappingResults.themes.forEach(theme => {
+            data.themes.forEach(theme => {
                 const cat = theme.iptc_final_label || theme.iptc_label || 'Diğer';
                 if (!categoryThemes[cat]) categoryThemes[cat] = [];
                 categoryThemes[cat].push(theme);
@@ -2709,7 +2879,7 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 const color = iptcColors[cat] || '#999';
                 
                 // Gerçek t-SNE koordinatlarını kullan (JSON'dan)
-                const data = themes.map(theme => {
+                const scatterData = themes.map(theme => {
                     // tsne_x ve tsne_y Python tarafından hesaplanmış koordinatlar
                     let x = theme.tsne_x;
                     let y = theme.tsne_y;
@@ -2732,7 +2902,7 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                 
                 datasets.push({
                     label: cat.split(',')[0],
-                    data: data,
+                    data: scatterData,
                     backgroundColor: color + 'BB',
                     borderColor: color,
                     borderWidth: 1,
@@ -2744,8 +2914,8 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             // Koordinat aralığını hesapla (gerçek koordinatlar için)
             let minX = 0, maxX = 100, minY = 0, maxY = 100;
             if (hasRealCoords) {
-                const allX = iptcMappingResults.themes.map(t => t.tsne_x).filter(v => typeof v === 'number');
-                const allY = iptcMappingResults.themes.map(t => t.tsne_y).filter(v => typeof v === 'number');
+                const allX = data.themes.map(t => t.tsne_x).filter(v => typeof v === 'number');
+                const allY = data.themes.map(t => t.tsne_y).filter(v => typeof v === 'number');
                 if (allX.length > 0 && allY.length > 0) {
                     minX = Math.floor(Math.min(...allX) - 2);
                     maxX = Math.ceil(Math.max(...allX) + 2);
@@ -2755,8 +2925,8 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
             }
             
             const chartTitle = hasRealCoords 
-                ? 't-SNE 2D Tema Dağılımı (IPTC Kategorilerine Göre)'
-                : 'Tema Dağılımı (Simüle - Python\'da t-SNE çalıştırın)';
+                ? `${titlePrefix} t-SNE 2D Tema Dağılımı`
+                : `${titlePrefix} (Simüle - Python çalıştırın)`;
             
             const chart = new Chart(ctx, {
                 type: 'scatter',
@@ -2779,8 +2949,8 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    const data = context.raw;
-                                    return `${data.label} (sim: ${(data.similarity * 100).toFixed(0)}%)`;
+                                    const d = context.raw;
+                                    return `${d.label} (sim: ${(d.similarity * 100).toFixed(0)}%)`;
                                 }
                             }
                         }
@@ -2799,7 +2969,64 @@ ${Object.keys(IPTC_CATEGORIES).map(c => `- ${c}`).join('\n')}
                     }
                 }
             });
-            clusteringChartInstances.push(chart);
+            
+            return chart;
+        }
+        
+        // V1 için t-SNE grafiği
+        function createTSNEScatterChartV1() {
+            if (!iptcMappingResultsV1) return;
+            
+            // Önce eski grafiği temizle
+            const idx = clusteringChartInstances.findIndex(c => c.canvas && c.canvas.id === 'tsne-scatter-chart-v1');
+            if (idx > -1) {
+                clusteringChartInstances[idx].destroy();
+                clusteringChartInstances.splice(idx, 1);
+            }
+            
+            const chart = createTSNEScatterChartBase(
+                'tsne-scatter-chart-v1', 
+                iptcMappingResultsV1, 
+                'V1 (Embedding)',
+                '#2196F3'
+            );
+            if (chart) clusteringChartInstances.push(chart);
+        }
+        
+        // V2 için t-SNE grafiği
+        function createTSNEScatterChartV2() {
+            if (!iptcMappingResultsV2) return;
+            
+            // Önce eski grafiği temizle
+            const idx = clusteringChartInstances.findIndex(c => c.canvas && c.canvas.id === 'tsne-scatter-chart-v2');
+            if (idx > -1) {
+                clusteringChartInstances[idx].destroy();
+                clusteringChartInstances.splice(idx, 1);
+            }
+            
+            const chart = createTSNEScatterChartBase(
+                'tsne-scatter-chart-v2', 
+                iptcMappingResultsV2, 
+                'V2 (Fusion)',
+                '#4CAF50'
+            );
+            if (chart) clusteringChartInstances.push(chart);
+        }
+        
+        // Her iki t-SNE grafiğini de çiz
+        function createBothTSNEScatterCharts() {
+            createTSNEScatterChartV1();
+            createTSNEScatterChartV2();
+        }
+        
+        // Eski tek grafik fonksiyonu (uyumluluk için)
+        function createTSNEScatterChart() {
+            // Artık aktif sonuca göre çalışır
+            if (activeMapping === 'v1' && iptcMappingResultsV1) {
+                createTSNEScatterChartV1();
+            } else if (iptcMappingResultsV2) {
+                createTSNEScatterChartV2();
+            }
         }
         
         // IPTC Kategori Tema Sayısı
