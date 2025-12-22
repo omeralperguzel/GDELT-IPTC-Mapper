@@ -354,6 +354,84 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 })
                 self.wfile.write(error_response.encode('utf-8'))
         
+        elif self.path == '/api/run-iptc-mapping':
+            try:
+                # Istek parametrelerini al
+                content_length = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_length) if content_length > 0 else b'{}'
+                params = json.loads(body.decode('utf-8')) if body else {}
+                
+                algorithm = params.get('algorithm', 'v2')  # Default: v2 (two-layer fusion)
+                
+                # Scripti sec
+                if algorithm == 'v1':
+                    script_name = 'gdelt_iptc_mapping.py'
+                    print("[*] V1 Algoritma: Sadece Embedding (sentence-transformers)")
+                else:
+                    script_name = 'gdelt_iptc_mapping_v2.py'
+                    print("[*] V2 Algoritma: Iki Katmanli Fusion (Kural + Embedding)")
+                
+                script_path = Path(__file__).parent / script_name
+                
+                if not script_path.exists():
+                    raise FileNotFoundError(f"{script_name} bulunamadi")
+                
+                print(f"[1/5] {script_name} calistiriliyor...")
+                
+                result = subprocess.run(
+                    ['python', str(script_path)],
+                    capture_output=True,
+                    text=True,
+                    cwd=str(Path(__file__).parent),
+                    encoding='utf-8',
+                    errors='replace'
+                )
+                
+                # Terminal ciktisini goster
+                if result.stdout:
+                    for line in result.stdout.split('\n'):
+                        if line.strip():
+                            print(f"    {line}")
+                
+                if result.returncode != 0:
+                    print(f"[X] Script hatasi: {result.stderr}")
+                    raise RuntimeError(result.stderr)
+                
+                print(f"[OK] {algorithm.upper()} Mapping tamamlandi")
+                
+                # JSON sonuclarini yukle
+                json_path = Path(__file__).parent / 'gdelt_iptc_mapping.json'
+                if json_path.exists():
+                    with open(json_path, 'r', encoding='utf-8') as f:
+                        mapping_data = json.load(f)
+                    # Algoritma bilgisini ekle
+                    mapping_data['metadata']['algorithm'] = algorithm
+                    mapping_data['metadata']['algorithm_name'] = 'Embedding Only' if algorithm == 'v1' else 'Two-Layer Fusion'
+                else:
+                    mapping_data = {"success": True, "message": "Mapping tamamlandi", "algorithm": algorithm}
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json; charset=utf-8')
+                self.end_headers()
+                
+                response = json.dumps(mapping_data, ensure_ascii=False, indent=2)
+                self.wfile.write(response.encode('utf-8'))
+                
+            except Exception as e:
+                print(f"[X] IPTC Mapping API Hatasi: {e}")
+                import traceback
+                traceback.print_exc()
+                
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                
+                error_response = json.dumps({
+                    "success": False,
+                    "error": str(e)
+                })
+                self.wfile.write(error_response.encode('utf-8'))
+        
         elif self.path == '/api/list-saved':
             try:
                 # Kaydedilmiş dosyaları listele

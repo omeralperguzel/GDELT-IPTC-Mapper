@@ -30,3 +30,9 @@ NATURAL,ENVIRONMENT / NATURAL HAZARDS,Natural resources and nature
 AGRICULTURE,ECONOMY / FINANCE,Agricultural activities
 GENERAL,GENERAL / UNCATEGORIZED,General news and events
 OTHER,GENERAL / UNCATEGORIZED,Other categories
+ENV,ENVIRONMENT / NATURAL HAZARDS,Environmental issues and climate
+SOC,SOCIETY / SOCIAL ISSUES,Social issues and community events
+TAX,ECONOMY / FINANCE,Taxation and fiscal policy
+UNGP,POLITICS / GOVERNMENT,UN Guiding Principles on Business and Human Rights
+USPEC,GENERAL / UNCATEGORIZED,Unspecified or unknown category
+WB,ECONOMY / FINANCE,World Bank related news and development

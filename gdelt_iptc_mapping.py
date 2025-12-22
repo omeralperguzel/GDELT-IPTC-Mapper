@@ -29,7 +29,7 @@ try:
     HAS_SENTENCE_TRANSFORMERS = True
 except ImportError:
     HAS_SENTENCE_TRANSFORMERS = False
-    print("⚠️  sentence-transformers not available - using fallback mode")
+    print("[!] sentence-transformers not available - using fallback mode")
 
 try:
     from sklearn.metrics.pairwise import cosine_similarity
@@ -38,7 +38,7 @@ try:
     HAS_SKLEARN = True
 except ImportError:
     HAS_SKLEARN = False
-    print("⚠️  scikit-learn not available")
+    print("[!] scikit-learn not available")
 
 # ============================================================================
 # CONFIGURATION
@@ -51,7 +51,11 @@ EMBEDDING_DIM = 384
 # Files
 IPTC_FILE = "iptc_mediatopics.csv"
 VARGO_FILE = "vargo_gdelt_themes_issues.csv"
-GDELT_CSV = "bquxjob_645c6baa_19b43fe1bcd.csv"  # total_docs by theme
+GDELT_CSV_FILES = [
+    "bquxjob_645c6baa_19b43fe1bcd.csv",
+    "bquxjob_4750d984_19b43fefa20.csv",
+    "bquxjob_5c135702_19b43f3f270.csv"
+]
 
 # Output
 OUTPUT_JSON = "gdelt_iptc_mapping.json"
@@ -74,23 +78,33 @@ def load_iptc_topics(data_dir: Path) -> pd.DataFrame:
     # Create text representation for embedding
     iptc["text_repr"] = iptc["label"] + " - " + iptc["definition"]
     
-    print(f"✅ Loaded {len(iptc)} IPTC topics ({len(iptc[iptc['level']==1])} top-level)")
+    print(f"[OK] Loaded {len(iptc)} IPTC topics ({len(iptc[iptc['level']==1])} top-level)")
     return iptc
 
 
 def load_gdelt_themes(data_dir: Path) -> pd.DataFrame:
-    """Load unique GDELT themes from BigQuery export."""
-    csv_file = data_dir / GDELT_CSV
+    """Load unique GDELT themes from all BigQuery export files."""
+    theme_codes = set()
+    files_loaded = 0
     
-    if not csv_file.exists():
-        raise FileNotFoundError(f"GDELT CSV not found: {csv_file}")
+    for csv_name in GDELT_CSV_FILES:
+        csv_file = data_dir / csv_name
+        if csv_file.exists():
+            try:
+                df = pd.read_csv(csv_file)
+                if 'theme_code' in df.columns:
+                    theme_codes.update(df['theme_code'].dropna().unique())
+                    files_loaded += 1
+            except Exception as e:
+                print(f"[!] Could not read {csv_name}: {e}")
     
-    df = pd.read_csv(csv_file)
+    if not theme_codes:
+        raise FileNotFoundError(f"No GDELT themes found in CSV files")
     
-    # Get unique themes
-    themes = df[['theme_code']].drop_duplicates().reset_index(drop=True)
+    # Convert to DataFrame
+    themes = pd.DataFrame({'theme_code': sorted(theme_codes)})
     
-    print(f"✅ Loaded {len(themes)} unique GDELT themes from {csv_file.name}")
+    print(f"[OK] Loaded {len(themes)} unique GDELT themes from {files_loaded} CSV files")
     return themes
 
 
@@ -99,11 +113,11 @@ def load_vargo_mapping(data_dir: Path) -> pd.DataFrame:
     vargo_file = data_dir / VARGO_FILE
     
     if not vargo_file.exists():
-        print(f"⚠️  Vargo mapping not found: {vargo_file}")
+        print(f"[!] Vargo mapping not found: {vargo_file}")
         return pd.DataFrame()
     
     vargo = pd.read_csv(vargo_file)
-    print(f"✅ Loaded Vargo mapping with {len(vargo)} theme-issue pairs")
+    print(f"[OK] Loaded Vargo mapping with {len(vargo)} theme-issue pairs")
     return vargo
 
 
@@ -148,8 +162,8 @@ def prepare_theme_texts(themes: pd.DataFrame, vargo: pd.DataFrame) -> pd.DataFra
         lambda t: vargo_map.get(t, {}).get('issue_category')
     )
     
-    print(f"📝 Built text representations for {len(themes)} themes")
-    print(f"   Sample: {themes['text_repr'].iloc[0][:80]}...")
+    print(f"[*] Built text representations for {len(themes)} themes")
+    print(f"    Sample: {themes['text_repr'].iloc[0][:80]}...")
     
     return themes
 
@@ -164,7 +178,7 @@ def generate_embeddings(texts: list, model=None) -> np.ndarray:
     Falls back to random embeddings if model not available.
     """
     if HAS_SENTENCE_TRANSFORMERS and model is not None:
-        print(f"🧠 Encoding {len(texts)} texts with {MODEL_NAME}...")
+        print(f"[*] Encoding {len(texts)} texts with {MODEL_NAME}...")
         embeddings = model.encode(
             texts,
             batch_size=64,
@@ -173,7 +187,7 @@ def generate_embeddings(texts: list, model=None) -> np.ndarray:
         )
         return embeddings
     else:
-        print(f"⚠️  Using random embeddings (sentence-transformers not installed)")
+        print(f"[!] Using random embeddings (sentence-transformers not installed)")
         np.random.seed(42)
         return np.random.randn(len(texts), EMBEDDING_DIM).astype(np.float32)
 
@@ -185,7 +199,7 @@ def load_model():
     
     import torch
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"🚀 Loading model on {device}...")
+    print(f"[*] Loading model on {device}...")
     
     model = SentenceTransformer(MODEL_NAME, device=device)
     return model
@@ -216,7 +230,7 @@ def map_themes_to_iptc(
         themes DataFrame with IPTC mapping columns added
     """
     if not HAS_SKLEARN:
-        print("⚠️  scikit-learn not available for similarity computation")
+        print("[!] scikit-learn not available for similarity computation")
         themes['iptc_id'] = 'unknown'
         themes['iptc_label'] = 'Unknown'
         themes['similarity'] = 0.0
@@ -230,7 +244,7 @@ def map_themes_to_iptc(
         iptc_subset = iptc.reset_index(drop=True)
         iptc_emb_subset = iptc_embeddings
     
-    print(f"🎯 Mapping {len(themes)} themes to {len(iptc_subset)} IPTC topics...")
+    print(f"[*] Mapping {len(themes)} themes to {len(iptc_subset)} IPTC topics...")
     
     # Compute cosine similarity matrix: themes × IPTC
     sim_matrix = cosine_similarity(theme_embeddings, iptc_emb_subset)
@@ -278,7 +292,7 @@ def cluster_themes(
         themes['cluster_id'] = 0
         return themes
     
-    print(f"🔄 Clustering themes into {n_clusters} groups...")
+    print(f"[*] Clustering themes into {n_clusters} groups...")
     
     # PCA for dimensionality reduction
     n_components = min(20, len(themes) - 1, theme_embeddings.shape[1])
@@ -398,12 +412,12 @@ def export_results(themes: pd.DataFrame, iptc: pd.DataFrame, output_dir: Path):
     json_file = output_dir / OUTPUT_JSON
     with open(json_file, 'w', encoding='utf-8') as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
-    print(f"✅ Exported: {json_file}")
+    print(f"[OK] Exported: {json_file}")
     
     # Export CSV
     csv_file = output_dir / OUTPUT_CSV
     themes.to_csv(csv_file, index=False)
-    print(f"✅ Exported: {csv_file}")
+    print(f"[OK] Exported: {csv_file}")
     
     return result
 
@@ -419,27 +433,27 @@ def run_iptc_mapping_pipeline(data_dir: Path = None) -> dict:
         data_dir = Path(__file__).parent
     
     print("\n" + "=" * 70)
-    print("🎯 GDELT Theme → IPTC Media Topics Mapping Pipeline")
+    print("GDELT Theme -> IPTC Media Topics Mapping Pipeline (V1)")
     print("=" * 70 + "\n")
     
     # Step 1: Load IPTC topics
-    print("📥 Step 1: Loading IPTC Media Topics...")
+    print("[1/8] Loading IPTC Media Topics...")
     iptc = load_iptc_topics(data_dir)
     
     # Step 2: Load GDELT themes
-    print("\n📥 Step 2: Loading GDELT themes...")
+    print("\n[2/8] Loading GDELT themes...")
     themes = load_gdelt_themes(data_dir)
     
     # Step 3: Load Vargo mapping for additional context
-    print("\n🔗 Step 3: Loading Vargo issue mapping...")
+    print("\n[3/8] Loading Vargo issue mapping...")
     vargo = load_vargo_mapping(data_dir)
     
     # Step 4: Prepare text representations
-    print("\n📝 Step 4: Building text representations...")
+    print("\n[4/8] Building text representations...")
     themes = prepare_theme_texts(themes, vargo)
     
     # Step 5: Load model and generate embeddings
-    print("\n🧠 Step 5: Generating embeddings...")
+    print("\n[5/8] Generating embeddings...")
     model = load_model()
     
     # IPTC embeddings
@@ -451,38 +465,38 @@ def run_iptc_mapping_pipeline(data_dir: Path = None) -> dict:
     theme_embeddings = generate_embeddings(theme_texts, model)
     
     # Step 6: Map themes to IPTC
-    print("\n🎯 Step 6: Mapping themes to IPTC categories...")
+    print("\n[6/8] Mapping themes to IPTC categories...")
     themes = map_themes_to_iptc(
         theme_embeddings, iptc_embeddings, themes, iptc, top_level_only=True
     )
     
     # Step 7: Optional clustering
-    print("\n📊 Step 7: Additional clustering...")
+    print("\n[7/8] Additional clustering...")
     n_clusters = min(8, len(themes))
     themes = cluster_themes(theme_embeddings, themes, n_clusters=n_clusters)
     
     # Step 8: Export results
-    print("\n💾 Step 8: Exporting results...")
+    print("\n[8/8] Exporting results...")
     result = export_results(themes, iptc, data_dir)
     
     # Print summary
     print("\n" + "=" * 70)
-    print("📊 MAPPING RESULTS SUMMARY")
+    print("MAPPING RESULTS SUMMARY")
     print("=" * 70)
     
     summary = result['summary']
-    print(f"\n📈 Total themes mapped: {summary['total_themes']}")
-    print(f"📁 IPTC categories used: {summary['iptc_categories_used']}")
-    print(f"📐 Average similarity: {summary['avg_similarity']:.3f}")
-    print(f"🎯 Average confidence: {summary['avg_confidence']:.3f}")
-    print(f"⚠️  Low confidence mappings: {summary['low_confidence_count']}")
+    print(f"\n  Total themes mapped: {summary['total_themes']}")
+    print(f"  IPTC categories used: {summary['iptc_categories_used']}")
+    print(f"  Average similarity: {summary['avg_similarity']:.3f}")
+    print(f"  Average confidence: {summary['avg_confidence']:.3f}")
+    print(f"  Low confidence mappings: {summary['low_confidence_count']}")
     
-    print("\n📊 Themes per IPTC Category:")
+    print("\nThemes per IPTC Category:")
     for iptc_label, count in sorted(summary['themes_per_iptc'].items(), key=lambda x: -x[1]):
         avg_sim = summary['avg_similarity_per_iptc'].get(iptc_label, 0)
-        print(f"   • {iptc_label}: {count} themes (avg sim: {avg_sim:.3f})")
+        print(f"  - {iptc_label}: {count} themes (avg sim: {avg_sim:.3f})")
     
-    print("\n✅ Pipeline complete!")
+    print("\n[OK] Pipeline complete!")
     
     return result
 
