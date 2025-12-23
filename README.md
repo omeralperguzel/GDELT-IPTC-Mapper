@@ -35,7 +35,7 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 2. **Enable** cross-country comparative analysis of news coverage
 3. **Provide** an interactive dashboard for exploring theme distributions
 4. **Compare** two different mapping algorithms (V1 vs V2)
-5. **Export** results in multiple formats (CSV, XLSX, JSON, LaTeX)
+5. **Export** results in multiple formats (CSV, XLSX, JSON, LaTeX, TikZ)
 
 ---
 
@@ -79,6 +79,7 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 - CSV (comma-separated values)
 - JSON (structured data)
 - LaTeX (academic tables)
+- TikZ (LaTeX treemaps for publications)
 - PNG/SVG (chart graphics)
 
 ### 🔧 Analysis Tools
@@ -88,6 +89,7 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 - Theme distribution statistics
 - IPTC category summaries
 - Algorithm comparison metrics
+- **Treemap generation** for IPTC categories (LaTeX TikZ)
 
 ---
 
@@ -110,7 +112,7 @@ cd GDELT-IPTC-Mapper
 2. **Install dependencies**
 
 ```bash
-pip install pandas numpy sentence-transformers scikit-learn
+pip install pandas numpy sentence-transformers scikit-learn squarify matplotlib
 ```
 
 3. **Start the server**
@@ -122,7 +124,7 @@ python run_server.py
 4. **Open the dashboard**
 
 ```
-http://localhost:5000
+http://localhost:5001
 ```
 
 ---
@@ -172,7 +174,15 @@ Switch to the **Grafikler** tab to visualize:
 - Top themes by document count
 - Similarity score analysis
 
-### 6. Export Data
+### 6. Generate Treemaps
+
+Use the **Treemap** tab to generate LaTeX TikZ treemaps:
+
+- **Single Category**: Generate treemap for specific IPTC category
+- **All Categories**: Generate treemaps for all 17 IPTC categories
+- Output files saved in `latex_treemaps/` directory
+
+### 7. Export Data
 
 Use the **Dışarı Aktar** tab to download:
 
@@ -294,6 +304,18 @@ Cosine similarity between theme and IPTC embeddings:
 
 $$\text{similarity}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}$$
 
+### 5. Treemap Generation
+
+LaTeX TikZ treemaps are generated using squarify algorithm:
+
+```python
+import squarify
+
+# Generate rectangles for treemap
+sizes = squarify.normalize_sizes(values, width, height)
+rects = squarify.squarify(sizes, 0, 0, width, height)
+```
+
 ### Architecture Diagram
 
 ```
@@ -325,6 +347,7 @@ $$\text{similarity}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}$$
               │  • Side-by-side t-SNE   │
               │  • Algorithm comparison │
               │  • Export capabilities  │
+              │  • Treemap generation   │
               └─────────────────────────┘
 ```
 
@@ -371,12 +394,13 @@ $$\text{similarity}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}$$
 
 ### Tab Overview
 
-| Tab                 | Description                                                                  |
-| ------------------- | ---------------------------------------------------------------------------- |
-| 📰 **GDELT Tema**   | Load CSV data, view 3 data tables, filter by 6 countries, run theme analysis |
-| 📈 **Grafikler**    | Interactive charts including side-by-side t-SNE V1/V2 scatter plots          |
-| 🤖 **Kümeleme**     | Run V1 or V2 algorithm, load results, switch active mapping                  |
-| 📤 **Dışarı Aktar** | Export data in XLSX, CSV, JSON, LaTeX formats                                |
+| Tab                  | Description                                                                  |
+| -------------------- | ---------------------------------------------------------------------------- |
+| 📰 **GDELT Tema**    | Load CSV data, view 3 data tables, filter by 6 countries, run theme analysis |
+| 📈 **Grafikler**     | Interactive charts including side-by-side t-SNE V1/V2 scatter plots          |
+| 🤖 **Kümeleme**      | Run V1 or V2 algorithm, load results, switch active mapping                  |
+| � **Treemap**        | Generate LaTeX TikZ treemaps for IPTC categories                             |
+| �📤 **Dışarı Aktar** | Export data in XLSX, CSV, JSON, LaTeX formats                                |
 
 ### Kümeleme Tab Features
 
@@ -393,35 +417,59 @@ $$\text{similarity}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}$$
 - **Theme Count by Category**: Bar chart
 - **Similarity Score Distribution**: Histogram
 
+### Treemap Tab Features
+
+- **Single IPTC Category**: Generate TikZ treemap for one category
+- **All IPTC Categories**: Batch generate treemaps for all 17 categories
+- **LaTeX Output**: Files saved in `latex_treemaps/` directory
+- **Publication Ready**: High-quality vector graphics for academic papers
+
 ---
 
 ## 🔌 API Reference
 
 ### Endpoints
 
-| Method | Endpoint                | Description              |
-| ------ | ----------------------- | ------------------------ |
-| GET    | `/`                     | Serve main dashboard     |
-| GET    | `/*.csv`                | Serve CSV data files     |
-| GET    | `/*.json`               | Serve JSON results       |
-| POST   | `/api/run-iptc-mapping` | Execute mapping pipeline |
-| POST   | `/api/analyze`          | Run data analysis        |
-| POST   | `/api/save`             | Save analysis state      |
-| POST   | `/api/load`             | Load saved analysis      |
-| POST   | `/api/list-saved`       | List saved analyses      |
+| Method | Endpoint                          | Description                  |
+| ------ | --------------------------------- | ---------------------------- |
+| GET    | `/`                               | Serve main dashboard         |
+| GET    | `/*.csv`                          | Serve CSV data files         |
+| GET    | `/*.json`                         | Serve JSON results           |
+| POST   | `/api/analyze`                    | Run data analysis            |
+| POST   | `/api/run-iptc-mapping`           | Execute mapping pipeline     |
+| POST   | `/api/generate-iptc-treemap`      | Generate single IPTC treemap |
+| POST   | `/api/generate-all-iptc-treemaps` | Generate all IPTC treemaps   |
+| POST   | `/api/save`                       | Save analysis state          |
+| POST   | `/api/load`                       | Load saved analysis          |
+| POST   | `/api/save-analysis`              | Save analysis with filename  |
+| GET    | `/api/load-analysis/{filename}`   | Load specific saved analysis |
+| GET    | `/api/list-saved-analyses`        | List all saved analyses      |
+| DELETE | `/api/delete-analysis/{filename}` | Delete saved analysis        |
 
 ### IPTC Mapping API
 
 ```bash
 # Run V1 algorithm (embedding only)
-curl -X POST http://localhost:5000/api/run-iptc-mapping \
+curl -X POST http://localhost:5001/api/run-iptc-mapping \
   -H "Content-Type: application/json" \
   -d '{"algorithm": "v1"}'
 
 # Run V2 algorithm (two-layer fusion)
-curl -X POST http://localhost:5000/api/run-iptc-mapping \
+curl -X POST http://localhost:5001/api/run-iptc-mapping \
   -H "Content-Type: application/json" \
   -d '{"algorithm": "v2"}'
+```
+
+### Treemap Generation API
+
+```bash
+# Generate treemap for single IPTC category
+curl -X POST http://localhost:5001/api/generate-iptc-treemap \
+  -H "Content-Type: application/json" \
+  -d '{"iptc_category": "economy, business and finance"}'
+
+# Generate treemaps for all categories
+curl -X POST http://localhost:5001/api/generate-all-iptc-treemaps
 ```
 
 ### Response Format
@@ -496,6 +544,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - IPTC for the standardized Media Topics taxonomy
 - Hugging Face for the Sentence-Transformers library
 - scikit-learn for t-SNE implementation
+- squarify for treemap generation
 - TED University CMPE490 course
 
 ---
