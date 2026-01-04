@@ -19,6 +19,8 @@
     ['v3', 'combined']
   ];
 
+  const comparisonSelections = { v1: 'vargo', v2: 'gkg', v3: 'combined' };
+
   // Active pointer used by other modules via window.iptcMappingResults
   function setActiveResults(obj, version, source){
     try {
@@ -84,6 +86,8 @@
     try { if (typeof updateSharedMappingStats === 'function') updateSharedMappingStats(); } catch(e){}
     // If GDELT data already loaded, re-run analyze to reflect new categories
     try{ if (typeof analyzeThemes === 'function' && window.gdeltDataLoaded) analyzeThemes(); }catch(e){}
+
+    try{ renderMappingComparisonTable(); } catch(e){ console.warn('comparison table refresh', e); }
   }
 
   // Build a quick lookup theme_code -> iptc_label for frontend grouping
@@ -544,10 +548,14 @@
         }catch(e){ console.warn('switchActiveMapping', e); }
       };
       hydrateMappingResultsShells();
+      registerComparisonSelectors();
+      renderMappingComparisonTable();
       // Sync initial value
       try{ window.switchActiveMapping(); }catch(e){}
-      // pre-load v2 (non-blocking)
+      // pre-load all saved outputs
+      loadResultsFor('v1').catch(()=>{});
       loadResultsFor('v2').catch(()=>{});
+      loadResultsFor('v3').catch(()=>{});
     }catch(e){ console.warn('initTabClustering error', e); }
   }
 
@@ -565,6 +573,100 @@
     const payload = { themes: Array.isArray(themes) ? themes : [], metadata: {} };
     try { renderMappingResultsCard(info.version, info.source, payload); } catch(err){ console.warn('displayIPTCThemesTable', err); }
   };
+
+  function gatherThemeCodes(){
+    const codes = new Set();
+    Object.values(results).forEach(versionSet => {
+      Object.values(versionSet).forEach(payload => {
+        if (!payload) return;
+        const themes = Array.isArray(payload) ? payload : (Array.isArray(payload.themes) ? payload.themes : (Array.isArray(payload.results) ? payload.results : []));
+        themes.forEach(theme => {
+          const code = theme.theme_code || theme.theme || theme.code;
+          if (code) codes.add(code);
+        });
+      });
+    });
+    return Array.from(codes).sort();
+  }
+
+  function findThemeEntry(payload, themeCode){
+    if (!payload || !themeCode) return null;
+    const themes = Array.isArray(payload) ? payload : (Array.isArray(payload.themes) ? payload.themes : (Array.isArray(payload.results) ? payload.results : []));
+    return themes.find(theme => (theme.theme_code || theme.theme || theme.code) === themeCode) || null;
+  }
+
+  function extractThemeDescription(theme){
+    if (!theme) return '';
+    return theme.text_repr || theme.description || theme.issue_category || theme.text || theme.note || theme.definition || theme.iptc_definition || '';
+  }
+
+  function getPrimaryMatchScore(theme){
+    if (!theme) return null;
+    return theme.similarity ?? theme.nn_score ?? theme.final_confidence ?? theme.confidence ?? theme.rule_confidence ?? theme.similarity_2nd ?? theme.second_score ?? null;
+  }
+
+  function renderMatchCell(version, themeCode){
+    const source = comparisonSelections[version];
+    if (!source) return '<div class="comparison-empty">Seçim yok</div>';
+    const payload = results[version] && results[version][source];
+    const theme = findThemeEntry(payload, themeCode);
+    if (!theme) return '<div class="comparison-empty">Veri yok</div>';
+    const label = theme.iptc_final_label || theme.iptc_label || theme.category || theme.iptc_nn_label || 'Belirsiz';
+    const score = getPrimaryMatchScore(theme);
+    const percent = formatPercent(score);
+    const helperText = theme.iptc_second_label ? `${escapeHtml(theme.iptc_second_label)} (${formatPercent(theme.second_score ?? theme.similarity_2nd)})` : '';
+    return `<div style="display:flex;flex-direction:column;gap:4px;padding:6px 0;">
+        <span style="font-weight:600;color:#1f2560">${escapeHtml(label)}</span>
+        <span style="font-size:0.85em;color:#4f5d85">${percent}</span>
+        ${helperText ? `<span style="font-size:0.78em;color:#6d7aa3">${helperText}</span>` : ''}
+    </div>`;
+  }
+
+  function renderMappingComparisonTable(){
+    const tbody = document.getElementById('mapping-comparison-tbody');
+    if (!tbody) return;
+    const codes = gatherThemeCodes();
+    if (!codes.length){
+      tbody.innerHTML = '<tr><td colspan="5" style="padding:32px 10px; text-align:center; color:#8691a8;">Henüz karşılaştırma verisi yok.</td></tr>';
+      return;
+    }
+    const rows = codes.map(code => {
+      const desc = escapeHtml(getPrimaryDescription(code));
+      return `<tr>
+        <td style="padding:10px;border-bottom:1px solid #edf1fb;font-weight:600;color:#1b2437;">${escapeHtml(code)}</td>
+        <td style="padding:10px;border-bottom:1px solid #edf1fb;color:#3a4155;">${desc || '<span style="color:#9ba5c4;">Tanım yok</span>'}</td>
+        <td style="padding:10px;border-bottom:1px solid #edf1fb;vertical-align:top;">${renderMatchCell('v1', code)}</td>
+        <td style="padding:10px;border-bottom:1px solid #edf1fb;vertical-align:top;">${renderMatchCell('v2', code)}</td>
+        <td style="padding:10px;border-bottom:1px solid #edf1fb;vertical-align:top;">${renderMatchCell('v3', code)}</td>
+      </tr>`;
+    }).join('');
+    tbody.innerHTML = rows;
+  }
+
+  function getPrimaryDescription(code){
+    for (const version of Object.keys(results)){
+      for (const source of Object.keys(results[version])){
+        const entry = findThemeEntry(results[version][source], code);
+        if (entry){
+          const desc = extractThemeDescription(entry);
+          if (desc) return desc;
+        }
+      }
+    }
+    return '';
+  }
+
+  function registerComparisonSelectors(){
+    document.querySelectorAll('[data-comparison-version]').forEach(select => {
+      const version = select.getAttribute('data-comparison-version');
+      if (!version || !comparisonSelections[version]) return;
+      select.value = comparisonSelections[version];
+      select.addEventListener('change', () => {
+        comparisonSelections[version] = select.value;
+        renderMappingComparisonTable();
+      });
+    });
+  }
 
   // expose init (loader calls window.initTabClustering)
   window.initTabClustering = initTabClustering;

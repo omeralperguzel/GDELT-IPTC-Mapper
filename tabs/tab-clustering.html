@@ -144,4 +144,52 @@
             </div>
         </div>
     </template>
+
+    <div class="mapping-comparison-panel" style="margin-top: 30px; padding: 20px; border: 1px solid #e1e7f0; border-radius: 16px; background:#fff; max-width:1200px; margin-left:auto; margin-right:auto;">
+        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; margin-bottom:16px;">
+            <div style="flex:1 1 220px;">
+                <label style="display:block; font-weight:600; color:#283046; margin-bottom:6px;">V1 Kaynağı</label>
+                <select id="mapping-comparison-v1-source" data-comparison-version="v1" style="width:100%; padding:8px 10px; border-radius:6px; border:1px solid #cfd7eb; font-weight:600;">
+                    <option value="vargo">Vargo</option>
+                    <option value="gkg">GKG</option>
+                </select>
+            </div>
+            <div style="flex:1 1 220px;">
+                <label style="display:block; font-weight:600; color:#283046; margin-bottom:6px;">V2 Kaynağı</label>
+                <select id="mapping-comparison-v2-source" data-comparison-version="v2" style="width:100%; padding:8px 10px; border-radius:6px; border:1px solid #cfd7eb; font-weight:600;">
+                    <option value="vargo">Vargo</option>
+                    <option value="gkg">GKG</option>
+                </select>
+            </div>
+            <div style="flex:1 1 220px;">
+                <label style="display:block; font-weight:600; color:#283046; margin-bottom:6px;">V3 Kaynağı</label>
+                <select id="mapping-comparison-v3-source" data-comparison-version="v3" style="width:100%; padding:8px 10px; border-radius:6px; border:1px solid #cfd7eb; font-weight:600;">
+                    <option value="vargo">Vargo</option>
+                    <option value="gkg">GKG</option>
+                    <option value="combined">Combined</option>
+                </select>
+            </div>
+            <div style="flex:1 1 260px; min-width:220px;">
+                <span style="font-weight:600; color:#5c6bc0;">Tablo, V1/V2/V3 JSON dosyalarındaki eşlemeleri okur ve her satırda aynı GDELT temasının IPTC kategori eşleşmelerini karşılaştırır.</span>
+            </div>
+        </div>
+        <div style="overflow:auto; max-height:480px; border-radius:12px; border:1px solid #e4ebf7;">
+            <table id="mapping-comparison-table" style="width:100%; border-collapse:collapse; min-width:900px;">
+                <thead style="background:#f9fafc;">
+                    <tr>
+                        <th style="padding:12px 10px; text-align:left; border-bottom:1px solid #e0e6f2;">Tema Kodu</th>
+                        <th style="padding:12px 10px; text-align:left; border-bottom:1px solid #e0e6f2;">Açıklama</th>
+                        <th style="padding:12px 10px; text-align:left; border-bottom:1px solid #e0e6f2;">V1</th>
+                        <th style="padding:12px 10px; text-align:left; border-bottom:1px solid #e0e6f2;">V2</th>
+                        <th style="padding:12px 10px; text-align:left; border-bottom:1px solid #e0e6f2;">V3</th>
+                    </tr>
+                </thead>
+                <tbody id="mapping-comparison-tbody">
+                    <tr>
+                        <td colspan="5" style="padding:40px 10px; text-align:center; color:#8691a8;">JSON çıktıları yükleniyor ya da veri henüz gelmedi.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
