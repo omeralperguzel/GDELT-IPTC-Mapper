@@ -1,0 +1,35 @@
+<!-- Partial: Charts Tab -->
+<div class="charts-section">
+    <h3 style="color: #0f3460; margin-bottom: 20px; text-align: center;"> GDELT Tema → IPTC Media Topics Analizi</h3>
+    <!-- NOTE: This partial contains charts UI moved from index.html -->
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3> IPTC Kategori Dağılımı</h3>
+            <div class="chart-wrapper">
+                <canvas id="iptc-distribution-chart"></canvas>
+            </div>
+        </div>
+        <div class="chart-container">
+            <h3> Ülke Bazlı Tema Hacmi</h3>
+            <div class="chart-wrapper">
+                <canvas id="country-theme-chart"></canvas>
+            </div>
+        </div>
+        <div class="chart-container">
+            <h3> En Yüksek Hacimli Temalar</h3>
+            <div class="chart-wrapper">
+                <canvas id="top-themes-chart"></canvas>
+            </div>
+        </div>
+        <div class="chart-container">
+            <h3> IPTC Benzerlik Skorları</h3>
+            <div class="chart-wrapper">
+                <canvas id="iptc-similarity-chart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <button class="run-btn" onclick="generateGDELTCharts()"> GDELT Grafikleri Oluştur</button>
+        <button class="run-btn" style="background: #667eea; margin-left: 10px;" onclick="generateClusteringCharts()"> Kümeleme Grafikleri Oluştur</button>
+    </div>
+</div>

@@ -43,5 +43,8 @@ Thumbs.db
 *.tmp
 *.temp
 
+# Generated results (should not be tracked)
+results/
+
 # Saved analyses (user data)
 saved_analyses/

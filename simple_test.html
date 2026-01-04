@@ -14,7 +14,7 @@
     </style>
 </head>
 <body>
-    <h1>🎯 GDELT Tema Kümelemesi</h1>
+    <h1> GDELT Tema Kümelemesi</h1>
     
     <div>
         <button onclick="testJSON()">Test 1: JSON Valid mi?</button>
@@ -34,18 +34,18 @@
                 clusterData = await resp.json();
                 return clusterData;
             } catch (e) {
-                document.getElementById('output').innerHTML = `<p class="error">❌ JSON yüklenemedi: ${e.message}</p>`;
+                document.getElementById('output').innerHTML = `<p class="error"> JSON yüklenemedi: ${e.message}</p>`;
                 return null;
             }
         }
 
         async function testJSON() {
-            document.getElementById('output').innerHTML = '<p class="info">⏳ Test yapılıyor...</p>';
+            document.getElementById('output').innerHTML = '<p class="info"> Test yapılıyor...</p>';
             const data = await loadJSON();
             
             if (!data) return;
             
-            let html = '<div class="success"><h2>✅ JSON Başarıyla Yüklendi!</h2>';
+            let html = '<div class="success"><h2> JSON Başarıyla Yüklendi!</h2>';
             html += `<p><strong>Model:</strong> ${data.metadata.model}</p>`;
             html += `<p><strong>Kümeler:</strong> ${data.metadata.n_clusters}</p>`;
             html += `<p><strong>Temalar:</strong> ${data.metadata.total_themes}</p>`;
@@ -59,7 +59,7 @@
             if (!clusterData) await loadJSON();
             if (!clusterData) return;
 
-            let html = '<h2>📊 Kümeler</h2>';
+            let html = '<h2> Kümeler</h2>';
             for (const [id, cluster] of Object.entries(clusterData.cluster_labels)) {
                 const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA502', '#95E1D3', '#C87094', '#6C5CE7', '#00B894'];
                 const bgColor = colors[id % colors.length];
@@ -79,7 +79,7 @@
             if (!clusterData) await loadJSON();
             if (!clusterData) return;
 
-            let html = '<h2>📋 Tüm Temalar</h2>';
+            let html = '<h2> Tüm Temalar</h2>';
             html += '<table border="1" cellpadding="8" style="width: 100%; border-collapse: collapse;">';
             html += '<tr><th>Tema Kodu</th><th>Küme</th><th>Konu Kategorisi</th></tr>';
             

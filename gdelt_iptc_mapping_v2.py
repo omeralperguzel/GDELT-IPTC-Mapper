@@ -173,16 +173,45 @@ def load_vargo_mapping(filepath: str = "vargo_gdelt_themes_issues.csv") -> dict:
         print(f"[!] Could not load Vargo mapping: {e}")
     return vargo_map
 
-def build_theme_text(theme_code: str, vargo_map: dict) -> str:
+
+def load_gkg_mapping(filepath: str = "gdelt_gkg_categorylist.csv") -> dict:
+    """Load GKG Category List mapping"""
+    gkg_map = {}
+    try:
+        df = pd.read_csv(filepath)
+        for _, row in df.iterrows():
+            gkg_map[row['Name']] = {
+                'description': row.get('Description', '')
+            }
+    except Exception as e:
+        print(f"[!] Could not load GKG mapping: {e}")
+    return gkg_map
+
+
+def load_mapping_source(data_dir: Path, mapping_source: str) -> dict:
+    """Load mapping source based on selection."""
+    if mapping_source == 'vargo':
+        return load_vargo_mapping(data_dir / "vargo_gdelt_themes_issues.csv")
+    elif mapping_source == 'gkg':
+        return load_gkg_mapping(data_dir / "gdelt_gkg_categorylist.csv")
+    else:
+        print(f"[!] Unknown mapping source: {mapping_source}, using Vargo as default")
+        return load_vargo_mapping(data_dir / "vargo_gdelt_themes_issues.csv")
+
+def build_theme_text(theme_code: str, mapping_data: dict, mapping_source: str) -> str:
     """Build rich text representation for a theme"""
     parts = [theme_code]
     
-    if theme_code in vargo_map:
-        info = vargo_map[theme_code]
-        if info.get('issue'):
-            parts.append(info['issue'])
-        if info.get('description'):
-            parts.append(info['description'])
+    if theme_code in mapping_data:
+        info = mapping_data[theme_code]
+        if mapping_source == 'vargo':
+            if info.get('issue'):
+                parts.append(info['issue'])
+            if info.get('description'):
+                parts.append(info['description'])
+        elif mapping_source == 'gkg':
+            if info.get('description'):
+                parts.append(info['description'])
     
     readable = theme_code.replace('_', ' ').replace('-', ' ').title()
     if readable != theme_code:
@@ -322,7 +351,7 @@ def get_iptc_label(iptc_id: str) -> str:
 # MAIN PIPELINE
 # ============================================================================
 
-def run_full_mapping(output_dir: str = ".") -> dict:
+def run_full_mapping(data_dir: str = ".", output_dir: str = ".", mapping_source: str = 'vargo') -> dict:
     """
     Run the complete two-layer GDELT -> IPTC mapping pipeline.
     
@@ -335,6 +364,8 @@ def run_full_mapping(output_dir: str = ".") -> dict:
     print("=" * 60)
     
     output_path = Path(output_dir)
+    data_path = Path(data_dir)
+    results_path = Path(output_dir)  # Results are saved to output_dir
     
     # Load theme codes from all CSV files
     print("\n[*] Loading theme codes from CSV files...")
@@ -348,7 +379,7 @@ def run_full_mapping(output_dir: str = ".") -> dict:
     
     for csv_file in csv_files:
         try:
-            df = pd.read_csv(output_path / csv_file)
+            df = pd.read_csv(results_path / csv_file)
             if 'theme_code' in df.columns:
                 theme_codes.update(df['theme_code'].dropna().unique())
         except Exception as e:
@@ -360,10 +391,10 @@ def run_full_mapping(output_dir: str = ".") -> dict:
     
     print(f"  [OK] Found {len(theme_codes)} unique theme codes")
     
-    # Load Vargo mapping
-    print("\n[*] Loading Vargo issue mapping...")
-    vargo_map = load_vargo_mapping(output_path / "vargo_gdelt_themes_issues.csv")
-    print(f"  [OK] Loaded {len(vargo_map)} Vargo mappings")
+    # Load mapping source
+    print(f"\n[*] Loading {mapping_source.upper()} mapping...")
+    mapping_data = load_mapping_source(data_path, mapping_source)
+    print(f"  [OK] Loaded {len(mapping_data)} {mapping_source.upper()} mappings")
     
     # LAYER 1: Rule-based mapping
     print("\n[*] Layer 1: Applying rule-based mapping...")
@@ -393,7 +424,7 @@ def run_full_mapping(output_dir: str = ".") -> dict:
         
         # Build text representations
         theme_list = sorted(theme_codes)
-        theme_texts = [build_theme_text(t, vargo_map) for t in theme_list]
+        theme_texts = [build_theme_text(t, mapping_data, mapping_source) for t in theme_list]
         iptc_texts = build_iptc_texts(IPTC_CATEGORIES)
         
         print(f"  Encoding {len(theme_texts)} themes...")
@@ -436,7 +467,7 @@ def run_full_mapping(output_dir: str = ".") -> dict:
         
         result = {
             'theme_code': theme,
-            'text_repr': build_theme_text(theme, vargo_map),
+            'text_repr': build_theme_text(theme, mapping_data, mapping_source),
             'iptc_rule_id': rule_id,
             'iptc_rule_label': get_iptc_label(rule_id) if rule_id else '',
             'rule_confidence': rule_conf,
@@ -482,7 +513,8 @@ def run_full_mapping(output_dir: str = ".") -> dict:
             "total_themes": len(theme_codes),
             "rule_matched": rule_matched,
             "iptc_categories": len(set(r['iptc_final_label'] for r in final_results if r['iptc_final_label'])),
-            "decision_stats": decision_counts
+            "decision_stats": decision_counts,
+            "mapping_source": mapping_source
         },
         "themes": final_results,
         "iptc_categories": {}
@@ -501,13 +533,15 @@ def run_full_mapping(output_dir: str = ".") -> dict:
         output_data["iptc_categories"][cat_label]["themes"].append(r['theme_code'])
     
     # Save JSON
-    json_path = output_path / "gdelt_iptc_mapping_v2.json"
+    json_filename = f"gdelt_iptc_mapping_v2_{mapping_source}.json"
+    json_path = output_path / json_filename
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, ensure_ascii=False, indent=2)
     print(f"  [OK] JSON: {json_path.name}")
     
     # Save CSV
-    csv_path = output_path / "gdelt_themes_iptc_v2.csv"
+    csv_filename = f"gdelt_themes_iptc_v2_{mapping_source}.csv"
+    csv_path = output_path / csv_filename
     pd.DataFrame(final_results).to_csv(csv_path, index=False)
     print(f"  [OK] CSV: {csv_path.name}")
     
@@ -524,5 +558,34 @@ def run_full_mapping(output_dir: str = ".") -> dict:
 # ============================================================================
 
 if __name__ == "__main__":
-    output_dir = Path(__file__).parent
-    results = run_full_mapping(output_dir=output_dir)
+    import argparse
+    
+    parser = argparse.ArgumentParser(
+        description="Map GDELT themes to IPTC Media Topics (V2 - Two-Layer Fusion)"
+    )
+    parser.add_argument(
+        "--data-dir",
+        type=str,
+        default=None,
+        help="Directory containing data files"
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default=None,
+        help="Directory to save output files"
+    )
+    parser.add_argument(
+        "--mapping-source",
+        type=str,
+        choices=['vargo', 'gkg'],
+        default='vargo',
+        help="Mapping source to use: 'vargo' (Vargo issue taxonomy) or 'gkg' (GKG Category List)"
+    )
+    
+    args = parser.parse_args()
+    
+    data_dir = Path(args.data_dir) if args.data_dir else Path(__file__).parent / "data"
+    output_dir = Path(args.output_dir) if args.output_dir else Path(__file__).parent / "results"
+    
+    results = run_full_mapping(data_dir=data_dir, output_dir=output_dir, mapping_source=args.mapping_source)

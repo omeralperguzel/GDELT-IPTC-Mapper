@@ -1,0 +1,147 @@
+<!-- Partial: Clustering Tab -->
+<div class="charts-section" style="text-align: center; padding: 20px;">
+    <h3 style="color: #667eea; margin-bottom: 20px;"> GDELT Tema → IPTC Media Topics Eşleştirme</h3>
+    <p style="color: #666; margin-bottom: 15px;">Sentence-Transformer embedding + Cosine Similarity → IPTC NewsCodes (17 üst düzey kategori)</p>
+
+    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
+        <div style="min-width:280px; padding:15px; border:2px solid #667eea; border-radius:8px; background:white;">
+            <strong style="color: #667eea;">V1: Sadece Embedding</strong>
+            <div style="margin-top:10px;">
+                <input type="radio" id="v1-vargo" name="v1-mapping-source" value="vargo" checked>
+                <label for="v1-vargo">Vargo</label>
+                <input type="radio" id="v1-gkg" name="v1-mapping-source" value="gkg">
+                <label for="v1-gkg">GKG</label>
+            </div>
+            <div style="margin-top:10px;">
+                <button class="run-btn" onclick="runIPTCMappingV1()"> V1 Çalıştır</button>
+                <button class="run-btn" onclick="loadIPTCMappingResultsV1()"> V1 Yükle</button>
+            </div>
+        </div>
+        <div style="min-width:280px; padding:15px; border:2px solid #FF9800; border-radius:8px; background:white;">
+            <strong style="color: #FF9800;">V2: İki Katmanlı Fusion</strong>
+            <div style="margin-top:10px;">
+                <input type="radio" id="v2-vargo" name="v2-mapping-source" value="vargo" checked>
+                <label for="v2-vargo">Vargo</label>
+                <input type="radio" id="v2-gkg" name="v2-mapping-source" value="gkg">
+                <label for="v2-gkg">GKG</label>
+            </div>
+            <div style="margin-top:10px;">
+                <button class="run-btn" onclick="runIPTCMappingV2()"> V2 Çalıştır</button>
+                <button class="run-btn" onclick="loadIPTCMappingResultsV2()"> V2 Yükle</button>
+            </div>
+        </div>
+        <div style="min-width:280px; padding:15px; border:2px solid #9C27B0; border-radius:8px; background:white;">
+            <strong style="color: #9C27B0;">V3: Hiyerarşik Alt Konular</strong>
+            <div style="margin-top:10px;">
+                <input type="radio" id="v3-gkg" name="v3-mapping-source" value="gkg" checked>
+                <label for="v3-gkg">GKG</label>
+                <input type="radio" id="v3-combined" name="v3-mapping-source" value="combined">
+                <label for="v3-combined">Birleşik</label>
+            </div>
+            <div style="margin-top:10px;">
+                <button class="run-btn" onclick="runIPTCMappingV3()"> V3 Çalıştır</button>
+                <button class="run-btn" onclick="loadIPTCMappingResultsV3()"> V3 Yükle</button>
+            </div>
+        </div>
+    </div>
+                    <!-- Aktif Algoritma Seçimi -->
+                    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                        <label style="font-weight: 600; color: #2e7d32; margin-right: 15px;">📊 GDELT Tema ve Grafikler için Aktif Sonuç:</label>
+                        <select id="active-mapping-select" onchange="switchActiveMapping()" style="padding: 10px 15px; border-radius: 5px; border: 2px solid #4CAF50; font-size: 1em; font-weight: 600;">
+                            <option value="v2-vargo">V2 - Vargo</option>
+                            <option value="v2-gkg">V2 - GKG</option>
+                            <option value="v1-vargo">V1 - Vargo</option>
+                            <option value="v1-gkg">V1 - GKG</option>
+                            <option value="v3-vargo">V3 - Vargo</option>
+                            <option value="v3-gkg">V3 - GKG</option>
+                            <option value="v3-combined">V3 - Combined</option>
+                        </select>
+                        <span id="active-mapping-info" style="margin-left: 15px; color: #666; font-size: 0.9em;">V2 - Vargo sonuçları kullanılıyor</span>
+                    </div>
+                </div>
+                
+                <!-- Progress Gostergesi -->
+                <div id="iptc-progress-container" style="display: none; max-width: 600px; margin: 0 auto 25px; background: #f0f4f8; border-radius: 10px; padding: 20px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <div class="loading-spinner" style="width: 24px; height: 24px;"></div>
+                        <span id="iptc-progress-text" style="font-weight: 600; color: #333;">Baslatiliyor...</span>
+                    </div>
+                    <div style="background: #e0e0e0; border-radius: 5px; height: 8px; overflow: hidden;">
+                        <div id="iptc-progress-bar" style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: 0%; transition: width 0.5s ease;"></div>
+                    </div>
+                    <div id="iptc-progress-steps" style="margin-top: 15px; text-align: left; font-size: 0.85em;">
+                        <div class="progress-step" data-step="1" style="padding: 8px 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                            <span class="step-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #6b7280; color: white; font-size: 12px; font-weight: bold;">1</span>
+                            <span class="step-text">CSV yükle</span>
+                        </div>
+                        <div class="progress-step" data-step="2" style="padding: 8px 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                            <span class="step-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #6b7280; color: white; font-size: 12px; font-weight: bold;">2</span>
+                            <span class="step-text">Embedding + kurallar</span>
+                        </div>
+                        <div class="progress-step" data-step="3" style="padding: 8px 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                            <span class="step-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #6b7280; color: white; font-size: 12px; font-weight: bold;">3</span>
+                            <span class="step-text">Katmanlı eşleme</span>
+                        </div>
+                        <div class="progress-step" data-step="4" style="padding: 8px 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                            <span class="step-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #6b7280; color: white; font-size: 12px; font-weight: bold;">4</span>
+                            <span class="step-text">Güven puanı hesapla</span>
+                        </div>
+                        <div class="progress-step" data-step="5" style="padding: 8px 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                            <span class="step-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #6b7280; color: white; font-size: 12px; font-weight: bold;">5</span>
+                            <span class="step-text">JSON çıktısı oluştur</span>
+                        </div>
+                    </div>
+                </div>
+
+    <div id="iptc-mapping-status" class="status-message" style="max-width: 800px; margin: 0 auto 20px;"></div>
+
+    <div class="mapping-results-grid">
+        <div id="v1-vargo-results" class="mapping-results-container" data-version="v1" data-source="vargo" style="display: none;"></div>
+        <div id="v1-gkg-results" class="mapping-results-container" data-version="v1" data-source="gkg" style="display: none;"></div>
+        <div id="v2-vargo-results" class="mapping-results-container" data-version="v2" data-source="vargo" style="display: none;"></div>
+        <div id="v2-gkg-results" class="mapping-results-container" data-version="v2" data-source="gkg" style="display: none;"></div>
+        <div id="v3-vargo-results" class="mapping-results-container" data-version="v3" data-source="vargo" style="display: none;"></div>
+        <div id="v3-gkg-results" class="mapping-results-container" data-version="v3" data-source="gkg" style="display: none;"></div>
+        <div id="v3-combined-results" class="mapping-results-container" data-version="v3" data-source="combined" style="display: none;"></div>
+    </div>
+
+    <template id="mapping-results-template">
+        <div class="mapping-results-card">
+            <div class="mapping-results-header">
+                <div>
+                    <div class="mapping-results-label" data-role="results-label">Mapping sonucu</div>
+                    <div class="mapping-results-meta" data-role="generated-at">Henüz yüklenmedi</div>
+                </div>
+                <div class="mapping-results-badges">
+                    <span class="mapping-badge" data-role="theme-total">0 tema</span>
+                    <span class="mapping-badge" data-role="category-count">0 IPTC kategorisi</span>
+                    <span class="mapping-badge" data-role="decision-summary">Karar verisi yok</span>
+                </div>
+            </div>
+            <div class="mapping-top-categories" data-role="top-categories">
+                <span class="mapping-tag neutral">İlk sonuçlar yüklendiğinde kategori özeti burada görünecek</span>
+            </div>
+            <div class="mapping-table-card">
+                <div class="mapping-table-title">📊 Tüm Temalar ve IPTC Eşleştirmeleri</div>
+                <div class="mapping-table-scroll">
+                    <table class="mapping-table">
+                        <thead>
+                            <tr>
+                                <th>Tema Kodu</th>
+                                <th>IPTC Kategori</th>
+                                <th>Benzerlik</th>
+                                <th>Güven</th>
+                                <th>2. En Yakın</th>
+                            </tr>
+                        </thead>
+                        <tbody data-role="mapping-tbody">
+                            <tr>
+                                <td colspan="5" class="mapping-placeholder">IPTC eşleştirme sonuçları yüklenmedi</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

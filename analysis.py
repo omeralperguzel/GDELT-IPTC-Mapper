@@ -119,7 +119,7 @@ def compute_total_from_monthly(monthly_df: pd.DataFrame) -> pd.DataFrame:
         .rename(columns={'n_docs': 'total_docs'})
     )
     
-    print(f"✅ Computed total_docs from monthly data: {len(total_docs)} rows")
+    print(f" Computed total_docs from monthly data: {len(total_docs)} rows")
     return total_docs
 
 
@@ -143,7 +143,7 @@ def compute_quality_from_monthly(monthly_df: pd.DataFrame, min_docs: int = MIN_D
         .reset_index()
     )
     
-    print(f"✅ Computed quality metrics from monthly data: {len(quality)} rows")
+    print(f" Computed quality metrics from monthly data: {len(quality)} rows")
     return quality
 
 
@@ -160,10 +160,10 @@ def load_data(data_dir: Path = None) -> tuple:
     # Monthly detail (primary data source)
     try:
         monthly = pd.read_csv(data_dir / "gdelt_monthly_docs_per_theme_country_2022_2024.csv")
-        print("✅ Monthly detail loaded as primary data source")
+        print(" Monthly detail loaded as primary data source")
     except FileNotFoundError:
         monthly = None
-        print("❌ Monthly detail file not found - cannot proceed")
+        print(" Monthly detail file not found - cannot proceed")
         return None, None, None, None, None
     
     # Compute total_docs from monthly detail
@@ -175,10 +175,10 @@ def load_data(data_dir: Path = None) -> tuple:
     # Load trend analysis (optional enhancement)
     try:
         trend = pd.read_csv(data_dir / "gdelt_theme_trend_analysis_2022_2024.csv")
-        print("✅ Trend analysis loaded")
+        print(" Trend analysis loaded")
     except FileNotFoundError:
         trend = None
-        print("⚠️ Trend analysis file not found (optional)")
+        print(" Trend analysis file not found (optional)")
     
     # Load IPTC mapping (for category integration)
     try:
@@ -186,10 +186,10 @@ def load_data(data_dir: Path = None) -> tuple:
             iptc_data = json.load(f)
         iptc_mapping = pd.DataFrame(iptc_data['themes'])[['theme_code', 'iptc_final_id', 'iptc_final_label']]
         iptc_mapping = iptc_mapping.rename(columns={'iptc_final_id': 'iptc_id', 'iptc_final_label': 'iptc_category'})
-        print("✅ IPTC mapping loaded")
+        print(" IPTC mapping loaded")
     except (FileNotFoundError, KeyError):
         iptc_mapping = None
-        print("⚠️ IPTC mapping file not found (optional)")
+        print(" IPTC mapping file not found (optional)")
     
     return total_docs, quality, monthly, trend, iptc_mapping
 
@@ -207,7 +207,7 @@ def filter_metadata_themes(df: pd.DataFrame) -> pd.DataFrame:
     filtered = df[mask].copy()
     
     removed_count = len(df) - len(filtered)
-    print(f"📊 Filtered out {removed_count} metadata theme rows")
+    print(f" Filtered out {removed_count} metadata theme rows")
     
     return filtered
 
@@ -224,7 +224,7 @@ def select_top_k_themes_per_country(df: pd.DataFrame, k: int = TOP_K) -> pd.Data
         .head(k)
     )
     
-    print(f"📊 Selected top {k} themes for each country")
+    print(f" Selected top {k} themes for each country")
     for country in COUNTRIES:
         country_themes = top_k[top_k['country'] == country]['theme_code'].tolist()
         print(f"   {country}: {', '.join(country_themes[:5])}...")
@@ -253,7 +253,7 @@ def find_common_themes(top_k_df: pd.DataFrame) -> set:
     
     common_themes = set.intersection(*themes_per_country.values)
     
-    print(f"\n✅ Found {len(common_themes)} common themes across all {len(COUNTRIES)} countries:")
+    print(f"\n Found {len(common_themes)} common themes across all {len(COUNTRIES)} countries:")
     for theme in sorted(common_themes):
         total = top_k_df[top_k_df['theme_code'] == theme]['total_docs'].sum()
         print(f"   • {theme} ({total:,} total docs)")
@@ -317,7 +317,7 @@ def analyze_coverage(quality_df: pd.DataFrame, common_themes: set, trend_df: pd.
     
     usable['decision'] = usable.apply(make_decision_enhanced, axis=1)
     
-    print(f"\n📊 Enhanced Coverage Analysis Summary:")
+    print(f"\n Enhanced Coverage Analysis Summary:")
     for decision in ['monthly', 'quarterly', 'exclude']:
         count = (usable['decision'] == decision).sum()
         print(f"   • {decision.upper()}: {count} country-theme pairs")
@@ -419,15 +419,15 @@ def analyze_category_groups(coverage_df: pd.DataFrame) -> pd.DataFrame:
 def generate_group_matrix(group_analysis: pd.DataFrame) -> pd.DataFrame:
     """
     Create a simplified country × category_group matrix with symbols.
-    ✔ = monthly, ⚠ = quarterly, ✖ = exclude
+     = monthly,  = quarterly,  = exclude
     """
     def to_symbol(decision):
         if decision == 'monthly':
-            return '✔'
+            return ''
         elif decision == 'quarterly':
-            return '⚠'
+            return ''
         else:
-            return '✖'
+            return ''
     
     matrix = group_analysis.pivot(
         index='country',
@@ -512,16 +512,16 @@ def generate_report_sentences() -> list:
 def print_summary(decision_matrix: pd.DataFrame, group_matrix: pd.DataFrame):
     """Print a nicely formatted summary."""
     print("\n" + "="*70)
-    print("📊 GDELT THEME ANALYSIS SUMMARY")
+    print(" GDELT THEME ANALYSIS SUMMARY")
     print("="*70)
     
-    print("\n📋 Individual Theme Decision Matrix:")
+    print("\n Individual Theme Decision Matrix:")
     print(decision_matrix.to_string())
     
-    print("\n\n📋 Category Group Matrix (✔=monthly, ⚠=quarterly, ✖=exclude):")
+    print("\n\n Category Group Matrix (=monthly, =quarterly, =exclude):")
     print(group_matrix.to_string())
     
-    print("\n\n📝 Report Sentences:")
+    print("\n\n Report Sentences:")
     for i, sentence in enumerate(generate_report_sentences(), 1):
         print(f"   {i}. {sentence}")
     
@@ -564,7 +564,7 @@ def export_results(
         for sentence in generate_report_sentences():
             f.write(sentence + "\n\n")
     
-    print(f"\n✅ Results exported to {output_dir}")
+    print(f"\n Results exported to {output_dir}")
 
 
 def export_to_json(
@@ -604,7 +604,7 @@ def export_to_json(
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(json_results, f, indent=2, ensure_ascii=False)
     
-    print(f"✅ JSON results exported to {output_file}")
+    print(f" JSON results exported to {output_file}")
 
 
 # ============================================================================
@@ -618,15 +618,15 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
     Returns:
         dict: Analysis results including matrices and statistics
     """
-    print("🚀 Starting GDELT Theme Analysis...")
+    print(" Starting GDELT Theme Analysis...")
     print("="*70)
     
     # Step 1: Load data
-    print("\n📥 Loading data...")
+    print("\n Loading data...")
     total_docs, quality, monthly, trend, iptc_mapping = load_data(data_dir)
     
     if monthly is None:
-        print("❌ Cannot proceed without monthly detail data")
+        print(" Cannot proceed without monthly detail data")
         return {}
     
     print(f"   • Monthly detail: {len(monthly)} rows")
@@ -639,7 +639,7 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
     # STEP A: TEMA SEÇİMİ VE IPTC ÖZETLERİ
     # ============================================================================
     
-    print("\n🔍 Adım A: Tema seçimi ve IPTC özetleri...")
+    print("\n Adım A: Tema seçimi ve IPTC özetleri...")
     
     # Filter metadata themes
     filtered_docs = filter_metadata_themes(total_docs)
@@ -677,13 +677,13 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
             .reset_index()
         )
         
-        print(f"✅ IPTC entegrasyonu tamamlandı: {len(category_stats)} kategori bulundu")
+        print(f" IPTC entegrasyonu tamamlandı: {len(category_stats)} kategori bulundu")
     
     # ============================================================================
     # STEP B: ÜLKE × IPTC KULLANILABILIRLIK MATRISI
     # ============================================================================
     
-    print("\n📊 Adım B: Ülke × IPTC kullanılabilirlik matrisi...")
+    print("\n Adım B: Ülke × IPTC kullanılabilirlik matrisi...")
     
     # Coverage analysis
     coverage = analyze_coverage(quality, common_themes, trend)
@@ -724,13 +724,13 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
         
         country_cat_coverage["coverage_level"] = country_cat_coverage.apply(decide_level, axis=1)
         
-        print(f"✅ Ülke × IPTC matrisi oluşturuldu: {len(country_cat_coverage)} satır")
+        print(f" Ülke × IPTC matrisi oluşturuldu: {len(country_cat_coverage)} satır")
     
     # ============================================================================
     # STEP C: ANALIZ İÇİN KATEGORI/ÜLKE SEÇİMİ VE TREND
     # ============================================================================
     
-    print("\n📈 Adım C: Analiz için kategori/ülke seçimi ve trend...")
+    print("\n Adım C: Analiz için kategori/ülke seçimi ve trend...")
     
     # Trend + coverage birleşimi
     trend_with_coverage = None
@@ -746,10 +746,10 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
             trend_with_coverage["decision"].isin(["monthly", "quarterly"])
         ]
         
-        print(f"✅ Trend + coverage birleşimi: {len(trend_with_coverage)} satır")
+        print(f" Trend + coverage birleşimi: {len(trend_with_coverage)} satır")
     
     # Eski adımlar (karar matrisi vb.)
-    print("\n📋 Ek analizler...")
+    print("\n Ek analizler...")
     decision_matrix = generate_decision_matrix(coverage)
     numeric_matrix = generate_numeric_matrix(coverage)
     group_analysis = analyze_category_groups(coverage)
@@ -838,4 +838,4 @@ if __name__ == "__main__":
         export=not args.no_export
     )
     
-    print("\n✅ Analysis complete!")
+    print("\n Analysis complete!")

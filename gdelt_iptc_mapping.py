@@ -87,24 +87,62 @@ def load_gdelt_themes(data_dir: Path) -> pd.DataFrame:
     """Load unique GDELT themes from all BigQuery export files."""
     theme_codes = set()
     files_loaded = 0
-    
+
+    # Candidate directories to search (data_dir first, then repository results folder)
+    repo_root = Path(__file__).parent
+    candidates = [data_dir, repo_root / 'results', repo_root]
+
+    tried_paths = []
+
     for csv_name in GDELT_CSV_FILES:
-        csv_file = data_dir / csv_name
-        if csv_file.exists():
-            try:
-                df = pd.read_csv(csv_file)
-                if 'theme_code' in df.columns:
-                    theme_codes.update(df['theme_code'].dropna().unique())
-                    files_loaded += 1
-            except Exception as e:
-                print(f"[!] Could not read {csv_name}: {e}")
-    
+        found = False
+        for base in candidates:
+            if base is None:
+                continue
+            csv_file = base / csv_name
+            tried_paths.append(str(csv_file))
+            if csv_file.exists():
+                found = True
+                try:
+                    df = pd.read_csv(csv_file)
+                    if 'theme_code' in df.columns:
+                        theme_codes.update(df['theme_code'].dropna().unique())
+                        files_loaded += 1
+                except Exception as e:
+                    print(f"[!] Could not read {csv_file}: {e}")
+                break
+        if not found:
+            # continue to next expected CSV
+            continue
+
     if not theme_codes:
-        raise FileNotFoundError(f"No GDELT themes found in CSV files")
-    
+        # build helpful error message listing where we looked and directory listings
+        msg_lines = [
+            "No GDELT themes found in expected CSV files.",
+            "Tried the following paths:",
+        ]
+        msg_lines += [f"  - {p}" for p in tried_paths]
+
+        # show contents of data_dir and results dir if they exist
+        try:
+            if data_dir and data_dir.exists():
+                listing = ', '.join([p.name for p in data_dir.iterdir()])
+                msg_lines.append(f"Contents of data_dir ({data_dir}): {listing}")
+        except Exception:
+            pass
+        try:
+            results_dir = repo_root / 'results'
+            if results_dir.exists():
+                listing = ', '.join([p.name for p in results_dir.iterdir()])
+                msg_lines.append(f"Contents of results/ ({results_dir}): {listing}")
+        except Exception:
+            pass
+
+        raise FileNotFoundError('\n'.join(msg_lines))
+
     # Convert to DataFrame
     themes = pd.DataFrame({'theme_code': sorted(theme_codes)})
-    
+
     print(f"[OK] Loaded {len(themes)} unique GDELT themes from {files_loaded} CSV files")
     return themes
 
@@ -122,11 +160,35 @@ def load_vargo_mapping(data_dir: Path) -> pd.DataFrame:
     return vargo
 
 
+def load_gkg_mapping(data_dir: Path) -> pd.DataFrame:
+    """Load GKG Category List mapping for additional context."""
+    gkg_file = data_dir / "gdelt_gkg_categorylist.csv"
+    
+    if not gkg_file.exists():
+        print(f"[!] GKG mapping not found: {gkg_file}")
+        return pd.DataFrame()
+    
+    gkg = pd.read_csv(gkg_file)
+    print(f"[OK] Loaded GKG mapping with {len(gkg)} category entries")
+    return gkg
+
+
+def load_mapping_source(data_dir: Path, mapping_source: str) -> pd.DataFrame:
+    """Load mapping source based on selection."""
+    if mapping_source == 'vargo':
+        return load_vargo_mapping(data_dir)
+    elif mapping_source == 'gkg':
+        return load_gkg_mapping(data_dir)
+    else:
+        print(f"[!] Unknown mapping source: {mapping_source}, using Vargo as default")
+        return load_vargo_mapping(data_dir)
+
+
 # ============================================================================
 # TEXT REPRESENTATION
 # ============================================================================
 
-def build_theme_text(row, vargo_map: dict) -> str:
+def build_theme_text(row, mapping_data: dict, mapping_source: str) -> str:
     """
     Build rich text representation for GDELT theme.
     Format: "THEME_CODE - issue_category - description"
@@ -134,37 +196,53 @@ def build_theme_text(row, vargo_map: dict) -> str:
     theme = row['theme_code']
     parts = [theme]
     
-    # Add Vargo issue if available
-    if theme in vargo_map:
-        info = vargo_map[theme]
-        if pd.notna(info.get('issue_category')):
-            parts.append(str(info['issue_category']))
-        if pd.notna(info.get('description')):
-            parts.append(str(info['description']))
+    # Add mapping data if available
+    if theme in mapping_data:
+        info = mapping_data[theme]
+        if mapping_source == 'vargo':
+            if pd.notna(info.get('issue_category')):
+                parts.append(str(info['issue_category']))
+            if pd.notna(info.get('description')):
+                parts.append(str(info['description']))
+        elif mapping_source == 'gkg':
+            if pd.notna(info.get('Description')):
+                parts.append(str(info['Description']))
     
     return " - ".join(parts)
 
 
-def prepare_theme_texts(themes: pd.DataFrame, vargo: pd.DataFrame) -> pd.DataFrame:
+def prepare_theme_texts(themes: pd.DataFrame, mapping_df: pd.DataFrame, mapping_source: str) -> pd.DataFrame:
     """Prepare text representations for all themes."""
     
-    # Build Vargo lookup
-    vargo_map = {}
-    if not vargo.empty:
-        for _, row in vargo.iterrows():
-            vargo_map[row['theme_code']] = {
-                'issue_category': row.get('issue_category'),
-                'description': row.get('description')
-            }
+    # Build mapping lookup
+    mapping_map = {}
+    if not mapping_df.empty:
+        if mapping_source == 'vargo':
+            for _, row in mapping_df.iterrows():
+                mapping_map[row['theme_code']] = {
+                    'issue_category': row.get('issue_category'),
+                    'description': row.get('description')
+                }
+        elif mapping_source == 'gkg':
+            for _, row in mapping_df.iterrows():
+                mapping_map[row['Name']] = {
+                    'Description': row.get('Description')
+                }
     
     # Build text for each theme
-    themes['text_repr'] = themes.apply(lambda r: build_theme_text(r, vargo_map), axis=1)
-    themes['issue_category'] = themes['theme_code'].map(
-        lambda t: vargo_map.get(t, {}).get('issue_category')
-    )
+    themes['text_repr'] = themes.apply(lambda r: build_theme_text(r, mapping_map, mapping_source), axis=1)
     
-    print(f"[*] Built text representations for {len(themes)} themes")
-    print(f"    Sample: {themes['text_repr'].iloc[0][:80]}...")
+    # Add issue_category column for Vargo source
+    if mapping_source == 'vargo':
+        themes['issue_category'] = themes['theme_code'].map(
+            lambda t: mapping_map.get(t, {}).get('issue_category')
+        )
+    else:
+        themes['issue_category'] = None
+    
+    print(f"[*] Built text representations for {len(themes)} themes using {mapping_source.upper()} source")
+    if len(themes) > 0:
+        print(f"    Sample: {themes['text_repr'].iloc[0][:80]}...")
     
     return themes
 
@@ -415,7 +493,7 @@ def analyze_mapping(themes: pd.DataFrame, iptc: pd.DataFrame) -> dict:
     return summary
 
 
-def export_results(themes: pd.DataFrame, iptc: pd.DataFrame, output_dir: Path):
+def export_results(themes: pd.DataFrame, iptc: pd.DataFrame, output_dir: Path, mapping_source: str):
     """Export mapping results to JSON and CSV."""
     
     # Analyze mapping
@@ -476,7 +554,8 @@ def export_results(themes: pd.DataFrame, iptc: pd.DataFrame, output_dir: Path):
             'method': 'IPTC Media Topics cosine similarity mapping',
             'reference': 'IPTC NewsCodes 2025-10-10',
             'total_themes': summary['total_themes'],
-            'iptc_categories': summary['iptc_categories_used']
+            'iptc_categories': summary['iptc_categories_used'],
+            'mapping_source': mapping_source
         },
         'summary': summary,
         'iptc_categories': iptc_details,
@@ -484,13 +563,15 @@ def export_results(themes: pd.DataFrame, iptc: pd.DataFrame, output_dir: Path):
     }
     
     # Export JSON
-    json_file = output_dir / OUTPUT_JSON
+    json_filename = f"gdelt_iptc_mapping_v1_{mapping_source}.json"
+    json_file = output_dir / json_filename
     with open(json_file, 'w', encoding='utf-8') as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
     print(f"[OK] Exported: {json_file}")
     
     # Export CSV
-    csv_file = output_dir / OUTPUT_CSV
+    csv_filename = f"gdelt_themes_iptc_v1_{mapping_source}.csv"
+    csv_file = output_dir / csv_filename
     themes.to_csv(csv_file, index=False)
     print(f"[OK] Exported: {csv_file}")
     
@@ -501,14 +582,16 @@ def export_results(themes: pd.DataFrame, iptc: pd.DataFrame, output_dir: Path):
 # MAIN PIPELINE
 # ============================================================================
 
-def run_iptc_mapping_pipeline(data_dir: Path = None) -> dict:
+def run_iptc_mapping_pipeline(data_dir: Path = None, output_dir: Path = None, mapping_source: str = 'vargo') -> dict:
     """Run the complete IPTC mapping pipeline."""
     
     if data_dir is None:
-        data_dir = Path(__file__).parent
+        data_dir = Path(__file__).parent / "data"
+    if output_dir is None:
+        output_dir = Path(__file__).parent / "results"
     
     print("\n" + "=" * 70)
-    print("GDELT Theme -> IPTC Media Topics Mapping Pipeline (V1)")
+    print(f"GDELT Theme -> IPTC Media Topics Mapping Pipeline (V1) - {mapping_source.upper()} Source")
     print("=" * 70 + "\n")
     
     # Step 1: Load IPTC topics
@@ -519,13 +602,13 @@ def run_iptc_mapping_pipeline(data_dir: Path = None) -> dict:
     print("\n[2/8] Loading GDELT themes...")
     themes = load_gdelt_themes(data_dir)
     
-    # Step 3: Load Vargo mapping for additional context
-    print("\n[3/8] Loading Vargo issue mapping...")
-    vargo = load_vargo_mapping(data_dir)
+    # Step 3: Load mapping source for additional context
+    print(f"\n[3/8] Loading {mapping_source.upper()} mapping...")
+    mapping_df = load_mapping_source(data_dir, mapping_source)
     
     # Step 4: Prepare text representations
     print("\n[4/8] Building text representations...")
-    themes = prepare_theme_texts(themes, vargo)
+    themes = prepare_theme_texts(themes, mapping_df, mapping_source)
     
     # Step 5: Load model and generate embeddings
     print("\n[5/8] Generating embeddings...")
@@ -556,7 +639,7 @@ def run_iptc_mapping_pipeline(data_dir: Path = None) -> dict:
     
     # Step 8: Export results
     print("\n[8/8] Exporting results...")
-    result = export_results(themes, iptc, data_dir)
+    result = export_results(themes, iptc, output_dir, mapping_source)
     
     # Print summary
     print("\n" + "=" * 70)
@@ -585,6 +668,8 @@ def run_iptc_mapping_pipeline(data_dir: Path = None) -> dict:
 # ============================================================================
 
 if __name__ == "__main__":
+    import argparse
+    
     parser = argparse.ArgumentParser(
         description="Map GDELT themes to IPTC Media Topics"
     )
@@ -594,9 +679,23 @@ if __name__ == "__main__":
         default=None,
         help="Directory containing data files"
     )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default=None,
+        help="Directory to save output files"
+    )
+    parser.add_argument(
+        "--mapping-source",
+        type=str,
+        choices=['vargo', 'gkg'],
+        default='vargo',
+        help="Mapping source to use: 'vargo' (Vargo issue taxonomy) or 'gkg' (GKG Category List)"
+    )
     
     args = parser.parse_args()
     
-    data_dir = Path(args.data_dir) if args.data_dir else Path(__file__).parent
+    data_dir = Path(args.data_dir) if args.data_dir else Path(__file__).parent / "data"
+    output_dir = Path(args.output_dir) if args.output_dir else Path(__file__).parent / "results"
     
-    results = run_iptc_mapping_pipeline(data_dir)
+    results = run_iptc_mapping_pipeline(data_dir, output_dir, mapping_source=args.mapping_source)

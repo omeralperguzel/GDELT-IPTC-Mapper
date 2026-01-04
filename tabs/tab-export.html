@@ -1,0 +1,419 @@
+<div class="charts-section">
+                <h3 style="color: #0f3460; margin-bottom: 20px; text-align: center;">📤 GDELT & IPTC Veri Dışarı Aktarma</h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+
+<!-- GRAFİKLER BÖLÜMÜ -->
+
+<div class="chart-container" style="border-left: 4px solid #4CAF50; margin-bottom: 30px;">
+    <h4 style="color: #4CAF50; margin-bottom: 15px;"> Analiz Grafikleri</h4>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+        
+        <!-- Grafik 1: IPTC Treemap -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #4CAF50; margin: 0 0 10px 0;">1. IPTC Treemap</h5>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="run-btn" style="background: #4CAF50; padding: 6px 12px; font-size: 0.85em;" onclick="generateIPTCTreemap()">
+                     Oluştur
+                </button>
+                <button class="run-btn" style="background: #FF9800; padding: 6px 12px; font-size: 0.85em;" onclick="exportIPTCTreemapPNG()">
+                     PNG
+                </button>
+                <button class="run-btn" style="background: #673AB7; padding: 6px 12px; font-size: 0.85em;" onclick="exportIPTCTreemapSVG()">
+                     SVG
+                </button>
+                <button class="run-btn" style="background: #9C27B0; padding: 6px 12px; font-size: 0.85em;" onclick="exportIPTCTreemapLaTeX()">
+                     LaTeX
+                </button>
+            </div>
+            <canvas id="iptc-treemap-canvas" style="width: 100%; max-width: 720px; height: 400px; margin: 10px auto 0; display: block; border: 1px solid #ddd; border-radius: 4px;"></canvas>
+        </div>
+        
+        <!-- Grafik 2: Ülke-Kategori Doküman Dağılımı -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #4CAF50; margin: 0 0 10px 0;">2. Ülke-Kategori Dağılımı</h5>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="run-btn" style="background: #4CAF50; padding: 6px 12px; font-size: 0.85em;" onclick="generateCountryCategoryChart()">
+                     Oluştur
+                </button>
+                <button class="run-btn" style="background: #FF9800; padding: 6px 12px; font-size: 0.85em;" onclick="exportCountryCategoryPNG()">
+                     PNG
+                </button>
+                <button class="run-btn" style="background: #673AB7; padding: 6px 12px; font-size: 0.85em;" onclick="exportCountryCategorySVG()">
+                     SVG
+                </button>
+                <button class="run-btn" style="background: #9C27B0; padding: 6px 12px; font-size: 0.85em;" onclick="exportCountryCategoryLaTeX()">
+                     LaTeX
+                </button>
+            </div>
+            <canvas id="country-category-canvas" style="width: 100%; max-width: 720px; height: 400px; margin: 10px auto 0; display: block; border: 1px solid #ddd; border-radius: 4px;"></canvas>
+        </div>
+        
+        <!-- Grafik 3: IPTC Kategori Hacmi -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #4CAF50; margin: 0 0 10px 0;">3. IPTC Kategori Hacmi</h5>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="run-btn" style="background: #4CAF50; padding: 6px 12px; font-size: 0.85em;" onclick="generateIPTCCategoryVolumeChart()">
+                     Oluştur
+                </button>
+                <button class="run-btn" style="background: #FF9800; padding: 6px 12px; font-size: 0.85em;" onclick="exportIPTCCategoryVolumePNG()">
+                     PNG
+                </button>
+                <button class="run-btn" style="background: #673AB7; padding: 6px 12px; font-size: 0.85em;" onclick="exportIPTCCategoryVolumeSVG()">
+                     SVG
+                </button>
+                <button class="run-btn" style="background: #9C27B0; padding: 6px 12px; font-size: 0.85em;" onclick="exportIPTCCategoryVolumeLaTeX()">
+                     LaTeX
+                </button>
+            </div>
+            <canvas id="iptc-category-volume-canvas" style="width: 100%; max-width: 720px; height: 400px; margin: 10px auto 0; display: block; border: 1px solid #ddd; border-radius: 4px;"></canvas>
+        </div>
+        
+        <!-- Grafik 4: V1-V2 Fark Grafiği -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #4CAF50; margin: 0 0 10px 0;">4. V1-V2 Tema Farkı</h5>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="run-btn" style="background: #4CAF50; padding: 6px 12px; font-size: 0.85em;" onclick="generateV1V2DifferenceChart()">
+                     Oluştur
+                </button>
+                <button class="run-btn" style="background: #FF9800; padding: 6px 12px; font-size: 0.85em;" onclick="exportV1V2DifferencePNG()">
+                     PNG
+                </button>
+                <button class="run-btn" style="background: #673AB7; padding: 6px 12px; font-size: 0.85em;" onclick="exportV1V2DifferenceSVG()">
+                     SVG
+                </button>
+                <button class="run-btn" style="background: #9C27B0; padding: 6px 12px; font-size: 0.85em;" onclick="exportV1V2DifferenceLaTeX()">
+                     LaTeX
+                </button>
+            </div>
+            <canvas id="v1v2-difference-canvas" style="width: 100%; max-width: 720px; height: 400px; margin: 10px auto 0; display: block; border: 1px solid #ddd; border-radius: 4px;"></canvas>
+        </div>
+        
+        <!-- Grafik 5: Zaman Serileri -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #4CAF50; margin: 0 0 10px 0;">5. Zaman Serileri</h5>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="run-btn" style="background: #4CAF50; padding: 6px 12px; font-size: 0.85em;" onclick="generateTimeSeriesChart()">
+                     Oluştur
+                </button>
+                <button class="run-btn" style="background: #FF9800; padding: 6px 12px; font-size: 0.85em;" onclick="exportTimeSeriesPNG()">
+                     PNG
+                </button>
+                <button class="run-btn" style="background: #673AB7; padding: 6px 12px; font-size: 0.85em;" onclick="exportTimeSeriesSVG()">
+                     SVG
+                </button>
+                <button class="run-btn" style="background: #9C27B0; padding: 6px 12px; font-size: 0.85em;" onclick="exportTimeSeriesLaTeX()">
+                     LaTeX
+                </button>
+            </div>
+            <canvas id="time-series-canvas" style="width: 100%; max-width: 720px; height: 400px; margin: 10px auto 0; display: block; border: 1px solid #ddd; border-radius: 4px;"></canvas>
+        </div>
+        
+    </div>
+</div>
+
+<!-- HARİTALAMA ÇIKTILARI BÖLÜMÜ -->
+<div class="chart-container" style="border-left: 4px solid #FF9800; margin-bottom: 30px;">
+    <h4 style="color: #FF9800; margin-bottom: 15px;"> Haritalama Çıktıları</h4>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+        
+        <!-- Tema Eşleştirmeleri -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #FF9800; margin: 0 0 10px 0;">1. Tema Eşleştirmeleri</h5>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="run-btn" style="background: #FF9800; padding: 6px 12px; font-size: 0.85em;" onclick="exportThemeMappingsJSON()">
+                     JSON
+                </button>
+                <button class="run-btn" style="background: #2196F3; padding: 6px 12px; font-size: 0.85em;" onclick="exportThemeMappingsCSV()">
+                     CSV
+                </button>
+            </div>
+        </div>
+        
+        <!-- Embedding Koordinatları -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #FF9800; margin: 0 0 10px 0;">2. Embedding Koordinatları</h5>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="run-btn" style="background: #FF9800; padding: 6px 12px; font-size: 0.85em;" onclick="exportEmbeddingCoordinatesJSON()">
+                     JSON
+                </button>
+                <button class="run-btn" style="background: #2196F3; padding: 6px 12px; font-size: 0.85em;" onclick="exportEmbeddingCoordinatesCSV()">
+                     CSV
+                </button>
+            </div>
+        </div>
+        
+        <!-- Kapsama Matrisi -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #FF9800; margin: 0 0 10px 0;">3. Kapsama Matrisi</h5>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="run-btn" style="background: #FF9800; padding: 6px 12px; font-size: 0.85em;" onclick="exportCoverageMatrixJSON()">
+                     JSON
+                </button>
+                <button class="run-btn" style="background: #2196F3; padding: 6px 12px; font-size: 0.85em;" onclick="exportCoverageMatrixCSV()">
+                     CSV
+                </button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px;">
+    
+    <!-- GDELT TEMA EXPORT -->
+    <div class="chart-container" style="border-left: 4px solid #4CAF50;">
+        <h4 style="color: #4CAF50; margin-bottom: 15px;"> GDELT Tema Verileri</h4>
+        
+        <!-- Sütun Seçimi -->
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: 600; color: #333; display: block; margin-bottom: 8px;">Sütunlar:</label>
+            <div id="export-columns-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; background: #f8f9fa; padding: 12px; border-radius: 5px; max-height: 200px; overflow-y: auto;">
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" class="export-col-checkbox" value="country" checked> Ülke
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" class="export-col-checkbox" value="theme_code" checked> Tema Kodu
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" class="export-col-checkbox" value="total_docs" checked> Toplam Doküman
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" class="export-col-checkbox" value="iptc_category" checked> IPTC Kategorisi
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" class="export-col-checkbox" value="months_ok"> Uygun Ay Sayısı
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" class="export-col-checkbox" value="months_total"> Toplam Ay
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" class="export-col-checkbox" value="quality_ratio"> Kalite Oranı
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" class="export-col-checkbox" value="median_docs"> Median Doküman
+                </label>
+            </div>
+            <div style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+                <button id="select-all-export-cols-btn" style="padding: 5px 10px; font-size: 0.85em; cursor: pointer;">Tümünü Seç</button>
+                <button id="deselect-all-export-cols-btn" style="padding: 5px 10px; font-size: 0.85em; cursor: pointer;">Tümünü Kaldır</button>
+                <span id="selected-columns-count" style="font-size: 0.85em; color: #666;">0/8 sütun seçili</span>
+            </div>
+        </div>
+        
+        <!-- IPTC Filtre Seçimi -->
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: 600; color: #333; display: block; margin-bottom: 8px;">IPTC Kategori Filtresi:</label>
+            <select id="export-iptc-filter" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                <option value="all">Tüm Kategoriler</option>
+                <option value="economy, business and finance"> Economy</option>
+                <option value="conflict, war and peace"> Conflict</option>
+                <option value="politics and government"> Politics</option>
+                <option value="health"> Health</option>
+                <option value="education"> Education</option>
+                <option value="lifestyle and leisure"> Lifestyle</option>
+                <option value="disaster, accident and emergency incident"> Disaster</option>
+                <option value="environment"> Environment</option>
+                <option value="arts, culture, entertainment and media"> Arts/Media</option>
+                <option value="society"> Society</option>
+            </select>
+        </div>
+        
+        <!-- Export Butonları -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button id="export-xlsx-btn" class="run-btn" style="background: #4CAF50;">
+                 XLSX İndir
+            </button>
+            <button id="export-csv-btn" class="run-btn" style="background: #2196F3;">
+                 CSV İndir
+            </button>
+            <button id="export-latex-btn" class="run-btn" style="background: #9C27B0;">
+                 LaTeX Kodu
+            </button>
+        </div>
+        
+        <!-- LaTeX Önizleme -->
+        <div id="latex-table-preview" style="display: none; margin-top: 15px;">
+            <label style="font-weight: 600; color: #9C27B0; display: block; margin-bottom: 8px;">LaTeX Tablo Kodu:</label>
+            <textarea id="latex-table-code" readonly style="width: 100%; height: 200px; font-family: monospace; font-size: 0.85em; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #f5f5f5;"></textarea>
+            <button id="copy-latex-table-btn" style="margin-top: 8px; padding: 8px 15px; cursor: pointer;"> Kopyala</button>
+        </div>
+    </div>
+    
+    <!-- IPTC MAPPING EXPORT -->
+    <div class="chart-container" style="border-left: 4px solid #FF9800;">
+        <h4 style="color: #FF9800; margin-bottom: 15px;"> IPTC Eşleştirme Sonuçları</h4>
+        
+        <!-- IPTC Mapping Export Seçenekleri -->
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: 600; color: #333; display: block; margin-bottom: 8px;">Export İçeriği:</label>
+            <div style="display: flex; flex-direction: column; gap: 8px; background: #f8f9fa; padding: 12px; border-radius: 5px;">
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" id="export-iptc-themes" checked> Tema-IPTC Eşleştirmeleri
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" id="export-iptc-summary" checked> IPTC Kategori Özeti
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer;">
+                    <input type="checkbox" id="export-iptc-similarity"> Benzerlik Matrisi
+                </label>
+            </div>
+        </div>
+        
+        <!-- Export Butonları -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button id="export-iptc-json-btn" class="run-btn" style="background: #FF9800;">
+                 JSON İndir
+            </button>
+            <button id="export-iptc-csv-btn" class="run-btn" style="background: #E91E63;">
+                 CSV İndir
+            </button>
+        </div>
+        
+        <!-- Grafik Export -->
+        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
+            <h5 style="color: #FF9800; margin-bottom: 10px;"> Grafik Export</h5>
+            <div style="margin-bottom: 10px;">
+                <label style="font-weight: 600; color: #333; display: block; margin-bottom: 8px;">Grafik Seçin:</label>
+                <select id="export-chart-select" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em;">
+                    <option value="iptc-distribution-chart"> IPTC Kategori Dağılımı</option>
+                    <option value="country-theme-chart"> Ülke Bazlı Tema Hacmi</option>
+                    <option value="top-themes-chart"> En Yüksek Hacimli Temalar</option>
+                    <option value="iptc-similarity-chart"> IPTC Benzerlik Skorları</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button id="export-chart-png-btn" class="run-btn" style="background: #9C27B0;">
+                     PNG İndir
+                </button>
+                <button id="export-chart-svg-btn" class="run-btn" style="background: #673AB7;">
+                     SVG İndir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- IPTC TREEMAP BÖLÜMÜ -->
+<div class="chart-container" style="border-left: 4px solid #9C27B0; margin-bottom: 30px;">
+    <h4 style="color: #9C27B0; margin-bottom: 15px;"> IPTC Media Topics Treemap'leri</h4>
+    <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">
+        16 IPTC kategorisinin her biri için Python squarify algoritması ile oluşturulan LaTeX-native vektörel treemap'ler.
+    </p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+        
+        <!-- IPTC Kategori Seçimi -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #9C27B0; margin: 0 0 10px 0;">IPTC Kategori Seçimi</h5>
+            <select id="iptc-treemap-select" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 10px;">
+                <option value="">Kategori Seçin...</option>
+                <option value="01000000">01000000 - arts, culture, entertainment and media</option>
+                <option value="02000000">02000000 - crime, law and justice</option>
+                <option value="03000000">03000000 - disaster, accident and emergency incident</option>
+                <option value="04000000">04000000 - economy, business and finance</option>
+                <option value="05000000">05000000 - education</option>
+                <option value="06000000">06000000 - environment</option>
+                <option value="07000000">07000000 - health</option>
+                <option value="08000000">08000000 - human interest</option>
+                <option value="09000000">09000000 - labour</option>
+                <option value="10000000">10000000 - lifestyle and leisure</option>
+                <option value="11000000">11000000 - politics and government</option>
+                <option value="12000000">12000000 - religion</option>
+                <option value="13000000">13000000 - science and technology</option>
+                <option value="14000000">14000000 - society</option>
+                <option value="15000000">15000000 - sport</option>
+                <option value="16000000">16000000 - conflict, war and peace</option>
+            </select>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="run-btn" style="background: #9C27B0; padding: 6px 12px; font-size: 0.85em;" onclick="generateIPTCLaTeXTreemap()">
+                     LaTeX Oluştur
+                </button>
+                <button class="run-btn" style="background: #4CAF50; padding: 6px 12px; font-size: 0.85em;" onclick="generateAllIPTCTreemaps()">
+                     Tümünü Oluştur
+                </button>
+            </div>
+        </div>
+        
+        <!-- LaTeX Kodu Önizleme -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #9C27B0; margin: 0 0 10px 0;">LaTeX Kodu Önizleme</h5>
+            <div id="iptc-latex-preview" style="background: white; border: 1px solid #ddd; border-radius: 4px; padding: 10px; height: 150px; overflow-y: auto; font-family: monospace; font-size: 0.8em; color: #333;">
+                IPTC kategori seçip "LaTeX Oluştur" butonuna tıklayın...
+            </div>
+            <button id="copy-iptc-latex-btn" style="margin-top: 8px; padding: 6px 12px; font-size: 0.8em; cursor: pointer; background: #2196F3; color: white; border: none; border-radius: 4px;"> Kopyala</button>
+        </div>
+        
+        <!-- Kullanım Örneği -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h5 style="color: #9C27B0; margin: 0 0 10px 0;">LaTeX Kullanımı</h5>
+            <div style="font-family: monospace; font-size: 0.8em; color: #333; background: white; padding: 10px; border-radius: 4px;">
+\begin{figure}[t]<br>
+\centering<br>
+\input{fig_treemap_iptc.tex}<br>
+\caption{IPTC kategori dağılımı}<br>
+\label{fig:iptc-treemap}<br>
+\end{figure}
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- İlerleme Göstergesi -->
+    <div id="iptc-treemap-progress" style="display: none; margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 8px;">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+            <div class="loading-spinner" style="width: 20px; height: 20px;"></div>
+            <span id="iptc-treemap-status" style="font-weight: 600; color: #2e7d32;">Treemap'ler oluşturuluyor...</span>
+        </div>
+        <div style="background: #c8e6c9; border-radius: 5px; height: 8px; overflow: hidden;">
+            <div id="iptc-treemap-progress-bar" style="background: linear-gradient(90deg, #4CAF50, #2e7d32); height: 100%; width: 0%; transition: width 0.5s ease;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOPLU EXPORT BÖLÜMÜ -->
+<div class="chart-container" style="margin-top: 20px; border-left: 4px solid #0f3460;">
+    <h4 style="color: #0f3460; margin-bottom: 15px;"> Eski Toplu Dışarı Aktarma</h4>
+    <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">Eski formatta tüm GDELT tema verilerini ve IPTC eşleştirmelerini tek seferde dışarı aktarın.</p>
+    
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button id="export-all-xlsx-btn" class="run-btn" style="background: #0f3460;">
+             Tüm Verileri İndir (XLSX)
+        </button>
+        <button id="export-all-charts-png-btn" class="run-btn" style="background: #00BCD4;">
+             Tüm Grafikleri İndir (PNG)
+        </button>
+        <button id="export-full-report-btn" class="run-btn" style="background: #795548;">
+             Tam Rapor (ZIP)
+        </button>
+    </div>
+    
+    <div style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 5px;">
+        <p style="font-size: 0.85em; color: #666; margin: 0;">
+            <strong> İpucu:</strong> Toplu export, GDELT tema analizi ve IPTC eşleştirme sonuçlarını içerir. 
+            Önce GDELT Tema sekmesinden CSV yükleyin ve Kümeleme sekmesinden IPTC eşleştirmesini çalıştırın.
+        </p>
+    </div>
+</div>
+<!-- Partial: Export Tab -->
+<div class="charts-section">
+    <h3 style="color: #0f3460; margin-bottom: 20px; text-align: center;"> GDELT & IPTC Kapsamlı Dışarı Aktarma</h3>
+    <div class="chart-container">
+        <h4> Tek Adımda Tüm Export</h4>
+        <div style="display:flex; gap:10px;">
+            <button class="run-btn" onclick="exportCompleteAnalysis()">Tüm Analizi Export Et</button>
+            <button class="run-btn" onclick="exportCompleteAnalysisXLSX()">XLSX (Tablolar)</button>
+        </div>
+    </div>
+    <div class="chart-container" style="margin-top:15px;">
+        <h4> Analiz Tabloları</h4>
+        <div style="display:flex; gap:8px;">
+            <button class="run-btn" onclick="exportIPTCOverviewTable()">IPTC Özeti XLSX</button>
+        </div>
+    </div>
+</div>
+
+</h3>
+</div>

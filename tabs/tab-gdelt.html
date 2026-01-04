@@ -1,0 +1,379 @@
+<div class="charts-section">
+    <h3 style="color: #0f3460; margin-bottom: 20px; text-align: center;"> GDELT Tema → IPTC Media Topics Analizi</h3>
+    <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center;">
+        <button class="run-btn" id="load-gdelt-data-btn" onclick="loadGDELTData()"> CSV Verilerini Yükle</button>
+        <button class="run-btn" style="background: #4CAF50;" id="analyze-themes-btn" onclick="analyzeThemes()" disabled> Tema Analizi Yap</button>
+        <button class="run-btn" style="background: #FF9800;" id="generate-matrix-btn" onclick="generateCountryThemeMatrix()" disabled> Matris Oluştur</button>
+    </div>
+    <div id="gdelt-status" class="status-message" style="max-width: 600px; margin: 0 auto 20px;"></div>
+    
+    <!-- Ana İçerik Grid -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+        
+        <!-- SOL PANEL: Tablo-1 (total_docs) -->
+        <div class="chart-container" style="border-left: 4px solid #2196F3;">
+            <h4 style="color: #2196F3; margin-bottom: 10px;"> Tablo-1: Ülke Başına Top 15 Tema (BigQuery: QUALIFY ROW_NUMBER() <= 15)</h4>
+            <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+                Her ülke-tema için 2022-2024 toplam doküman sayısı
+            </p>
+            
+            <!-- Ülke Seçimi -->
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; font-size: 0.9em;">Ülke Seç:</label>
+                <select id="gdelt-country-select" onchange="updateTotalDocsTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 10px;">
+                    <option value="ALL"> Tüm Ülkeler</option>
+                    <option value="CE">CE - Sri Lanka</option>
+                    <option value="HO">HO - Honduras</option>
+                    <option value="HR">HR - Croatia</option>
+                    <option value="KG">KG - Kyrgyzstan</option>
+                    <option value="LO">LO - Slovakia</option>
+                    <option value="SA">SA - Saudi Arabia</option>
+                </select>
+            </div>
+            
+            <!-- Tablo -->
+            <div style="max-height: 450px; overflow-y: auto;">
+                <table id="total-docs-table" style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                    <thead style="position: sticky; top: 0; background: #e3f2fd;">
+                        <tr>
+                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #2196F3;">Ülke</th>
+                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #2196F3;">Tema Kodu</th>
+                            <th style="padding: 10px; text-align: right; border-bottom: 2px solid #2196F3;">Toplam Doküman</th>
+                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #2196F3;">IPTC Kategorisi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="total-docs-tbody">
+                        <tr><td colspan="4" style="text-align: center; padding: 30px; color: #999;">CSV yüklenmedi. Yukarıdaki butona tıklayın.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Açıklama -->
+            <div style="margin-top: 15px; padding: 12px; background: #e3f2fd; border-radius: 5px; font-size: 0.85em;">
+                <strong> IPTC Media Topics (17 Kategori):</strong><br>
+                 <span style="color: #FF9800;">Economy</span>: ECON, EPU, EPU_ECONOMY |
+                 <span style="color: #F44336;">Conflict</span>: CRISISLEX, ARMEDCONFLICT |
+                 <span style="color: #2196F3;">Politics</span>: LEADER, GOV, ELECTION<br>
+                 <span style="color: #4CAF50;">Health</span>: HEALTH, MEDICAL |
+                 <span style="color: #9C27B0;">Education</span>: EDUCATION |
+                 <span style="color: #00BCD4;">Lifestyle</span>: TOURISM
+            </div>
+        </div>
+        
+        <!-- SAĞ PANEL: Tablo-2 (months_ok, median_docs) -->
+        <div class="chart-container" style="border-left: 4px solid #4CAF50;">
+            <h4 style="color: #4CAF50; margin-bottom: 10px;"> Tablo-2: Aylık Kalite Metrikleri (country, theme_code, months_total, months_ok, min_docs, median_docs)</h4>
+            <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+                Her ülke-tema için aylık haber yeterliliği ve hacim eşiği
+            </p>
+            
+            <!-- Filtre -->
+            <div style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <label style="font-weight: 600; font-size: 0.9em;">Kalite Filtresi:</label>
+                <select id="gdelt-quality-filter" onchange="updateMonthlyQualityTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd;">
+                    <option value="all">Tümü</option>
+                    <option value="good"> İyi (≥70%)</option>
+                    <option value="marginal"> Sınırda (40-70%)</option>
+                    <option value="poor"> Yetersiz (&lt;40%)</option>
+                </select>
+            </div>
+            
+            <!-- Tablo -->
+            <div style="max-height: 450px; overflow-y: auto;">
+                <table id="monthly-quality-table" style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                    <thead style="position: sticky; top: 0; background: #e8f5e9;">
+                        <tr>
+                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #4CAF50;">Ülke</th>
+                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #4CAF50;">Tema</th>
+                            <th style="padding: 10px; text-align: right; border-bottom: 2px solid #4CAF50;">months_total</th>
+                            <th style="padding: 10px; text-align: right; border-bottom: 2px solid #4CAF50;">months_ok</th>
+                            <th style="padding: 10px; text-align: right; border-bottom: 2px solid #4CAF50;">min_docs</th>
+                            <th style="padding: 10px; text-align: right; border-bottom: 2px solid #4CAF50;">median_docs</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monthly-quality-tbody">
+                        <tr><td colspan="6" style="text-align: center; padding: 30px; color: #999;">CSV yüklenmedi. Yukarıdaki butona tıklayın.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Karar Kuralları -->
+            <div style="margin-top: 15px; padding: 12px; background: #e8f5e9; border-radius: 5px; font-size: 0.85em;">
+                <strong> Karar Kuralları (Aylık Sentiment için):</strong><br>
+                 <span style="color: #4CAF50;">months_ok/total ≥ 0.7</span> → Kullan (aylık)<br>
+                 <span style="color: #FF9800;">0.4 – 0.7</span> → Quarterly aggregation<br>
+                 <span style="color: #f44336;">&lt; 0.4</span> → O kategoriyi çıkar
+            </div>
+        </div>
+    </div>
+    
+    <!-- TABLO-3: Aylık Detay (Tam Genişlik) -->
+    <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #FF5722;">
+        <h4 style="color: #FF5722; margin-bottom: 10px;"> Tablo-3: Aylık Tema Başına Belge Sayıları (BigQuery: ym, country, theme_code, n_docs)</h4>
+        <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+            Her ay, her ülke, her tema için doküman sayısı - zaman serisi analizi için
+        </p>
+        
+        <!-- Filtreler -->
+        <div style="margin-bottom: 15px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+            <div>
+                <label style="font-weight: 600; font-size: 0.9em;">Ülke:</label>
+                <select id="monthly-detail-country" onchange="updateMonthlyDetailTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px;">
+                    <option value="ALL"> Tümü</option>
+                    <option value="CE">CE - Sri Lanka</option>
+                    <option value="HO">HO - Honduras</option>
+                    <option value="HR">HR - Croatia</option>
+                    <option value="KG">KG - Kyrgyzstan</option>
+                    <option value="LO">LO - Slovakia</option>
+                    <option value="SA">SA - Saudi Arabia</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-weight: 600; font-size: 0.9em;">Tema:</label>
+                <select id="monthly-detail-theme" onchange="updateMonthlyDetailTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px;">
+                    <option value="ALL">Tümü</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-weight: 600; font-size: 0.9em;">Yıl:</label>
+                <select id="monthly-detail-year" onchange="updateMonthlyDetailTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px;">
+                    <option value="ALL">Tümü</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-weight: 600; font-size: 0.9em;">Min Doküman:</label>
+                <input type="number" id="monthly-detail-min-docs" value="100" min="0" onchange="updateMonthlyDetailTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px; width: 80px;">
+            </div>
+            <span id="monthly-detail-count" style="color: #666; font-size: 0.9em;"></span>
+        </div>
+        
+        <!-- Tablo -->
+        <div style="max-height: 400px; overflow-y: auto;">
+            <table id="monthly-detail-table" style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                <thead style="position: sticky; top: 0; background: #fbe9e7;">
+                    <tr>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722; cursor: pointer;" onclick="sortMonthlyDetailTable('ym')"> Ay-Yıl ⇅</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722; cursor: pointer;" onclick="sortMonthlyDetailTable('country')"> Ülke ⇅</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722; cursor: pointer;" onclick="sortMonthlyDetailTable('theme_code')"> Tema ⇅</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722;"> IPTC Kategorisi</th>
+                        <th style="padding: 10px; text-align: right; border-bottom: 2px solid #FF5722; cursor: pointer;" onclick="sortMonthlyDetailTable('n_docs')"> Doküman ⇅</th>
+                    </tr>
+                </thead>
+                <tbody id="monthly-detail-tbody">
+                    <tr><td colspan="5" style="text-align: center; padding: 30px; color: #999;">CSV yüklenmedi. "CSV Verilerini Yükle" butonuna tıklayın.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Özet İstatistikler -->
+        <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+            <div style="background: #fff3e0; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: bold; color: #FF5722;" id="detail-total-rows">0</div>
+                <div style="font-size: 0.85em; color: #666;">Toplam Satır</div>
+            </div>
+            <div style="background: #e3f2fd; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: bold; color: #2196F3;" id="detail-total-docs">0</div>
+                <div style="font-size: 0.85em; color: #666;">Toplam Doküman</div>
+            </div>
+            <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: bold; color: #4CAF50;" id="detail-unique-themes">0</div>
+                <div style="font-size: 0.85em; color: #666;">Farklı Tema</div>
+            </div>
+            <div style="background: #f3e5f5; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: bold; color: #9C27B0;" id="detail-avg-docs">0</div>
+                <div style="font-size: 0.85em; color: #666;">Ort. Doküman/Ay</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- TABLO-4: Trend Analizi (BigQuery: gdelt_theme_trend_analysis_2022_2024.csv) -->
+    <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #9C27B0;">
+        <h4 style="color: #9C27B0; margin-bottom: 10px;"> Tablo-4: Tema Trend Analizi (BigQuery: gdelt_theme_trend_analysis_2022_2024.csv)</h4>
+        <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+            Her tema için 2022-2024 arası aylık trend eğimi, kategorizasyon ve istatistikler - karar verme için ek kriter
+        </p>
+        
+        <!-- Filtreler -->
+        <div style="margin-bottom: 15px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+            <div>
+                <label style="font-weight: 600; font-size: 0.9em;">Trend Kategorisi:</label>
+                <select id="trend-category-filter" onchange="updateTrendAnalysisTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px;">
+                    <option value="ALL">Tümü</option>
+                    <option value="Artan"> Artan</option>
+                    <option value="Azalan"> Azalan</option>
+                    <option value="Stabil"> Stabil</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-weight: 600; font-size: 0.9em;">Min Eğim:</label>
+                <input type="number" id="trend-min-slope" value="-1" step="0.1" onchange="updateTrendAnalysisTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px; width: 80px;">
+            </div>
+            <div>
+                <label style="font-weight: 600; font-size: 0.9em;">Max Eğim:</label>
+                <input type="number" id="trend-max-slope" value="1" step="0.1" onchange="updateTrendAnalysisTable()" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; margin-left: 5px; width: 80px;">
+            </div>
+            <span id="trend-count" style="color: #666; font-size: 0.9em;"></span>
+        </div>
+        
+        <!-- Tablo -->
+        <div style="max-height: 400px; overflow-y: auto;">
+            <table id="trend-analysis-table" style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                <thead style="position: sticky; top: 0; background: #f3e5f5;">
+                    <tr>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('theme_code')"> Tema Kodu ⇅</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #9C27B0;"> IPTC Kategorisi</th>
+                        <th style="padding: 10px; text-align: center; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('slope')"> Eğim ⇅</th>
+                        <th style="padding: 10px; text-align: center; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('trend_category')"> Trend ⇅</th>
+                        <th style="padding: 10px; text-align: right; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('avg_docs')"> Ort. Doküman ⇅</th>
+                        <th style="padding: 10px; text-align: right; border-bottom: 2px solid #9C27B0; cursor: pointer;" onclick="sortTrendTable('total_docs')"> Toplam Doküman ⇅</th>
+                    </tr>
+                </thead>
+                <tbody id="trend-analysis-tbody">
+                    <tr><td colspan="6" style="text-align: center; padding: 30px; color: #999;">Trend analizi CSV'si yüklenmedi. "Trend Analizi Yükle" butonuna tıklayın.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Özet İstatistikler -->
+        <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+            <div style="background: #e1f5fe; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: bold; color: #0277bd;" id="trend-total-themes">0</div>
+                <div style="font-size: 0.85em; color: #666;">Toplam Tema</div>
+            </div>
+            <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: bold; color: #2e7d32;" id="trend-artan-count">0</div>
+                <div style="font-size: 0.85em; color: #666;">Artan Trend</div>
+            </div>
+            <div style="background: #ffebee; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: bold; color: #c62828;" id="trend-azalan-count">0</div>
+                <div style="font-size: 0.85em; color: #666;">Azalan Trend</div>
+            </div>
+            <div style="background: #f3e5f5; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: bold; color: #7b1fa2;" id="trend-stabil-count">0</div>
+                <div style="font-size: 0.85em; color: #666;">Stabil Trend</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ADIM A: IPTC Kategori Özet Kartları -->
+    <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #9C27B0;">
+        <h4 style="color: #9C27B0; margin-bottom: 15px;"> Adım A: IPTC Üst Kategoriler – Tema ve Doküman Özeti</h4>
+        <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+            17 IPTC Media Topic kategorisi için tema sayısı, toplam doküman ve 6 ülke kapsamı özeti
+            <a href="https://iptc.org/standards/media-topics/" target="_blank" style="color: #9C27B0; text-decoration: none; margin-left: 5px;">ℹ IPTC Referans</a>
+        </p>
+        
+        <!-- IPTC Kategori Özet Kartları Grid -->
+        <div id="iptc-summary-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 500px; overflow-y: auto; padding: 5px;">
+            <!-- JavaScript ile doldurulacak -->
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
+                CSV verilerini yükleyip "Tema Analizi Yap" butonuna tıklayın...
+            </div>
+        </div>
+    </div>
+    
+    <!-- ADIM B: Ülke-Kategori Kullanılabilirlik Matrisi -->
+    <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #E91E63;">
+        <h4 style="color: #E91E63; margin-bottom: 15px;"> Adım B: Ülke-Kategori Kullanılabilirlik Matrisi</h4>
+        <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+             = Aylık sentiment için uygun (≥70%) |  = Quarterly gerekli (40-70%) |  = Yetersiz (&lt;40%) | - = Veri yok
+        </p>
+        
+        <div style="overflow-x: auto; max-width: 100%;">
+            <table id="country-theme-matrix" style="border-collapse: collapse; font-size: 0.75em; text-align: center; min-width: 1200px;">
+                <thead style="background: linear-gradient(135deg, #E91E63 0%, #9C27B0 100%); color: white;">
+                    <tr>
+                        <th style="padding: 8px; position: sticky; left: 0; background: #E91E63; z-index: 1;">Ülke</th>
+                        <!-- 17 IPTC kategorisi JavaScript ile doldurulacak -->
+                    </tr>
+                </thead>
+                <tbody id="matrix-tbody">
+                    <tr><td colspan="18" style="text-align: center; padding: 30px; color: #999;">Adım A tamamlandığında matris otomatik oluşturulur</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- ADIM C: Analiz İçin Kategori Seçimi ve Karşılaştırma -->
+    <div class="chart-container" style="margin-top: 25px; border-left: 4px solid #2196F3;">
+        <h4 style="color: #2196F3; margin-bottom: 15px;">Adım C: Analiz İçin Kategori Seçimi ve Karşılaştırma</h4>
+        <p style="font-size: 0.85em; color: #666; margin-bottom: 15px;">
+            17 kategoriden 5-6 tanesini seçerek karşılaştırmalı analiz yapın. Yeşil kategoriler önerilir.
+        </p>
+        
+        <div style="display: grid; grid-template-columns: 350px 1fr; gap: 20px;">
+            <!-- Sol: Kategori Seçim Listesi -->
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h5 style="color: #2196F3; margin: 0;">Kategori Seçimi</h5>
+                    <span id="selected-category-count" style="background: #2196F3; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.85em;">0 / 17</span>
+                </div>
+                
+                <div style="margin-bottom: 10px;">
+                    <button onclick="selectRecommendedCategories()" style="padding: 5px 10px; font-size: 0.8em; cursor: pointer; background: #4CAF50; color: white; border: none; border-radius: 4px; margin-right: 5px;">Önerilenleri Seç</button>
+                    <button onclick="selectAlternativeCategories()" style="padding: 5px 10px; font-size: 0.8em; cursor: pointer; background: #FF9800; color: white; border: none; border-radius: 4px; margin-right: 5px;">Alternatifleri Seç</button>
+                    <button onclick="clearCategorySelection()" style="padding: 5px 10px; font-size: 0.8em; cursor: pointer; background: #f44336; color: white; border: none; border-radius: 4px;"> Temizle</button>
+                </div>
+                
+                <div id="iptc-selection-list" style="max-height: 400px; overflow-y: auto;">
+                    <!-- JavaScript ile doldurulacak -->
+                    <div style="text-align: center; padding: 20px; color: #999; font-size: 0.9em;">
+                        Önce Adım A'yı tamamlayın...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sağ: Seçime Göre Grafik ve Özet -->
+            <div>
+                <!-- Seçili Kategoriler Özeti -->
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <h5 style="color: #1976D2; margin: 0 0 10px 0;">Seçili Kategoriler Özeti</h5>
+                    <div id="selected-categories-summary" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;">
+                        <div style="text-align: center; color: #999; padding: 20px;">Kategori seçin...</div>
+                    </div>
+                </div>
+                
+                <!-- Ülke × Kategori Hacim Grafiği -->
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0;">
+                    <h5 style="color: #333; margin: 0 0 10px 0;">Ülke × Kategori Doküman Dağılımı</h5>
+                    <div style="height: 250px;">
+                        <canvas id="category-country-bar-chart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- V1-V2-V3 Mapping Comparison -->
+                <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <h5 style="color: #E65100; margin: 0 0 10px 0;">V1-V2-V3 Farkı</h5>
+                    <p style="font-size:0.8em;color:#5d4037;margin:0 0 12px;">
+                        Results klasöründeki JSON'lar üzerinden V1/V2/V3 algoritma çıktılarının kategori bazlı temalarının sayısını karşılaştırır.
+                    </p>
+                    <div id="mapping-comparison-table" style="font-size: 0.85em;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #ffe0b2;">
+                                    <th style="padding: 8px; text-align: left;">Kategori</th>
+                                    <th style="padding: 8px; text-align: center;">V1 Tema</th>
+                                    <th style="padding: 8px; text-align: center;">V2 Tema</th>
+                                    <th style="padding: 8px; text-align: center;">V3 Tema</th>
+                                    <th style="padding: 8px; text-align: center;">Δ V3-V1</th>
+                                    <th style="padding: 8px; text-align: center;">Δ V3-V2</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mapping-diff-tbody">
+                                <tr><td colspan="6" style="text-align: center; padding: 15px; color: #999;">Kategori seçildikten sonra görüntülenir</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Export Butonu -->
+        <div style="margin-top: 20px; text-align: center;">
+            <button class="run-btn" style="background: #2196F3;" onclick="exportSelectedCategoriesAnalysis()" id="export-selected-btn"> Seçili Kategorilerin Analizini İndir</button>
+        </div>
+    </div>
+</div>

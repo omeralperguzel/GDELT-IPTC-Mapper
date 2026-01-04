@@ -90,10 +90,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎯 GDELT Tema Semantik Kümelemesi - Test Sayfası</h1>
+        <h1> GDELT Tema Semantik Kümelemesi - Test Sayfası</h1>
         
-        <button onclick="loadJSON()">📥 JSON'u Yükle</button>
-        <button onclick="clearDisplay()">🗑️ Temizle</button>
+        <button onclick="loadJSON()"> JSON'u Yükle</button>
+        <button onclick="clearDisplay()"> Temizle</button>
         
         <div id="status"></div>
         <div id="metadata"></div>
@@ -105,20 +105,20 @@
         async function loadJSON() {
             const statusDiv = document.getElementById('status');
             try {
-                statusDiv.innerHTML = '<div class="status info">⏳ JSON yükleniyor...</div>';
+                statusDiv.innerHTML = '<div class="status info"> JSON yükleniyor...</div>';
                 
                 const response = await fetch('gdelt_theme_clusters.json');
                 if (!response.ok) throw new Error('HTTP ' + response.status);
                 
                 const data = await response.json();
-                statusDiv.innerHTML = '<div class="status success">✅ JSON başarıyla yüklendi!</div>';
+                statusDiv.innerHTML = '<div class="status success"> JSON başarıyla yüklendi!</div>';
                 
                 displayMetadata(data);
                 displayClusters(data);
                 displayRawJSON(data);
                 
             } catch (error) {
-                statusDiv.innerHTML = `<div class="status error">❌ Hata: ${error.message}</div>`;
+                statusDiv.innerHTML = `<div class="status error"> Hata: ${error.message}</div>`;
                 console.error('Error:', error);
             }
         }
@@ -129,7 +129,7 @@
                 const meta = data.metadata;
                 metaDiv.innerHTML = `
                     <div class="status info">
-                        <h3>📊 Metadata</h3>
+                        <h3> Metadata</h3>
                         <p><strong>Model:</strong> ${meta.model}</p>
                         <p><strong>PCA Bileşenleri:</strong> ${meta.pca_components}</p>
                         <p><strong>Küme Sayısı:</strong> ${meta.n_clusters}</p>
@@ -148,7 +148,7 @@
                 return;
             }
             
-            let html = '<h2>📈 Kümeler</h2>';
+            let html = '<h2> Kümeler</h2>';
             
             Object.entries(data.cluster_labels).forEach(([clusterID, clusterData]) => {
                 html += `
@@ -170,7 +170,7 @@
         function displayRawJSON(data) {
             const rawDiv = document.getElementById('raw-json');
             rawDiv.innerHTML = `
-                <h2>📄 Raw JSON (İlk 50 satır)</h2>
+                <h2> Raw JSON (İlk 50 satır)</h2>
                 <pre>${JSON.stringify(data, null, 2).split('\n').slice(0, 50).join('\n')}...</pre>
             `;
         }

@@ -1,4 +1,4 @@
-# 🌐 GDELT Theme → IPTC Media Topics Mapper
+# GDELT Theme → IPTC Media Topics Mapper
 
 Semantic embedding-based classification of GDELT news themes into IPTC Media Topics categories using Sentence-Transformers with dual algorithm support.
 
@@ -9,7 +9,7 @@ Semantic embedding-based classification of GDELT news themes into IPTC Media Top
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#-overview)
 - [Features](#-features)
@@ -25,7 +25,7 @@ Semantic embedding-based classification of GDELT news themes into IPTC Media Top
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardized **IPTC Media Topics** taxonomy using semantic embeddings. The mapping enables cross-platform news categorization and comparative media analysis across different countries.
 
@@ -39,9 +39,9 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 
 ---
 
-## ✨ Features
+## Features
 
-### 🔬 Dual Algorithm Support
+### Dual Algorithm Support
 
 #### V1: Embedding-Only Approach
 
@@ -56,7 +56,7 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 - Higher accuracy through combined approach
 - Configurable fusion weights
 
-### 📊 Interactive Dashboard
+### Interactive Dashboard
 
 - Real-time data visualization with Chart.js
 - **Side-by-side t-SNE scatter plots** for V1 vs V2 comparison
@@ -65,7 +65,7 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 - Three data tables (Total Docs, Monthly Quality, Monthly Detail)
 - Responsive design
 
-### 📈 Visualization Charts
+### Visualization Charts
 
 - t-SNE 2D theme distribution (real coordinates from sklearn)
 - IPTC category pie/doughnut charts
@@ -73,7 +73,7 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 - Similarity score distribution
 - Country-wise document volume
 
-### 📤 Export Capabilities
+### Export Capabilities
 
 - XLSX (multi-sheet workbooks)
 - CSV (comma-separated values)
@@ -82,7 +82,7 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 - TikZ (LaTeX treemaps for publications)
 - PNG/SVG (chart graphics)
 
-### 🔧 Analysis Tools
+### Analysis Tools
 
 - Document volume analysis by country
 - Monthly quality metrics
@@ -93,7 +93,7 @@ This project maps **GDELT Global Knowledge Graph (GKG) themes** to the standardi
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 
@@ -129,11 +129,11 @@ http://localhost:5001
 
 ---
 
-## 📖 Usage
+## Usage
 
 ### 1. Load Data
 
-Navigate to the **GDELT Tema** tab and click **"📥 CSV Verilerini Yükle"** to load the BigQuery CSV files:
+Navigate to the **GDELT Tema** tab and click **" CSV Verilerini Yükle"** to load the BigQuery CSV files:
 
 - Table 1: Total document counts by country-theme
 - Table 2: Monthly quality metrics
@@ -193,38 +193,38 @@ Use the **Dışarı Aktar** tab to download:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 GDELT-IPTC-Mapper/
 │
-├── 🖥️ Core Application
+├──  Core Application
 │   ├── index.html                    # Main dashboard (HTML/CSS/JS)
 │   ├── run_server.py                 # Python HTTP server with API
 │   └── analysis.py                   # Data analysis utilities
 │
-├── 🤖 Mapping Algorithms
+├──  Mapping Algorithms
 │   ├── gdelt_iptc_mapping.py         # V1: Embedding-only pipeline
 │   ├── gdelt_iptc_mapping_v2.py      # V2: Two-layer fusion pipeline
 │   └── gdelt_theme_clustering.py     # Alternative clustering approach
 │
-├── 📊 Data Files (BigQuery Exports)
+├──  Data Files (BigQuery Exports)
 │   ├── bquxjob_645c6baa_*.csv        # Total docs per country-theme
 │   ├── bquxjob_4750d984_*.csv        # Monthly quality metrics
 │   └── bquxjob_5c135702_*.csv        # Monthly detail data
 │
-├── 📋 Mapping Reference Files
+├──  Mapping Reference Files
 │   ├── vargo_gdelt_themes_issues.csv # GDELT theme → Issue mapping
 │   └── iptc_mediatopics.csv          # IPTC taxonomy (17 categories)
 │
-├── 📤 Output Files
+├──  Output Files
 │   ├── gdelt_iptc_mapping_v1.json    # V1 mapping results
 │   ├── gdelt_iptc_mapping_v2.json    # V2 mapping results
 │   ├── gdelt_themes_iptc_v1.csv      # V1 theme-IPTC pairs
 │   ├── gdelt_themes_iptc_v2.csv      # V2 theme-IPTC pairs
 │   └── gdelt_theme_clusters.json     # Clustering results
 │
-├── 💾 Saved Analyses
+├──  Saved Analyses
 │   └── saved_analyses/               # Auto-saved analysis states
 │
 ├── .gitignore
@@ -234,7 +234,7 @@ GDELT-IPTC-Mapper/
 
 ---
 
-## 🔬 Methodology
+## Methodology
 
 ### 1. Data Collection
 
@@ -242,12 +242,12 @@ GDELT GKG data is queried from Google BigQuery for 6 countries (2022-2024):
 
 | Code | Country      | Flag |
 | ---- | ------------ | ---- |
-| CE   | Sri Lanka    | 🇱🇰   |
-| HO   | Honduras     | 🇭🇳   |
-| HR   | Croatia      | 🇭🇷   |
-| KG   | Kyrgyzstan   | 🇰🇬   |
-| LO   | Slovakia     | 🇸🇰   |
-| SA   | Saudi Arabia | 🇸🇦   |
+| CE   | Sri Lanka    |      |
+| HO   | Honduras     |      |
+| HR   | Croatia      |      |
+| KG   | Kyrgyzstan   |      |
+| LO   | Slovakia     |      |
+| SA   | Saudi Arabia |      |
 
 ### 2. Algorithm Comparison
 
@@ -353,7 +353,7 @@ rects = squarify.squarify(sizes, 0, 0, width, height)
 
 ---
 
-## 📚 Data Sources
+## Data Sources
 
 ### GDELT Global Knowledge Graph
 
@@ -390,17 +390,17 @@ rects = squarify.squarify(sizes, 0, 0, width, height)
 
 ---
 
-## 🖥️ Dashboard
+## Dashboard
 
 ### Tab Overview
 
-| Tab                  | Description                                                                  |
-| -------------------- | ---------------------------------------------------------------------------- |
-| 📰 **GDELT Tema**    | Load CSV data, view 3 data tables, filter by 6 countries, run theme analysis |
-| 📈 **Grafikler**     | Interactive charts including side-by-side t-SNE V1/V2 scatter plots          |
-| 🤖 **Kümeleme**      | Run V1 or V2 algorithm, load results, switch active mapping                  |
-| � **Treemap**        | Generate LaTeX TikZ treemaps for IPTC categories                             |
-| �📤 **Dışarı Aktar** | Export data in XLSX, CSV, JSON, LaTeX formats                                |
+| Tab                | Description                                                                  |
+| ------------------ | ---------------------------------------------------------------------------- |
+| **GDELT Tema**     | Load CSV data, view 3 data tables, filter by 6 countries, run theme analysis |
+| **Grafikler**      | Interactive charts including side-by-side t-SNE V1/V2 scatter plots          |
+| **Kümeleme**       | Run V1 or V2 algorithm, load results, switch active mapping                  |
+| � **Treemap**      | Generate LaTeX TikZ treemaps for IPTC categories                             |
+| � **Dışarı Aktar** | Export data in XLSX, CSV, JSON, LaTeX formats                                |
 
 ### Kümeleme Tab Features
 
@@ -426,7 +426,7 @@ rects = squarify.squarify(sizes, 0, 0, width, height)
 
 ---
 
-## 🔌 API Reference
+## API Reference
 
 ### Endpoints
 
@@ -502,7 +502,7 @@ curl -X POST http://localhost:5001/api/generate-all-iptc-treemaps
 
 ---
 
-## 📖 References
+## References
 
 ### Academic Papers
 
@@ -524,21 +524,21 @@ curl -X POST http://localhost:5001/api/generate-all-iptc-treemaps
 
 ---
 
-## 👤 Author
+## Author
 
 **Ömer Alper Güzel**  
 TED University, Department of Computer Engineering  
-📧 omer.guzel@tedu.edu.tr
+ omer.guzel@tedu.edu.tr
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - GDELT Project for providing open access to global news data
 - IPTC for the standardized Media Topics taxonomy
@@ -550,5 +550,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <p align="center">
-  Made with ❤️ for media analysis research
+  Made with  for media analysis research
 </p>
