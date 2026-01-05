@@ -41,10 +41,9 @@ IPTC_CATEGORIES_V3 = [
         "label": "arts, culture, entertainment and media",
         "definition": "All forms of arts, entertainment, cultural heritage and media",
         "subtopics": [
-            {"id": "01010000", "label": "arts", "definition": "Visual arts, performing arts, literature"},
-            {"id": "01020000", "label": "culture", "definition": "Cultural heritage, traditions, cultural events"},
-            {"id": "01030000", "label": "entertainment", "definition": "Entertainment industry, leisure activities"},
-            {"id": "01040000", "label": "media", "definition": "Journalism, broadcasting, digital media"}
+            {"id": "20000002", "label": "arts and entertainment", "definition": "All forms of arts and entertainment"},
+            {"id": "20000038", "label": "culture", "definition": "The ideas, customs, arts, traditions of a particular group of persons"},
+            {"id": "20000045", "label": "mass media", "definition": "Media addressing a large audience"}
         ]
     },
     {
@@ -52,139 +51,201 @@ IPTC_CATEGORIES_V3 = [
         "label": "crime, law and justice",
         "definition": "Crime, legal proceedings, police, courts, punishment",
         "subtopics": [
-            {"id": "02010000", "label": "crime", "definition": "Criminal activities, offenses"},
-            {"id": "02020000", "label": "law enforcement", "definition": "Police, investigations, security"},
-            {"id": "02030000", "label": "justice system", "definition": "Courts, trials, legal processes"}
+            {"id": "20000082", "label": "crime", "definition": "Violations of laws by individuals, companies or organisations"},
+            {"id": "20000106", "label": "judiciary", "definition": "The system of courts of law"},
+            {"id": "20000121", "label": "law", "definition": "The codification of rules of behaviour"},
+            {"id": "20000129", "label": "law enforcement", "definition": "Agencies that attempt to prevent disobedience to established laws or bring to justice those who disobey those laws"}
         ]
     },
     {
         "id": "03000000",
         "label": "disaster, accident and emergency incident",
-        "definition": "Natural and man-made disasters, accidents, emergency response",
+        "definition": "Man made or natural event resulting in loss of life or injury to living creatures and/or damage to inanimate objects or property",
         "subtopics": [
-            {"id": "03010000", "label": "natural disaster", "definition": "Earthquakes, floods, hurricanes, wildfires"},
-            {"id": "03020000", "label": "man-made disaster", "definition": "Industrial accidents, explosions, structural failures"},
-            {"id": "03030000", "label": "emergency response", "definition": "Rescue operations, evacuation, humanitarian aid"}
+            {"id": "20000139", "label": "accident and emergency incident", "definition": "A sudden, unexpected event that causes unwanted consequences or requires immediate action"},
+            {"id": "20000148", "label": "disaster", "definition": "A sudden, unplanned event that causes great damage or loss of life, such as an accident or a natural catastrophe"},
+            {"id": "20000168", "label": "emergency response", "definition": "The planning and efforts made by people and organizations to help victims of a sudden, unplanned event, natural disaster or crisis"}
         ]
     },
     {
         "id": "04000000",
         "label": "economy, business and finance",
-        "definition": "Economic activity, business, markets, trade, financial matters",
+        "definition": "All matters concerning the planning, production and exchange of wealth.",
         "subtopics": [
-            {"id": "04010000", "label": "business", "definition": "Corporate activities, entrepreneurship, commerce"},
-            {"id": "04020000", "label": "finance", "definition": "Banking, investments, financial markets"},
-            {"id": "04030000", "label": "economy", "definition": "Economic indicators, trade, employment"}
+            {"id": "20000349", "label": "business enterprise", "definition": "Organisations set up to create and sell a product or service"},
+            {"id": "20000170", "label": "business information", "definition": "Information about individual business entities, including companies, corporations, charities"},
+            {"id": "20000344", "label": "economy", "definition": "Production, consumption, distribution and trade activities affecting regions or countries as a whole"},
+            {"id": "20000385", "label": "market and exchange", "definition": "Market for buying and selling stocks, currencies, commodities and other goods"},
+            {"id": "20000209", "label": "products and services", "definition": "Products and services consumed by companies and individuals and the companies that manufacture or manage them"}
         ]
     },
     {
         "id": "05000000",
         "label": "education",
-        "definition": "Education systems, schools, universities, learning",
+        "definition": "All aspects of furthering knowledge, formally or informally",
         "subtopics": [
-            {"id": "05010000", "label": "primary education", "definition": "Elementary and secondary schooling"},
-            {"id": "05020000", "label": "higher education", "definition": "Universities, colleges, postgraduate studies"},
-            {"id": "05030000", "label": "vocational training", "definition": "Technical education, apprenticeships"}
+            {"id": "20000412", "label": "curriculum", "definition": "The courses offered by a learning institution and the regulation of those courses"},
+            {"id": "20001217", "label": "educational grading", "definition": "The evaluation of a student's achievement on a test, assignment or course and the policies and methods around assigning those grades"},
+            {"id": "20000413", "label": "educational testing and examinations", "definition": "Polices and standards around the testing and assessment of students, including the merits of standardised testing, and testing methods"},
+            {"id": "20000414", "label": "entrance examination", "definition": "Exams for entering colleges, universities and all other higher and lower education institutions"},
+            {"id": "20001337", "label": "online and remote learning", "definition": "Learning where a student and teacher are not physically present in the same location"},
+            {"id": "20000398", "label": "parents group", "definition": "Group of parents set up to support educational activities of their children"},
+            {"id": "20000399", "label": "religious education", "definition": "Instruction by any faith about that faith's principles and beliefs"},
+            {"id": "20000400", "label": "school", "definition": "A building or institution in which education is provided"},
+            {"id": "20000410", "label": "social learning", "definition": "The learning of social skills and behaviours through the imitation and observation of others"},
+            {"id": "20000415", "label": "students", "definition": "Students as a demographic, including student protests and trends"},
+            {"id": "20000416", "label": "teachers", "definition": "Teachers as a demographic, including teacher unions, teacher education and training"},
+            {"id": "20001216", "label": "vocational education", "definition": "Education that provides students with practical experience and training in a particular occupational field"}
         ]
     },
     {
         "id": "06000000",
         "label": "environment",
-        "definition": "Environmental issues, climate, conservation, pollution",
+        "definition": "The protection, damage, and condition of the ecosystem of the planet Earth and its surroundings",
         "subtopics": [
-            {"id": "06010000", "label": "climate change", "definition": "Global warming, emissions, climate policy"},
-            {"id": "06020000", "label": "conservation", "definition": "Wildlife protection, biodiversity, habitats"},
-            {"id": "06030000", "label": "pollution", "definition": "Air, water, soil contamination"}
+            {"id": "20000418", "label": "climate change", "definition": "All issues relating to extreme changes in climate, including rising global temperature and greenhouse gases"},
+            {"id": "20000420", "label": "conservation", "definition": "Preservation of the natural world, such as wilderness areas, flora and fauna"},
+            {"id": "20000424", "label": "environmental pollution", "definition": "The contamination of natural resources by harmful substances"},
+            {"id": "20000430", "label": "natural resource", "definition": "Assets afforded by nature without human intervention that can be used for various purposes"},
+            {"id": "20000441", "label": "nature", "definition": "The natural world"},
+            {"id": "20001374", "label": "sustainability", "definition": "Actions by organizations, governments, and individuals in response to environmental problems"}
         ]
     },
     {
         "id": "07000000",
         "label": "health",
-        "definition": "Physical and mental health, diseases, healthcare systems",
+        "definition": "All aspects of physical and mental well-being",
         "subtopics": [
-            {"id": "07010000", "label": "medical research", "definition": "Drug development, clinical trials"},
-            {"id": "07020000", "label": "public health", "definition": "Disease prevention, health policy"},
-            {"id": "07030000", "label": "healthcare", "definition": "Hospitals, medical services, insurance"}
+            {"id": "20000446", "label": "disease and condition", "definition": "Any health conditions affecting humans"},
+            {"id": "20000480", "label": "government health care", "definition": "Health care provided by governments at any level"},
+            {"id": "20000461", "label": "health facility", "definition": "Facilities used for any kind of health care"},
+            {"id": "20000483", "label": "health insurance", "definition": "Insurance covering medical costs"},
+            {"id": "20000463", "label": "health organisation", "definition": "Specific health organisations, including professional associations, non-profit and international groups"},
+            {"id": "20000464", "label": "health treatment and procedure", "definition": "Remedies, therapies, interventions, medications, testing and treatments"},
+            {"id": "20000485", "label": "medical profession", "definition": "Profession requiring formal training in study, diagnosis, treatment and prevention"},
+            {"id": "20000484", "label": "private health care", "definition": "Health care provided by private organisations"},
+            {"id": "20001358", "label": "public health", "definition": "Organised measures to prevent disease and promote health across populations"}
         ]
     },
     {
         "id": "08000000",
         "label": "human interest",
-        "definition": "Human interest stories, curiosities, personal stories",
+        "definition": "Item that discusses individuals, groups, animals, plants or other objects in an emotional way",
         "subtopics": [
-            {"id": "08010000", "label": "personal stories", "definition": "Individual experiences, biographies"},
-            {"id": "08020000", "label": "curiosities", "definition": "Unusual events, remarkable achievements"},
-            {"id": "08030000", "label": "human condition", "definition": "Human experiences, emotions, relationships"}
+            {"id": "20001237", "label": "anniversary", "definition": "The celebration or commemoration of a significant amount of years since an event or a notable person's birth or death"},
+            {"id": "20000498", "label": "award and prize", "definition": "The recognition of an achievement in the form of a symbolic item or monetary gift"},
+            {"id": "20001238", "label": "birthday", "definition": "A celebration on the anniversary of a person's birth"},
+            {"id": "20000505", "label": "celebrity", "definition": "Life and behaviour of famous people"},
+            {"id": "20000501", "label": "ceremony", "definition": "Rituals, such as dedications or commemorations"},
+            {"id": "20000504", "label": "high society", "definition": "Life and behaviour of the rich and socialites"},
+            {"id": "20000503", "label": "human mishap", "definition": "Silly or stupid human errors"},
+            {"id": "20000499", "label": "record and achievement", "definition": "Non-sport achievement by an individual or group that sets a new record"}
         ]
     },
     {
         "id": "09000000",
         "label": "labour",
-        "definition": "Employment, working conditions, labour relations, unions",
+        "definition": "Social aspects, organisations, rules and conditions affecting the employment of human effort",
         "subtopics": [
-            {"id": "09010000", "label": "employment", "definition": "Job creation, unemployment, workforce"},
-            {"id": "09020000", "label": "working conditions", "definition": "Wages, safety, workplace rights"},
-            {"id": "09030000", "label": "labour relations", "definition": "Unions, collective bargaining, strikes"}
+            {"id": "20000509", "label": "employment", "definition": "The state of having work, usually paid"},
+            {"id": "20000521", "label": "employment legislation", "definition": "Laws governing employment"},
+            {"id": "20000523", "label": "labour market", "definition": "The supply and demand of labour in an economy"},
+            {"id": "20000524", "label": "labour relations", "definition": "The relationship between workers and employers"},
+            {"id": "20000531", "label": "retirement", "definition": "The years after work"},
+            {"id": "20000533", "label": "unemployment", "definition": "The state of being available to work but not having a job"},
+            {"id": "20000536", "label": "unions", "definition": "Groups established to represent workers for better workplace conditions"}
         ]
     },
     {
         "id": "10000000",
         "label": "lifestyle and leisure",
-        "definition": "Lifestyle, leisure activities, travel, fashion, food",
+        "definition": "Activities undertaken for pleasure, relaxation or recreation outside paid employment",
         "subtopics": [
-            {"id": "10010000", "label": "travel", "definition": "Tourism, vacations, transportation"},
-            {"id": "10020000", "label": "fashion", "definition": "Clothing, style, designers"},
-            {"id": "10030000", "label": "food and dining", "definition": "Cuisine, restaurants, culinary arts"}
+            {"id": "20000538", "label": "leisure", "definition": "Activities carried out in one's spare time"},
+            {"id": "20000565", "label": "lifestyle", "definition": "The way in which a person lives, including their style and possessions"},
+            {"id": "20001339", "label": "wellness", "definition": "The active pursuit of good mental and physical health"}
         ]
     },
     {
         "id": "11000000",
         "label": "politics and government",
-        "definition": "Politics, government, elections, public policy",
+        "definition": "Local, regional, national and international exercise of power, the day-to-day running of government, and the relationships between governing bodies and states.",
         "subtopics": [
-            {"id": "11010000", "label": "elections", "definition": "Voting, campaigns, political parties"},
-            {"id": "11020000", "label": "government", "definition": "Public administration, policy making"},
-            {"id": "11030000", "label": "international relations", "definition": "Diplomacy, treaties, foreign policy"}
+            {"id": "20000574", "label": "election", "definition": "The selection of government representatives by the casting of votes by the populace"},
+            {"id": "20000593", "label": "government", "definition": "The systems, institutions and people who run a political entity"},
+            {"id": "20000621", "label": "government policy", "definition": "An overall plan or course of action set out by a government intended to influence and guide decisions"},
+            {"id": "20000638", "label": "international relations", "definition": "Relations between nations through negotiation, treaty, or diplomacy"},
+            {"id": "20000646", "label": "non-governmental organisation (NGO)", "definition": "Groups officially outside of government that lobby, demonstrate or campaign on a wide range of issues"},
+            {"id": "20000648", "label": "political prisoners and dissenters", "definition": "Individuals who put themselves at risk by expressing their political views and the imprisonment of individuals who speak out against a political authority"}
         ]
     },
     {
         "id": "12000000",
         "label": "religion",
-        "definition": "Religious beliefs, practices, institutions, faith",
+        "definition": "Belief systems, institutions and people who provide moral guidance to followers",
         "subtopics": [
-            {"id": "12010000", "label": "religious institutions", "definition": "Churches, mosques, temples, clergy"},
-            {"id": "12020000", "label": "religious practices", "definition": "Rituals, ceremonies, pilgrimages"},
-            {"id": "12030000", "label": "religious beliefs", "definition": "Faith, theology, spiritual matters"}
+            {"id": "20000657", "label": "belief systems", "definition": "A set of beliefs prescribed by an institution or text often focusing on worship and moral guidelines"},
+            {"id": "20000702", "label": "relations between religion and government", "definition": "Matters arising from the relationship between religions and a government"},
+            {"id": "20000688", "label": "religious conflict", "definition": "Conflicts involving religious differences"},
+            {"id": "20000697", "label": "religious facility", "definition": "Any facility where a group carries out its religious rites"},
+            {"id": "20000690", "label": "religious festival and holiday", "definition": "Holy day or period of observance in a religion"},
+            {"id": "20000703", "label": "religious leader", "definition": "Person(s) who have a ritual, juridical or leading role in their religion"},
+            {"id": "20000696", "label": "religious ritual", "definition": "Established religious rituals such as mass, baptism or prayer meetings"},
+            {"id": "20000705", "label": "religious text", "definition": "Texts regarded as holy or important by a religion"}
         ]
     },
     {
         "id": "13000000",
         "label": "science and technology",
-        "definition": "Scientific research, technological developments, innovation",
+        "definition": "All aspects pertaining to human understanding of, as well as methodical study and research of natural, formal and social sciences",
         "subtopics": [
-            {"id": "13010000", "label": "scientific research", "definition": "Basic research, discoveries, academia"},
-            {"id": "13020000", "label": "technology", "definition": "Digital technology, engineering, innovation"},
-            {"id": "13030000", "label": "space exploration", "definition": "Astronomy, space missions, cosmology"}
+            {"id": "20000710", "label": "biomedical science", "definition": "Application of biology-based science to medical fields"},
+            {"id": "20000715", "label": "mathematics", "definition": "The study of structure, space, change and number"},
+            {"id": "20000717", "label": "natural science", "definition": "Sciences that deal with matter, energy and the physical world"},
+            {"id": "20000741", "label": "scientific institution", "definition": "Institution that carries out or governs scientific work"},
+            {"id": "20000735", "label": "scientific research", "definition": "The scientific and methodical investigation to explain events or find solutions"},
+            {"id": "20000755", "label": "scientific standards", "definition": "Established rules governing scientific and technological study"},
+            {"id": "20000742", "label": "social sciences", "definition": "Study of human society such as anthropology, economics or sociology"},
+            {"id": "20000756", "label": "technology and engineering", "definition": "Study and practice of industrial or applied sciences"}
         ]
     },
     {
         "id": "14000000",
         "label": "society",
-        "definition": "Social issues, demographics, family, social welfare",
+        "definition": "The concerns, issues, affairs and institutions relevant to human social interactions, problems and welfare",
         "subtopics": [
-            {"id": "14010000", "label": "social welfare", "definition": "Poverty, inequality, social services"},
-            {"id": "14020000", "label": "demographics", "definition": "Population, migration, urbanization"},
-            {"id": "14030000", "label": "family", "definition": "Marriage, children, family life"}
+            {"id": "20000768", "label": "communities", "definition": "A group of individuals actively sharing a common value or interest"},
+            {"id": "20000788", "label": "demographic group", "definition": "A subset of society with shared traits"},
+            {"id": "20000770", "label": "demographics", "definition": "The study of human populations and their characteristics"},
+            {"id": "20000775", "label": "discrimination", "definition": "Unfair treatment of individuals or groups based on identity"},
+            {"id": "20001373", "label": "diversity, equity and inclusion", "definition": "Efforts to promote fair treatment and participation"},
+            {"id": "20000772", "label": "emigration", "definition": "Leaving one's country of residence to settle elsewhere"},
+            {"id": "20000780", "label": "family", "definition": "A group of people related genetically or by legal bond"},
+            {"id": "20000587", "label": "fundamental rights", "definition": "Basic political, social and economic rights usually upheld by law"},
+            {"id": "20000771", "label": "immigration", "definition": "Movement of individuals to another country"},
+            {"id": "20000799", "label": "social condition", "definition": "Circumstances affecting a person's life and welfare"},
+            {"id": "20000802", "label": "social problem", "definition": "Issues related to human rights, welfare and societal concern"},
+            {"id": "20000808", "label": "values", "definition": "Principles or standards of behaviour"},
+            {"id": "20000817", "label": "welfare", "definition": "Help for those in need of food, housing, health and other services"}
         ]
     },
     {
         "id": "15000000",
         "label": "sport",
-        "definition": "Sports events, competitions, athletes, sports organizations",
+        "definition": "Competitive activity or skill that involves physical and/or mental effort and organisations and bodies involved in these activities",
         "subtopics": [
-            {"id": "15010000", "label": "professional sport", "definition": "Professional leagues, athletes, competitions"},
-            {"id": "15020000", "label": "amateur sport", "definition": "Recreational sports, Olympics, youth sports"},
-            {"id": "15030000", "label": "sports organizations", "definition": "Federations, governing bodies, events"}
+            {"id": "20000822", "label": "competition discipline", "definition": "Different types of sport which can be executed in competitions"},
+            {"id": "20001103", "label": "disciplinary action in sport", "definition": "Actions, including fines and suspensions levied by sports organisations and teams"},
+            {"id": "20001104", "label": "drug use in sport", "definition": "Drug use associated with sport activities, including doping, abuse, testing and permitted medical uses"},
+            {"id": "20001301", "label": "sport achievement", "definition": "Records or honours earned by athletes for their performance"},
+            {"id": "20001108", "label": "sport event", "definition": "An event featuring one or more sport competitions"},
+            {"id": "20001124", "label": "sport industry", "definition": "Commercial issues related to sport"},
+            {"id": "20001125", "label": "sport organisation", "definition": "Organisations or associations that govern sports"},
+            {"id": "20001126", "label": "sport venue", "definition": "Gymnasiums, stadiums, arenas or facilities where sports events take place"},
+            {"id": "20001323", "label": "sports coaching", "definition": "The staff responsible for the training and on-field management of a sports team"},
+            {"id": "20001324", "label": "sports management and ownership", "definition": "The executive leadership and owners of a sports team"},
+            {"id": "20001325", "label": "sports officiating", "definition": "Referees, umpires and other staff who enforce the rules of a sport"},
+            {"id": "20001148", "label": "sports transaction", "definition": "The transfer, hiring or drafting of athletes"}
         ]
     },
     {
@@ -240,62 +301,131 @@ IPTC_ALL_ITEMS = get_all_iptc_items(IPTC_CATEGORIES_V3)
 # Rule patterns now map to subtopic IDs where possible
 RULE_PATTERNS_V3 = {
     # Arts subtopics
-    r'^(ART|MUSEUM|PAINTING|SCULPTURE)': '01010000',  # arts
-    r'^(CULTURE|HERITAGE|TRADITION)': '01020000',     # culture
-    r'^(ENTERTAINMENT|CELEBRITY)': '01030000',        # entertainment
-    r'^(MEDIA|PROPAGANDA|CENSOR)': '01040000',       # media
+    r'^(ART|MUSEUM|PAINTING|SCULPTURE)': '20000002',  # arts and entertainment (medtop:20000002)
+    r'^(CULTURE|HERITAGE|TRADITION)': '20000038',     # culture (medtop:20000038)
+    r'^(ENTERTAINMENT|CELEBRITY)': '20000002',        # entertainment -> arts and entertainment (medtop:20000002)
+    r'^(MEDIA|PROPAGANDA|CENSOR)': '20000045',       # mass media (medtop:20000045)
 
     # Crime subtopics
-    r'^(CRIME|KIDNAP|RAPE|DRUG|MURDER|ASSAULT)': '02010000',  # crime
-    r'^(ARREST|PRISON|POLICE)': '02020000',                   # law enforcement
-    r'^(COURT|TRIAL|VERDICT)': '02030000',                    # justice system
+    r'^(CRIME|KIDNAP|RAPE|DRUG|MURDER|ASSAULT)': '20000082',  # crime (medtop:20000082)
+    r'^(ARREST|PRISON|POLICE)': '20000129',                   # law enforcement (medtop:20000129)
+    r'^(COURT|TRIAL|VERDICT)': '20000106',                    # judiciary (medtop:20000106)
 
-    # Disaster subtopics
-    r'^(EARTHQUAKE|TSUNAMI|HURRICANE|FLOOD)': '03010000',     # natural disaster
-    r'^(ACCIDENT|EXPLOSION|FIRE)': '03020000',                # man-made disaster
-    r'^(EMERGENCY|EVACUATION)': '03030000',                   # emergency response
+    # Disaster subtopics (map to IPTC medtop qcodes)
+    r'^(EARTHQUAKE|TSUNAMI|HURRICANE|FLOOD)': '20000148',     # disaster (medtop:20000148)
+    r'^(ACCIDENT|EXPLOSION|FIRE)': '20000139',                # accident and emergency incident (medtop:20000139)
+    r'^(EMERGENCY|EVACUATION|RESCUE)': '20000168',            # emergency response (medtop:20000168)
 
-    # Economy subtopics
-    r'^(BUSINESS|CORPORATE|ENTREPRENEUR)': '04010000',        # business
-    r'^(BANK|INVEST|STOCK)': '04020000',                      # finance
-    r'^(ECONOMY|TRADE|GDP)': '04030000',                      # economy
+    # Economy subtopics (map to IPTC medtop qcodes)
+    r'^(BUSINESS|CORPORATE|ENTREPRENEUR|COMPANY|COMPANIES)': '20000349',  # business enterprise (medtop:20000349)
+    r'^(BUSINESS_INFO|BUSINESS_INFORMATION|COMPANY_INFO|REGISTRATION)': '20000170',  # business information (medtop:20000170)
+    r'^(MARKET|EXCHANGE|STOCK|CURRENCY|COMMODITY)': '20000385',  # market and exchange (medtop:20000385)
+    r'^(PRODUCT|PRODUCTS|SERVICE|SERVICES)': '20000209',  # products and services (medtop:20000209)
+    r'^(ECONOMY|TRADE|GDP|UNEMPLOYMENT|INFLATION)': '20000344',  # economy (medtop:20000344)
 
-    # Education subtopics
-    r'^(SCHOOL|PRIMARY)': '05010000',                         # primary education
-    r'^(UNIVERSITY|COLLEGE)': '05020000',                     # higher education
-    r'^(VOCATIONAL|TECHNICAL)': '05030000',                   # vocational training
+    # Education subtopics (map to IPTC medtop qcodes)
+    r'^(CURRICULUM|COURSE|SYLLABUS)': '20000412',
+    r'^(GRADING|GRADE|EDUCATIONAL_GRADING)': '20001217',
+    r'^(TEST|EXAM|EXAMINATION|ASSESSMENT)': '20000413',
+    r'^(ENTRANCE|ADMISSION|ENTRANCE_EXAM)': '20000414',
+    r'^(ONLINE|REMOTE|E_LEARNING|DISTANCE_LEARNING)': '20001337',
+    r'^(PARENTS|PARENTS_GROUP|PTA)': '20000398',
+    r'^(RELIGIOUS_EDUCATION|SUNDAY_SCHOOL)': '20000399',
+    r'^(SCHOOL|PRIMARY|SECONDARY|SCHOOLING)': '20000400',
+    r'^(SOCIAL_LEARNING|SOCIAL_SKILLS)': '20000410',
+    r'^(STUDENT|STUDENTS)': '20000415',
+    r'^(TEACHER|TEACHERS)': '20000416',
+    r'^(VOCATIONAL|TECHNICAL|CAREER)': '20001216',
 
-    # Environment subtopics
-    r'^(CLIMATE|EMISSION)': '06010000',                       # climate change
-    r'^(CONSERVATION|BIODIVERSITY)': '06020000',              # conservation
-    r'^(POLLUTION|CONTAMINATION)': '06030000',                # pollution
+    # Environment subtopics (map to IPTC medtop qcodes)
+    r'^(CLIMATE|EMISSION|GLOBAL_WARMING)': '20000418',
+    r'^(CONSERVATION|BIODIVERSITY|WILDLIFE)': '20000420',
+    r'^(POLLUTION|CONTAMINATION|WASTE)': '20000424',
+    r'^(NATURAL_RESOURCE|RESOURCE|FOREST|MINERAL)': '20000430',
+    r'^(NATURE|NATURAL_WORLD)': '20000441',
+    r'^(SUSTAINABILITY|SUSTAINABLE)': '20001374',
 
-    # Health subtopics
-    r'^(RESEARCH|DRUG|VACCINE)': '07010000',                  # medical research
-    r'^(PUBLIC_HEALTH|EPIDEMIC)': '07020000',                 # public health
-    r'^(HOSPITAL|HEALTHCARE)': '07030000',                    # healthcare
+    # Health subtopics (map to IPTC medtop qcodes)
+    r'^(DISEASE|CONDITION|ILLNESS|INFECTION)': '20000446',
+    r'^(GOVERNMENT_HEALTH|GOV_HEALTH|GOVERNMENT_HEALTHCARE)': '20000480',
+    r'^(HOSPITAL|HEALTHCARE|CLINIC)': '20000461',
+    r'^(INSURANCE|HEALTH_INSURANCE)': '20000483',
+    r'^(HEALTH_ORGANISATION|HEALTH_ORG|NGO_HEALTH)': '20000463',
+    r'^(TREATMENT|THERAPY|VACCINE|DRUG|SURGERY)': '20000464',
+    r'^(MEDICAL_PROFESSION|DOCTOR|NURSE|PROFESSION)': '20000485',
+    r'^(PRIVATE_HEALTH|PRIVATE_HOSPITAL)': '20000484',
+    r'^(PUBLIC_HEALTH|EPIDEMIC|PANDEMIC)': '20001358',
 
-    # Religion subtopics
-    r'^(CHURCH|MOSQUE|TEMPLE)': '12010000',                   # religious institutions
-    r'^(RITUAL|CEREMONY)': '12020000',                        # religious practices
-    r'^(FAITH|THEOLOGY)': '12030000',                         # religious beliefs
+    # Human interest subtopics
+    r'^(ANNIVERSARY|ANNIVERSARIES|ANNIV|ANNIVERSARY_EVENT|BIRTHDAY)': '20001237',
+    r'^(AWARD|PRIZE|GRANT|HONOUR|HONOR)': '20000498',
+    r'^(BIRTHDAY|BIRTHDAY_EVENT)': '20001238',
+    r'^(CELEBRITY|FAMOUS|STAR)': '20000505',
+    r'^(CEREMONY|RITUAL_EVENT)': '20000501',
+    r'^(HIGH_SOCIETY|SOCIETY|SOCIETAL_ELITE)': '20000504',
+    r'^(MISHAP|HUMAN_MISHAP|SILLY_EVENT)': '20000503',
+    r'^(RECORD|ACHIEVEMENT|RECORDS)': '20000499',
 
-    # Politics subtopics
-    r'^(ELECTION|VOTE)': '11010000',                          # elections
-    r'^(GOVERNMENT|POLICY)': '11020000',                      # government
-    r'^(DIPLOMACY|TREATY)': '11030000',                       # international relations
+    # Religion subtopics (map to IPTC medtop qcodes)
+    r'^(CHURCH|MOSQUE|TEMPLE|RELIGIOUS_FACILITY)': '20000697',
+    r'^(RITUAL|CEREMONY|RELIGIOUS_RITUAL)': '20000696',
+    r'^(FAITH|THEOLOGY|RELIGIOUS_TEXT)': '20000705',
+    r'^(RELIGION_CONFLICT|RELIGIOUS_CONFLICT)': '20000688',
+    r'^(RELATION_RELIGION_GOVERNMENT|RELIGION_GOVERNMENT)': '20000702',
+    r'^(RELIGIOUS_LEADER|IMAM|PRIEST|RABBI|PASTOR)': '20000703',
 
-    # Conflict subtopics
-    r'^(WAR|MILITARY|BATTLE)': '16010000',                    # armed conflict
-    r'^(PEACE|NEGOTIATION)': '16020000',                      # peace processes
-    r'^(RECONSTRUCTION|PEACEKEEPING)': '16030000',            # post-conflict
+    # Politics subtopics (map to IPTC medtop qcodes)
+    r'^(ELECTION|VOTE|BALLOT)': '20000574',
+    r'^(GOVERNMENT|STATE|ADMINISTRATION)': '20000593',
+    r'^(POLICY|GOVERNMENT_POLICY|POLICY_MAKING)': '20000621',
+    r'^(DIPLOMACY|TREATY|FOREIGN_POLICY)': '20000638',
+    r'^(NGO|NON_GOVERNMENT|NON-GOVERNMENTAL)': '20000646',
+    r'^(POLITICAL_PRISONER|DISSENTER|POLITICAL_DISSENT)': '20000648',
 
-    # Sport subtopics
-    r'^(PROFESSIONAL|ATHLETE)': '15010000',                   # professional sport
-    r'^(OLYMPIC|AMATEUR)': '15020000',                        # amateur sport
-    r'^(FEDERATION|ORGANIZATION)': '15030000',                # sports organizations
+    # Science & Technology subtopic mappings
+    r'^(BIOMED|BIOMEDICAL|BIOMEDICAL_SCIENCE)': '20000710',
+    r'^(MATH|MATHEMATICS|ALGEBRA|GEOMETRY|CALCULUS)': '20000715',
+    r'^(NATURAL_SCIENCE|PHYSICS|CHEMISTRY|BIOLOGY|ASTRONOMY)': '20000717',
+    r'^(SCI_INSTITUTION|RESEARCH_INSTITUTE|ACADEMY)': '20000741',
+    r'^(SCIENTIFIC_RESEARCH|RESEARCH|LAB)': '20000735',
+    r'^(SCIENTIFIC_STANDARD|STANDARD|STANDARDS)': '20000755',
+    r'^(SOCIAL_SCIENCE|SOCIAL_SCIENCES|ECONOMICS|ANTHROPOLOGY|SOCIOLOGY)': '20000742',
+    r'^(TECHNOLOGY|ENGINEERING|TECH|IT|COMPUTING)': '20000756',
 
-    # Fallback to top-level (same as v2)
+    # Conflict subtopics (map to IPTC medtop qcodes)
+    r'^(ACT_OF_TERROR|TERROR|TERRORISM)': '20000053',
+    r'^(WAR|MILITARY|BATTLE|ARMEDCONFLICT)': '20000056',
+    r'^(RIOT|DEMONSTRATION|CIVIL_UNREST|PROTEST|STRIKE)': '20000065',
+    r'^(COUP|COUP_D_ETAT|COUPDETAT)': '20000070',
+    r'^(CYBER|CYBER_ATTACK|CYBER_WARFARE|CYBERWAR)': '20001361',
+    r'^(MASSACRE|MASS_KILLING)': '20000071',
+    r'^(PEACE_PROCESS|PEACE|NEGOTIATION)': '20000073',
+    r'^(POST_WAR|POST-WAR|RECONSTRUCTION|POSTWAR_RECONSTRUCTION)': '20000077',
+    r'^(WAR_VICTIM|WAR_VICTIMS|VICTIM|VICTIMS)': '20001377',
+
+    # Sport subtopics (map to IPTC medtop qcodes)
+    r'^(PROFESSIONAL|ATHLETE|PLAYER)': '20001301',            # sport achievement
+    r'^(OLYMPIC|AMATEUR|TOURNAMENT)': '20001108',             # sport event
+    r'^(FEDERATION|ORGANIZATION|ASSOCIATION)': '20001125',    # sport organisation
+    r'^(COACH|COACHING|MANAGER|COACHES)': '20001323',         # sports coaching
+    r'^(TRANSFER|TRANSACTION|TRADE|DRAFT)': '20001148',       # sports transaction
+    r'^(VENUE|STADIUM|ARENA|GYM)': '20001126',               # sport venue
+    r'^(INDUSTRY|COMMERCIAL|COMMERCIALISATION)': '20001124',  # sport industry
+    r'^(RECORD|ACHIEVEMENT|MEDAL|TITLE)': '20001301',        # sport achievement
+    r'^(DOPING|DRUG|DRUG_USE|PERFORMANCE_ENHANCEMENT)': '20001104',  # drug use in sport
+    r'^(DISCIPLINARY|SUSPENSION|FINE|DISCIPLINARY_ACTION)': '20001103',
+
+    # Fallback to official top-level IDs
+    # Society subtopic patterns
+    r'^(COMMUNIT|COMMUNITY|COMMUNITIES)': '20000768',
+    r'^(DEMOGRAPHIC|DEMOGRAPHICS|DEMOGRAPHIC_GROUP)': '20000788',
+    r'^(DISCRIMINATION|DISCRIMINATE|DISCRIMINATORY)': '20000775',
+    r'^(DIVERSITY|EQUITY|INCLUSION|DEI)': '20001373',
+    r'^(EMIGRATION|EMIGRANT|EMIGRANTS)': '20000772',
+    r'^(IMMIGRATION|IMMIGRANT|IMMIGRANTS)': '20000771',
+    r'^(FAMILY|FAMILIES)': '20000780',
+    r'^(RIGHTS|FUNDAMENTAL_RIGHTS)': '20000587',
+    r'^(SOCIAL_CONDITION|SOCIAL_PROBLEM|WELFARE)': '20000802',
     r'^(ECON|TAX|WB|EPU|FISCAL)': '04000000',
     r'^(POLITICAL|POL|DEMOCRACY)': '11000000',
     r'^(ARMEDCONFLICT|TERROR)': '16000000',
@@ -309,6 +439,10 @@ RULE_PATTERNS_V3 = {
     r'^(SPORT|FOOTBALL)': '15000000',
     r'^(TOURISM|TRAVEL)': '10000000',
     r'^(LABOR|EMPLOYMENT)': '09000000',
+    # Weather subtopic mappings (use IPTC weather subtopics)
+    r'^(METEO|METEOROLOGY|METEOROLOGICAL|METEOROLOGIST|FORECAST|WEATHER_FORECAST)': '17010000',
+    r'^(STORM|HEATWAVE|TORNADO|HURRICANE|FLOOD|EXTREME_WEATHER|HEAT_WAVE|COLD_SNAP)': '17020000',
+    r'^(CLIMATE_PATTERN|SEASONAL|CLIMATE|CLIMATIC|CLIMATE_TREND)': '17030000',
     r'^(WEATHER|FORECAST)': '17000000',
     r'^(HUMAN_INTEREST)': '08000000',
 }
@@ -334,6 +468,17 @@ def apply_rule_based_mapping_v3(theme_code: str) -> tuple:
 # IPTC HIERARCHY FUNCTIONS (New)
 # ============================================================================
 
+def normalize_qcode(value: str) -> str:
+    """Normalize IPTC qcode/URI to bare numeric code."""
+    if not value:
+        return ''
+    return (value
+            .replace('medtop:', '')
+            .replace('http://cv.iptc.org/newscodes/mediatopic/', '')
+            .replace('https://cv.iptc.org/newscodes/mediatopic/', '')
+            )
+
+
 def load_iptc_hierarchy(json_path: str) -> dict:
     """
     Load IPTC Media Topic hierarchy from JSON file.
@@ -347,18 +492,31 @@ def load_iptc_hierarchy(json_path: str) -> dict:
             data = json.load(f)
 
         for concept in data.get('conceptSet', []):
-            qcode = concept.get('qcode', '').replace('medtop:', '')
+            qcode = normalize_qcode(concept.get('qcode', ''))
             if qcode:
                 hierarchy[qcode] = {
                     'label': concept.get('prefLabel', {}).get('en-GB', ''),
                     'definition': concept.get('definition', {}).get('en-GB', ''),
-                    'broader': [b.replace('medtop:', '') for b in concept.get('broader', [])],
-                    'narrower': [n.replace('medtop:', '') for n in concept.get('narrower', [])]
+                    'broader': [normalize_qcode(b) for b in concept.get('broader', [])],
+                    'narrower': [normalize_qcode(n) for n in concept.get('narrower', [])]
                 }
     except Exception as e:
         print(f"[!] Could not load IPTC hierarchy: {e}")
 
     return hierarchy
+
+
+def build_iptc_items_from_hierarchy(hierarchy: dict) -> list:
+    """Flatten IPTC hierarchy into a list of items with labels/definitions for embedding."""
+    items = []
+    for qcode, concept in hierarchy.items():
+        items.append({
+            "id": qcode,
+            "label": concept.get('label', ''),
+            "definition": concept.get('definition', ''),
+            "broader": concept.get('broader', []),
+        })
+    return items
 
 def get_top_level_parent(iptc_code: str, hierarchy: dict) -> str:
     """
@@ -404,60 +562,30 @@ def initialize_iptc_hierarchy(data_dir: Path):
 # ============================================================================
 
 def compute_enhanced_similarity(theme_emb, iptc_embs, iptc_items, threshold=0.6):
-    """
-    Simplified similarity scoring for top-level IPTC categories only.
-    All matches are resolved to one of the 17 main IPTC categories.
-    """
+    """Similarity scoring against all IPTC concepts; normalize to top-level later."""
     sim_matrix = cosine_similarity(theme_emb, iptc_embs)
 
     results = []
     for i in range(len(sim_matrix)):
         scores = sim_matrix[i]
 
-        # Find best top-level match (all items should be top-level now)
         best_idx = np.argmax(scores)
         best_score = scores[best_idx]
         best_item = iptc_items[best_idx]
 
-        # Get top-level parent (should be the item itself since we're using top-level only)
         top_level_id = get_top_level_parent(best_item["id"], IPTC_HIERARCHY)
 
-        if best_score >= THR_STRONG_V3:  # Strong match
-            results.append({
-                "final_id": top_level_id,
-                "final_label": best_item["label"],
-                "confidence": float(best_score),
-                "level": "top-level",
-                "top_id": best_item["id"],
-                "top_label": best_item["label"],
-                "sub_id": None,
-                "sub_label": "",
-                "sub_definition": ""
-            })
-        elif best_score >= THR_WEAK_V3:  # Weak match
-            results.append({
-                "final_id": top_level_id,
-                "final_label": best_item["label"],
-                "confidence": float(best_score),
-                "level": "weak-top-level",
-                "top_id": best_item["id"],
-                "top_label": best_item["label"],
-                "sub_id": None,
-                "sub_label": "",
-                "sub_definition": ""
-            })
-        else:
-            results.append({
-                "final_id": None,
-                "final_label": "",
-                "confidence": float(best_score),
-                "level": "unclassified",
-                "top_id": None,
-                "top_label": "",
-                "sub_id": None,
-                "sub_label": "",
-                "sub_definition": ""
-            })
+        results.append({
+            "final_id": top_level_id,
+            "final_label": get_iptc_label(top_level_id),
+            "confidence": float(best_score),
+            "level": "nn-best",
+            "top_id": top_level_id,
+            "top_label": get_iptc_label(top_level_id),
+            "sub_id": best_item["id"],
+            "sub_label": best_item.get("label", ""),
+            "sub_definition": best_item.get("definition", ""),
+        })
 
     return results
 
@@ -465,23 +593,29 @@ def compute_enhanced_similarity(theme_emb, iptc_embs, iptc_items, threshold=0.6)
 # FUSION: HIERARCHICAL DECISION TREE
 # ============================================================================
 
-THR_STRONG_V3 = 0.25  # Higher threshold for better matches
-THR_WEAK_V3 = 0.15    # Higher threshold for fallback matches
+THR_STRONG_V3 = 0.45  # NN acceptance threshold (stricter to avoid weak matches)
+THR_WEAK_V3 = 0.15    # Legacy weak threshold (unused in new fusion)
 
 def fusion_decision_v3(rule_id: str, rule_conf: float, nn_result: dict, iptc_items: list) -> tuple:
-    """
-    Simplified fusion for top-level categories only.
-    All matches are resolved to one of the 17 main IPTC categories.
-    """
+    """Fusion where NN has priority; rules are last-resort when NN is below threshold."""
     nn_id = nn_result.get("final_id")
     nn_conf = nn_result.get("confidence", 0)
-    nn_level = nn_result.get("level", "unclassified")
 
-    # Rule match takes precedence
-    if rule_id and rule_conf >= 0.8:
-        # Get top-level parent of rule match
+    # First: accept NN if strong enough
+    if nn_id and nn_conf >= THR_STRONG_V3:
+        top_level_nn_id = get_top_level_parent(nn_id, IPTC_HIERARCHY)
+        return top_level_nn_id, 'nn', nn_conf, {
+            "top_id": top_level_nn_id,
+            "top_label": get_iptc_label(top_level_nn_id),
+            "sub_id": nn_result.get('sub_id'),
+            "sub_label": nn_result.get('sub_label', ''),
+            "sub_definition": nn_result.get('sub_definition', '')
+        }
+
+    # Second: use rules only as a last resort when NN is weak
+    if rule_id and nn_conf < THR_STRONG_V3:
         top_level_rule_id = get_top_level_parent(rule_id, IPTC_HIERARCHY)
-        return top_level_rule_id, 'rule', rule_conf, {
+        return top_level_rule_id, 'rule_fallback', rule_conf, {
             "top_id": top_level_rule_id,
             "top_label": get_iptc_label(top_level_rule_id),
             "sub_id": None,
@@ -489,28 +623,7 @@ def fusion_decision_v3(rule_id: str, rule_conf: float, nn_result: dict, iptc_ite
             "sub_definition": ""
         }
 
-    # NN top-level match
-    if nn_level == "top-level" and nn_conf >= THR_STRONG_V3:
-        top_level_nn_id = get_top_level_parent(nn_id, IPTC_HIERARCHY)
-        return top_level_nn_id, 'nn_top', nn_conf, {
-            "top_id": top_level_nn_id,
-            "top_label": get_iptc_label(top_level_nn_id),
-            "sub_id": None,
-            "sub_label": "",
-            "sub_definition": ""
-        }
-
-    # Weak NN match as fallback
-    if nn_level in ["top-level", "weak-top-level"] and nn_conf >= THR_WEAK_V3:
-        top_level_nn_id = get_top_level_parent(nn_id, IPTC_HIERARCHY)
-        return top_level_nn_id, 'nn_weak', nn_conf, {
-            "top_id": top_level_nn_id,
-            "top_label": get_iptc_label(top_level_nn_id),
-            "sub_id": None,
-            "sub_label": "",
-            "sub_definition": ""
-        }
-
+    # Otherwise unclassified
     return None, 'unclassified', nn_conf, {
         "top_id": None,
         "top_label": "",
@@ -532,12 +645,20 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
     """
     print("=" * 60)
     print("GDELT Theme -> IPTC Media Topics Mapper (v3)")
-    print("Simplified Approach: Top-level Categories Only")
+    print("Full Hierarchy Embedding -> Top-level Normalization")
     print("=" * 60)
 
     output_path = Path(output_dir)
     data_path = Path(data_dir)
     results_path = Path(output_dir)  # Results are saved to output_dir
+
+    # Ensure output directory exists (use relative paths when possible)
+    try:
+        output_path.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        # Fallback: create relative 'results' directory next to script
+        output_path = Path(__file__).parent / "results"
+        output_path.mkdir(parents=True, exist_ok=True)
 
     # Initialize IPTC hierarchy
     print("\n[*] Loading IPTC Media Topic hierarchy...")
@@ -553,9 +674,10 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
         'gdelt_monthly_docs_per_theme_country_2022_2024.csv'
     ]
 
+    # Input CSVs should be read from the project's `data/` directory (relative path)
     for csv_file in csv_files:
         try:
-            df = pd.read_csv(results_path / csv_file)
+            df = pd.read_csv(data_path / csv_file)
             if 'theme_code' in df.columns:
                 theme_codes.update(df['theme_code'].dropna().unique())
         except Exception as e:
@@ -593,7 +715,7 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
             'level': 'unclassified', 'top_id': None, 'sub_id': None
         } for theme in theme_codes}
     else:
-        print("\n[*] Layer 2-3: Computing semantic embeddings with top-level categories only...")
+        print("\n[*] Layer 2-3: Computing semantic embeddings with full IPTC hierarchy...")
 
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print(f"  Device: {device}")
@@ -605,18 +727,18 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
         theme_list = sorted(theme_codes)
         theme_texts = [build_theme_text(t, mapping_data, mapping_source) for t in theme_list]
         
-        # Only encode top-level IPTC categories (17 main categories)
-        top_level_items = [item for item in IPTC_ALL_ITEMS if item["level"] == "top"]
-        iptc_texts = [item['definition'] for item in top_level_items]
+        # Encode all IPTC concepts from hierarchy (prefLabel + definition)
+        iptc_items = build_iptc_items_from_hierarchy(IPTC_HIERARCHY)
+        iptc_texts = [(item.get('label', '') + " " + item.get('definition', '')).strip() or item.get('id', '') for item in iptc_items]
 
         print(f"  Encoding {len(theme_texts)} themes...")
         theme_embeddings = compute_embeddings(theme_texts, model)
 
-        print(f"  Encoding {len(iptc_texts)} IPTC top-level categories...")
+        print(f"  Encoding {len(iptc_texts)} IPTC concepts (full hierarchy)...")
         iptc_embeddings = compute_embeddings(iptc_texts, model)
 
         print("  Computing similarities...")
-        nn_list = compute_enhanced_similarity(theme_embeddings, iptc_embeddings, top_level_items)
+        nn_list = compute_enhanced_similarity(theme_embeddings, iptc_embeddings, iptc_items)
 
         # Debug: Print similarity statistics
         confidences = [r['confidence'] for r in nn_list]
@@ -658,13 +780,13 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
         result = {
             'theme_code': theme,
             'text_repr': build_theme_text(theme, mapping_data, mapping_source),
-            'iptc_rule_id': rule_id,
+            'iptc_rule_id': rule_id or '',
             'iptc_rule_label': get_iptc_label(rule_id) if rule_id else '',
             'rule_confidence': rule_conf,
-            'iptc_nn_id': nn_data.get('final_id'),
+            'iptc_nn_id': nn_data.get('final_id') or '',
             'iptc_nn_label': nn_data.get('final_label', ''),
             'nn_score': nn_data.get('confidence', 0),
-            'iptc_final_id': final_id,
+            'iptc_final_id': final_id or '',
             'iptc_final_label': get_iptc_label(final_id) if final_id else '',
             'decision_source': decision,
             'final_confidence': confidence,
@@ -750,13 +872,26 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
     # Save CSV
     csv_filename = f"gdelt_themes_iptc_v3_{mapping_source}.csv"
     csv_path = output_path / csv_filename
-    pd.DataFrame(final_results).to_csv(csv_path, index=False)
+    # Ensure IPTC id columns are strings to preserve leading zeros in CSV exports
+    df_out = pd.DataFrame(final_results)
+    for col in ['iptc_rule_id', 'iptc_nn_id', 'iptc_final_id']:
+        if col in df_out.columns:
+            df_out[col] = (
+                df_out[col]
+                .fillna('')
+                .astype(str)
+                .str.replace(r'\.0+$', '', regex=True)  # strip float artefacts
+                .str.split('.').str[0]                   # guard against scientific notation
+            )
+
+    df_out.to_csv(csv_path, index=False)
     print(f"  [OK] CSV: {csv_path.name}")
 
     print("\n[OK] V3 Mapping complete!")
     print(f"\n[*] Summary:")
     print(f"   Total themes: {len(theme_codes)}")
-    print(f"   Top-level matches: {decision_counts.get('nn_top', 0) + decision_counts.get('nn_weak', 0) + decision_counts.get('rule', 0)}")
+    top_matches = decision_counts.get('nn', 0) + decision_counts.get('rule_fallback', 0)
+    print(f"   Top-level matches: {top_matches}")
     print(f"   Unclassified: {decision_counts.get('unclassified', 0)}")
 
     return output_data
@@ -861,7 +996,7 @@ def build_theme_text(theme_code: str, mapping_data: dict, mapping_source: str) -
         info = mapping_data[theme_code]
         description = info.get('description', '')
         if description:
-            return description
+            return f"{theme_code} - {description}"
     # Fallback if no description
     return theme_code.replace('_', ' ').replace('-', ' ').lower()
 
@@ -968,6 +1103,8 @@ def get_iptc_label(iptc_id: str) -> str:
         for sub in cat.get('subtopics', []):
             if sub['id'] == iptc_id:
                 return f"{cat['label']} - {sub['label']}"
+    if IPTC_HIERARCHY and iptc_id in IPTC_HIERARCHY:
+        return IPTC_HIERARCHY[iptc_id].get('label', '')
     return ''
 
 # ============================================================================

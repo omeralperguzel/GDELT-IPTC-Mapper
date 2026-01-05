@@ -20,6 +20,7 @@
   ];
 
   const comparisonSelections = { v1: 'vargo', v2: 'gkg', v3: 'combined' };
+  const gkgThemeDescriptions = {};
 
   // Active pointer used by other modules via window.iptcMappingResults
   function setActiveResults(obj, version, source){
@@ -263,6 +264,54 @@
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
+  }
+
+  function splitCSVLine(line){
+    const values = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++){
+      const ch = line[i];
+      if (ch === '"'){
+        if (inQuotes && line[i+1] === '"'){
+          cur += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+        continue;
+      }
+      if (ch === ',' && !inQuotes){
+        values.push(cur);
+        cur = '';
+      } else {
+        cur += ch;
+      }
+    }
+    values.push(cur);
+    return values;
+  }
+
+  async function loadGKGThemeDescriptions(){
+    try {
+      const resp = await fetch('/data/gdelt_gkg_categorylist.csv');
+      if (!resp.ok) return;
+      const text = await resp.text();
+      const lines = text.split(/\r?\n/).filter(Boolean);
+      if (!lines.length) return;
+      lines.slice(1).forEach(line => {
+        const cols = splitCSVLine(line);
+        const type = (cols[0] || '').trim();
+        const name = (cols[1] || '').trim();
+        const desc = (cols[4] || '').trim();
+        if (!name) return;
+        if (desc && (type === 'Theme' || type === 'Count')){
+          gkgThemeDescriptions[name] = desc;
+        }
+      });
+    } catch (err){
+      console.warn('loadGKGThemeDescriptions', err);
+    }
   }
 
   function buildThemeRows(themes){
@@ -644,6 +693,9 @@
   }
 
   function getPrimaryDescription(code){
+    if (!code) return '';
+    const fromList = gkgThemeDescriptions[code];
+    if (fromList) return fromList;
     for (const version of Object.keys(results)){
       for (const source of Object.keys(results[version])){
         const entry = findThemeEntry(results[version][source], code);
@@ -667,6 +719,8 @@
       });
     });
   }
+
+  loadGKGThemeDescriptions().catch(()=>{});
 
   // expose init (loader calls window.initTabClustering)
   window.initTabClustering = initTabClustering;

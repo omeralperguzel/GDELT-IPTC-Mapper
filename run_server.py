@@ -904,14 +904,14 @@ try:
 ║    GDELT → IPTC Mapping Dashboard - HTTP Sunucu + API          ║
 ╠════════════════════════════════════════════════════════════════╣
 ║                                                                ║
-║   Sunucu başlatıldı!                                         ║
+║   Sunucu başlatıldı!                                           ║
 ║                                                                ║
-║   Sayfayı açmak için: http://localhost:{PORT}                 ║
-║   API Endpoint: POST http://localhost:{PORT}/api/analyze      ║
+║   Sayfayı açmak için: http://localhost:{PORT}                  ║
+║   API Endpoint: POST http://localhost:{PORT}/api/analyze       ║
 ║                                                                ║
-║   Dizin: {Path(__file__).parent}                             ║
+║   Dizin: {Path(__file__).parent}                               ║
 ║                                                                ║
-║    Durdurmak için: Ctrl+C                                     ║
+║    Durdurmak için: Ctrl+C                                      ║
 ║                                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 """)
