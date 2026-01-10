@@ -561,31 +561,66 @@ def initialize_iptc_hierarchy(data_dir: Path):
 # LAYER 3: SUBTOPIC SIMILARITY SCORING (Modified for hierarchy)
 # ============================================================================
 
-def compute_enhanced_similarity(theme_emb, iptc_embs, iptc_items, threshold=0.6):
-    """Similarity scoring against all IPTC concepts; normalize to top-level later."""
-    sim_matrix = cosine_similarity(theme_emb, iptc_embs)
+def compute_enhanced_similarity(anchor_embs, gkg_embs, vargo_embs, probe_embs, iptc_embs, iptc_items, vargo_mask, mapping_source):
+    """Anchor-first hierarchical similarity (Tier0 anchor -> Tier1 GKG -> Tier2 Vargo) with deep probe recovery."""
 
-    results = []
-    for i in range(len(sim_matrix)):
-        scores = sim_matrix[i]
-
-        best_idx = np.argmax(scores)
-        best_score = scores[best_idx]
+    def best_match(sim_row):
+        best_idx = int(np.argmax(sim_row))
+        best_score = float(sim_row[best_idx])
         best_item = iptc_items[best_idx]
-
         top_level_id = get_top_level_parent(best_item["id"], IPTC_HIERARCHY)
-
-        results.append({
+        return {
             "final_id": top_level_id,
             "final_label": get_iptc_label(top_level_id),
-            "confidence": float(best_score),
+            "confidence": best_score,
             "level": "nn-best",
             "top_id": top_level_id,
             "top_label": get_iptc_label(top_level_id),
             "sub_id": best_item["id"],
             "sub_label": best_item.get("label", ""),
             "sub_definition": best_item.get("definition", ""),
-        })
+        }
+
+    anchor_sim = cosine_similarity(anchor_embs, iptc_embs)
+    gkg_sim = cosine_similarity(gkg_embs, iptc_embs)
+    vargo_sim = cosine_similarity(vargo_embs, iptc_embs) if vargo_embs is not None else None
+    probe_sim = cosine_similarity(probe_embs, iptc_embs) if probe_embs is not None else None
+
+    results = []
+    for i in range(len(anchor_sim)):
+        # Tier 0: anchor-only text (cleaned theme code)
+        anchor_match = best_match(anchor_sim[i])
+        if anchor_match["confidence"] >= THR_ANCHOR:
+            anchor_match["tier"] = "anchor"
+            results.append(anchor_match)
+            continue
+
+        # Tier 1: official definition (GKG)
+        gkg_match = best_match(gkg_sim[i])
+        if gkg_match["confidence"] >= THR_STRONG_V3:
+            gkg_match["tier"] = "gkg"
+            results.append(gkg_match)
+            continue
+
+        # Tier 2: Vargo augmented fallback
+        if mapping_source != 'gkg' and vargo_sim is not None and vargo_mask[i]:
+            vargo_match = best_match(vargo_sim[i])
+            if vargo_match["confidence"] >= THR_STRONG_V3:
+                vargo_match["tier"] = "vargo_fallback"
+                results.append(vargo_match)
+                continue
+
+        # Tier 3: Deep Semantic Probe for gray zone recoveries
+        if probe_sim is not None and THR_STRONG_V3 - 0.07 <= gkg_match["confidence"] < THR_STRONG_V3:
+            probe_match = best_match(probe_sim[i])
+            if probe_match["confidence"] >= 0.50:
+                probe_match["tier"] = "deep_probe"
+                results.append(probe_match)
+                continue
+
+        # Unclassified if all tiers fail
+        gkg_match["tier"] = "unclassified"
+        results.append(gkg_match)
 
     return results
 
@@ -593,8 +628,16 @@ def compute_enhanced_similarity(theme_emb, iptc_embs, iptc_items, threshold=0.6)
 # FUSION: HIERARCHICAL DECISION TREE
 # ============================================================================
 
-THR_STRONG_V3 = 0.45  # NN acceptance threshold (stricter to avoid weak matches)
+THR_STRONG_V3 = 0.39  # NN acceptance threshold (relaxed to recover borderline quality matches)
 THR_WEAK_V3 = 0.15    # Legacy weak threshold (unused in new fusion)
+THR_ANCHOR = 0.60     # Anchor acceptance threshold (direct label alignment)
+
+# Manual Tier 0 overrides for clearly mapped themes
+MANUAL_MAPPING_FIX = {
+    "SLUMS": "14000000",          # society
+    "SEPARATISTS": "11000000",   # politics and government
+    "RETALIATE": "16000000",     # conflict, war and peace
+}
 
 def fusion_decision_v3(rule_id: str, rule_conf: float, nn_result: dict, iptc_items: list) -> tuple:
     """Fusion where NN has priority; rules are last-resort when NN is below threshold."""
@@ -622,6 +665,17 @@ def fusion_decision_v3(rule_id: str, rule_conf: float, nn_result: dict, iptc_ite
             "sub_label": "",
             "sub_definition": ""
         }
+
+    # Third: borderline acceptance when NN is close but below threshold
+    #if nn_id and nn_conf > 0.35:
+    #    top_level_nn_id = get_top_level_parent(nn_id, IPTC_HIERARCHY)
+    #    return top_level_nn_id, 'borderline_accept', nn_conf, {
+    #        "top_id": top_level_nn_id,
+    #        "top_label": get_iptc_label(top_level_nn_id),
+    #        "sub_id": nn_result.get('sub_id'),
+    #        "sub_label": nn_result.get('sub_label', ''),
+    #        "sub_definition": nn_result.get('sub_definition', '')
+    #    }
 
     # Otherwise unclassified
     return None, 'unclassified', nn_conf, {
@@ -689,10 +743,12 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
 
     print(f"  [OK] Found {len(theme_codes)} unique theme codes")
 
-    # Load mapping source
+    # Load mappings (primary GKG + Vargo fallback for hybrid mode)
     print(f"\n[*] Loading {mapping_source.upper()} mapping...")
     mapping_data = load_mapping_source(data_path, mapping_source)
-    print(f"  [OK] Loaded {len(mapping_data)} {mapping_source.upper()} mappings")
+    gkg_map = load_gkg_mapping(data_path / "gdelt_gkg_categorylist.csv")
+    vargo_map = load_vargo_mapping(data_path / "vargo_gdelt_themes_issues.csv")
+    print(f"  [OK] Loaded {len(mapping_data)} {mapping_source.upper()} mappings | GKG:{len(gkg_map)} Vargo:{len(vargo_map)}")
 
     # LAYER 1: Rule-based mapping (extended for subtopics)
     print("\n[*] Layer 1: Applying rule-based mapping...")
@@ -723,33 +779,72 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
         print("  Loading sentence-transformer model...")
         model = SentenceTransformer('all-MiniLM-L6-v2', device=device)  # Back to proven model
 
-        # Build text representations - only top-level categories for better matching
+        # Build text representations (Tier 0: anchor; Tier 1: GKG primary; Tier 2: Vargo contextual fallback)
         theme_list = sorted(theme_codes)
-        theme_texts = [build_theme_text(t, mapping_data, mapping_source) for t in theme_list]
+        anchor_texts = [t.replace('_', ' ').lower() for t in theme_list]
+        gkg_texts = []
+        vargo_texts = []
+        probe_texts = []
+        vargo_mask = []
+
+        for t in theme_list:
+            if t in gkg_map and gkg_map[t].get('description'):
+                gkg_texts.append(gkg_map[t]['description'])
+            else:
+                gkg_texts.append(build_theme_text(t, mapping_data, mapping_source))
+
+            if mapping_source != 'gkg':
+                vargo_text = build_vargo_context_text(t, vargo_map)
+                vargo_mask.append(bool(vargo_text))
+                vargo_texts.append(vargo_text if vargo_text else gkg_texts[-1])
+            else:
+                vargo_mask.append(False)
+                vargo_texts.append(gkg_texts[-1])
+
+            probe_texts.append(build_probe_text(t, anchor_texts[len(probe_texts)], vargo_texts[-1]))
         
         # Encode all IPTC concepts from hierarchy (prefLabel + definition)
         iptc_items = build_iptc_items_from_hierarchy(IPTC_HIERARCHY)
         iptc_texts = [(item.get('label', '') + " " + item.get('definition', '')).strip() or item.get('id', '') for item in iptc_items]
 
-        print(f"  Encoding {len(theme_texts)} themes...")
-        theme_embeddings = compute_embeddings(theme_texts, model)
+        print(f"  Encoding {len(anchor_texts)} themes (Tier 0: anchor codes)...")
+        theme_embeddings_anchor = compute_embeddings(anchor_texts, model)
+
+        print(f"  Encoding {len(gkg_texts)} themes (Tier 1: GKG)...")
+        theme_embeddings_gkg = compute_embeddings(gkg_texts, model)
+
+        print(f"  Encoding {len(vargo_texts)} themes (Tier 2: Vargo contextual fallback)...")
+        theme_embeddings_vargo = compute_embeddings(vargo_texts, model) if mapping_source != 'gkg' else None
+
+        print(f"  Encoding {len(probe_texts)} themes (Tier 3: deep semantic probe)...")
+        theme_embeddings_probe = compute_embeddings(probe_texts, model)
 
         print(f"  Encoding {len(iptc_texts)} IPTC concepts (full hierarchy)...")
         iptc_embeddings = compute_embeddings(iptc_texts, model)
 
-        print("  Computing similarities...")
-        nn_list = compute_enhanced_similarity(theme_embeddings, iptc_embeddings, iptc_items)
-
-        # Debug: Print similarity statistics
-        confidences = [r['confidence'] for r in nn_list]
-        print(f"  Similarity stats: min={min(confidences):.3f}, max={max(confidences):.3f}, mean={np.mean(confidences):.3f}, median={np.median(confidences):.3f}")
-        print(f"  Thresholds: strong={THR_STRONG_V3}, weak={THR_WEAK_V3}")
+        print("  Computing similarities with tiered context framing...")
+        nn_list = compute_enhanced_similarity(
+            theme_embeddings_anchor,
+            theme_embeddings_gkg,
+            theme_embeddings_vargo,
+            theme_embeddings_probe,
+            iptc_embeddings,
+            iptc_items,
+            vargo_mask,
+            mapping_source,
+        )
 
         nn_results = {theme: nn_list[i] for i, theme in enumerate(theme_list)}
+        chosen_confidences = [r['confidence'] for r in nn_list]
+
+        # Debug: Print similarity statistics on chosen tier results
+        if chosen_confidences:
+            print(f"  Similarity stats (chosen tier): min={min(chosen_confidences):.3f}, max={max(chosen_confidences):.3f}, mean={np.mean(chosen_confidences):.3f}, median={np.median(chosen_confidences):.3f}")
+        print(f"  Thresholds: strong={THR_STRONG_V3}, weak={THR_WEAK_V3}")
 
         # Compute 2D projections for visualization
         print("\n[*] Computing 2D projections for visualization...")
-        coords_2d = compute_2d_projection(theme_embeddings, method='tsne')
+        coords_2d = compute_2d_projection(theme_embeddings_anchor, method='tsne')
 
         # Store coordinates in nn_results
         for i, theme in enumerate(theme_list):
@@ -763,19 +858,41 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
     decision_counts = {}
 
     for theme in sorted(theme_codes):
-        rule_id = rule_results[theme]['rule_id']
-        rule_conf = rule_results[theme]['rule_conf']
+        manual_id = MANUAL_MAPPING_FIX.get(theme.upper())
+        if manual_id:
+            decision = 'manual_override'
+            confidence = 1.0
+            subtopic_info = {
+                "top_id": manual_id,
+                "top_label": get_iptc_label(manual_id),
+                "sub_id": None,
+                "sub_label": "",
+                "sub_definition": ""
+            }
+            rule_id = ''
+            rule_conf = 1.0
+            nn_data = {
+                'final_id': manual_id,
+                'final_label': get_iptc_label(manual_id),
+                'confidence': 1.0,
+                'tier': 'manual'
+            }
+            final_id = manual_id
+            decision_counts[decision] = decision_counts.get(decision, 0) + 1
+        else:
+            rule_id = rule_results[theme]['rule_id']
+            rule_conf = rule_results[theme]['rule_conf']
 
-        nn_data = nn_results.get(theme, {
-            'final_id': None, 'final_label': '', 'confidence': 0,
-            'level': 'unclassified', 'top_id': None, 'sub_id': None
-        })
+            nn_data = nn_results.get(theme, {
+                'final_id': None, 'final_label': '', 'confidence': 0,
+                'level': 'unclassified', 'top_id': None, 'sub_id': None
+            })
 
-        final_id, decision, confidence, subtopic_info = fusion_decision_v3(
-            rule_id, rule_conf, nn_data, IPTC_ALL_ITEMS
-        )
+            final_id, decision, confidence, subtopic_info = fusion_decision_v3(
+                rule_id, rule_conf, nn_data, IPTC_ALL_ITEMS
+            )
 
-        decision_counts[decision] = decision_counts.get(decision, 0) + 1
+            decision_counts[decision] = decision_counts.get(decision, 0) + 1
 
         result = {
             'theme_code': theme,
@@ -794,7 +911,8 @@ def run_full_mapping_v3(data_dir: str = ".", output_dir: str = ".", mapping_sour
             'subtopic_info': subtopic_info,
             # 2D coordinates for visualization
             'tsne_x': nn_data.get('tsne_x', 50 + np.random.randn() * 10),
-            'tsne_y': nn_data.get('tsne_y', 50 + np.random.randn() * 10)
+            'tsne_y': nn_data.get('tsne_y', 50 + np.random.randn() * 10),
+            'nn_tier': nn_data.get('tier', 'gkg')
         }
         final_results.append(result)
 
@@ -990,15 +1108,118 @@ def load_mapping_source(data_dir: Path, mapping_source: str) -> dict:
         return load_combined_mapping(data_dir)
 
 
+def _keyword_hint(theme_code: str) -> str:
+    """Lightweight keyword hints to bridge to IPTC subtopics."""
+    t = theme_code.upper()
+    if 'ENV' in t or 'CLIMATE' in t:
+        return "related to environment and nature"
+    if 'TAX' in t or 'ECON' in t or 'EPU' in t or 'WB' in t:
+        return "related to business, finance, and markets"
+    if 'POLITIC' in t or 'GOV' in t:
+        return "related to government and policy"
+    if 'CRIME' in t or 'LAW' in t or 'JUSTICE' in t:
+        return "related to crime, law, and justice"
+    if 'HEALTH' in t or 'MEDICAL' in t:
+        return "related to health and medicine"
+    if 'EDUC' in t or 'SCHOOL' in t:
+        return "related to education and learning"
+    if 'SCIENCE' in t or 'TECH' in t:
+        return "related to science and technology"
+    if 'SOC' in t or 'HUMAN' in t:
+        return "related to society and social welfare"
+    if 'AID' in t:
+        return "related to humanitarian aid and welfare"
+    if 'CONFLICT' in t or 'WAR' in t or 'MILITARY' in t:
+        return "related to conflict, war, and peace"
+    if 'SPORT' in t:
+        return "related to sport and competition"
+    if 'WEATHER' in t or 'STORM' in t:
+        return "related to weather and climate patterns"
+    return ""
+
+
 def build_theme_text(theme_code: str, mapping_data: dict, mapping_source: str) -> str:
-    """Build text representation using only descriptions for semantic comparison"""
+    """Build text representation for semantic comparison with fallback expansion."""
+    def apply_semantic_magnets(base_text: str, t_upper: str) -> str:
+        magnet_suffixes = []
+        if 'SLUMS' in t_upper:
+            magnet_suffixes.append("Related to social issues, poverty, and urban sociology.")
+        if 'SEIZE' in t_upper or 'CONFISCATION' in t_upper:
+            magnet_suffixes.append("Related to law enforcement, criminal justice, and legal procedures.")
+        if 'UNGOVERNED' in t_upper or 'SOVEREIGNTY' in t_upper:
+            magnet_suffixes.append("Related to state authority, government administration, and political power.")
+        if magnet_suffixes:
+            base_text = base_text.rstrip('.') + '. ' + ' '.join(magnet_suffixes)
+        return base_text
+
+    text = ''
+    theme_upper = theme_code.upper()
     if theme_code in mapping_data:
         info = mapping_data[theme_code]
         description = info.get('description', '')
         if description:
-            return f"{theme_code} - {description}"
-    # Fallback if no description
-    return theme_code.replace('_', ' ').replace('-', ' ').lower()
+            text = f"{theme_code} - {description}"
+
+    if not text:
+        # Fallback semantic expansion when no description is available
+        cleaned = theme_code.replace('_', ' ').lower()
+        text = f"News regarding {cleaned}."
+
+    suffixes = []
+    if 'ENV_' in theme_upper:
+        suffixes.append(" Focuses on environment and nature.")
+    if 'TAX_' in theme_upper or 'ECON_' in theme_upper:
+        suffixes.append(" Focuses on economy, business, and finance.")
+    if 'POLITIC' in theme_upper or 'GOVT_' in theme_upper:
+        suffixes.append(" Focuses on politics and government.")
+    if 'CRIME_' in theme_upper or 'LAW_' in theme_upper:
+        suffixes.append(" Focuses on crime, law, and justice.")
+
+    hint = _keyword_hint(theme_code)
+    if hint and not suffixes:
+        suffixes.append(f" Contextually {hint}.")
+
+    if suffixes:
+        text += ''.join(suffixes)
+
+    # Targeted context injection (semantic magnets)
+    text = apply_semantic_magnets(text, theme_upper)
+
+    # Ensure at least three sentences to stabilize embeddings for undocumented themes
+    sentences = [s.strip() for s in text.split('.') if s.strip()]
+    while len(sentences) < 3:
+        if len(sentences) == 0:
+            sentences.append(f"This refers to a news topic labeled {theme_code}")
+        elif len(sentences) == 1:
+            sentences.append("It captures reporting, public discourse, and impacts related to this concept")
+        else:
+            sentences.append("Coverage may include causes, consequences, stakeholders, and societal response")
+    text = '. '.join(sentences) + '.'
+
+    return text
+
+
+def build_vargo_context_text(theme_code: str, vargo_map: dict) -> str:
+    """Contextual expansion using Vargo definitions with IPTC-friendly hints."""
+    if theme_code not in vargo_map:
+        return ''
+    desc = vargo_map[theme_code].get('description', '') or ''
+    base = f"Contextual expansion of {theme_code}: {desc}".strip()
+    hint = _keyword_hint(theme_code)
+    if hint:
+        base = f"{base} {hint}."
+    return base.strip()
+
+
+def build_probe_text(theme_code: str, anchor_text: str, contextual_text: str) -> str:
+    """Construct a richer probe text for gray zone recovery."""
+    anchor_clean = anchor_text.replace('_', ' ').strip()
+    base = f"Theme {anchor_clean}. {contextual_text}"
+    base += " This probe cross-checks IPTC definitions, impacts, and context such as disaster, economy, politics, society, health."  # brief semantic scaffold
+    sentences = [s.strip() for s in base.split('.') if s.strip()]
+    while len(sentences) < 3:
+        sentences.append("It considers causes, consequences, stakeholders, and responses")
+    return '. '.join(sentences) + '.'
 
 
 def build_iptc_texts(categories: list) -> list:

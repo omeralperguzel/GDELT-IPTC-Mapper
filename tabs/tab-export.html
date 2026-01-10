@@ -53,7 +53,18 @@
         <!-- Grafik 3: IPTC Kategori Hacmi -->
         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
             <h5 style="color: #4CAF50; margin: 0 0 10px 0;">3. IPTC Kategori Hacmi</h5>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                <label style="font-size: 0.85em; color: #555; display: flex; align-items: center; gap: 6px;">
+                    Versiyon:
+                    <select id="iptc-volume-version-select" style="padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9em;">
+                        <option value="v1-gkg">V1 - GKG</option>
+                        <option value="v1-vargo">V1 - Vargo</option>
+                        <option value="v2-gkg" selected>V2 - GKG</option>
+                        <option value="v2-vargo">V2 - Vargo</option>
+                        <option value="v3-combined">V3 - Combined</option>
+                        <option value="v3-gkg">V3 - GKG</option>
+                    </select>
+                </label>
                 <button class="run-btn" style="background: #4CAF50; padding: 6px 12px; font-size: 0.85em;" onclick="generateIPTCCategoryVolumeChart()">
                      Oluştur
                 </button>
@@ -70,9 +81,9 @@
             <canvas id="iptc-category-volume-canvas" style="width: 100%; max-width: 720px; height: 400px; margin: 10px auto 0; display: block; border: 1px solid #ddd; border-radius: 4px;"></canvas>
         </div>
         
-        <!-- Grafik 4: V1-V2 Fark Grafiği -->
+        <!-- Grafik 4: V1-V2-V3 Fark Grafiği -->
         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-            <h5 style="color: #4CAF50; margin: 0 0 10px 0;">4. V1-V2 Tema Farkı</h5>
+            <h5 style="color: #4CAF50; margin: 0 0 10px 0;">4. V1-V2-V3 Tema Farkı</h5>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                 <button class="run-btn" style="background: #4CAF50; padding: 6px 12px; font-size: 0.85em;" onclick="generateV1V2DifferenceChart()">
                      Oluştur
