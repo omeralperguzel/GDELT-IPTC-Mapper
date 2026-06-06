@@ -29,25 +29,20 @@ from datetime import datetime
 
 
 # ============================================================================
-# CONFIGURATION
+# HELPER CLASSES
 # ============================================================================
+
+class NaNEncoder(json.JSONEncoder):
+    """Custom JSON encoder to handle NaN and Infinity values."""
+    def encode(self, obj):
+        res = super().encode(obj)
+        # Replace NaN/Infinity with null (standard JSON doesn't support them)
+        return res.replace(': NaN', ': null').replace(':NaN', ':null') \
+                  .replace(': Infinity', ': null').replace(':Infinity', ':null')
 
 # Metadata prefixes - These are NOT news categories, just metadata tags
 META_PREFIXES = ("TAX_", "WB_", "USPEC_", "UNGP_", "SOC_", "SLFID_")
 META_EXACT = {"TAX", "WB", "USPEC", "UNGP", "SOC", "SLFID"}
-
-# Usable news categories
-USABLE_CATEGORIES = {
-    'ECON', 'EPU_ECONOMY', 'EPU_POLICY', 'EPU',
-    'GENERAL_GOVERNMENT', 'GENERAL', 'GOV',
-    'CRISISLEX', 'ARMEDCONFLICT', 'TERROR', 'SECURITY', 'MILITARY',
-    'HEALTH', 'GENERAL_HEALTH', 'MEDICAL',
-    'EDUCATION',
-    'TOURISM', 'AGRICULTURE',
-    'LEADER', 'ELECTION', 'DEMOCRACY', 'LEGISLATION',
-    'ENV', 'NATURAL', 'DISASTER',
-    'MEDIA', 'SCIENCE', 'RELIGION'
-}
 
 # Category groupings for final analysis
 CATEGORY_GROUPS = {
@@ -95,11 +90,9 @@ def is_metadata_theme(theme_code: str) -> bool:
 
 
 def get_theme_type(theme_code: str) -> str:
-    """Classify theme as 'category', 'metadata', or 'other'."""
+    """Classify theme as 'metadata' or 'other'."""
     if is_metadata_theme(theme_code):
         return 'metadata'
-    if theme_code in USABLE_CATEGORIES:
-        return 'category'
     return 'other'
 
 
@@ -261,6 +254,37 @@ def find_common_themes(top_k_df: pd.DataFrame) -> set:
     return common_themes
 
 
+def validate_iptc_mapping(coverage_df, iptc_mapping, ground_truth_csv=None):
+    """
+    If ground_truth_csv is provided, calculates ARI + F1 scores.
+    Otherwise, logs coverage metrics as a fallback.
+    """
+    try:
+        from sklearn.metrics import adjusted_rand_score, f1_score
+    except ImportError:
+        print("\n Warning: scikit-learn is not installed — skipping ARI/F1 validation.")
+        return
+
+    if ground_truth_csv and Path(ground_truth_csv).exists():
+        gt = pd.read_csv(ground_truth_csv)  # Expected columns: theme_code, true_iptc_label
+        
+        # Merge dataframes to align predictions with ground truth
+        merged = coverage_df.merge(gt, on='theme_code').merge(iptc_mapping, on='theme_code')
+        
+        ari = adjusted_rand_score(merged['true_iptc_label'], merged['iptc_category'])
+        f1 = f1_score(merged['true_iptc_label'], merged['iptc_category'], average='macro')
+        
+        print(f"\n V3 Mapping Validation:")
+        print(f"   • ARI Score: {ari:.3f}")
+        print(f"   • F1 Score (Macro): {f1:.3f}")
+    else:
+        print("\n Ground truth not provided or not found — reporting coverage metrics only.")
+        if iptc_mapping is not None:
+            coverage_pct = coverage_df['theme_code'].isin(iptc_mapping['theme_code']).mean() * 100
+            print(f"   • IPTC Theme Coverage: {coverage_pct:.1f}%")
+
+
+
 # ============================================================================
 # STEP C: COVERAGE ANALYSIS (Monthly Quality)
 # ============================================================================
@@ -300,13 +324,17 @@ def analyze_coverage(quality_df: pd.DataFrame, common_themes: set, trend_df: pd.
     # Enhanced decision function
     def make_decision_enhanced(row):
         ratio = row['ratio_ok']
-        trend = row['trend_category']
+        trend = str(row['trend_category']).lower()
         std_ratio = row['std_docs'] / row['median_docs'] if row['median_docs'] > 0 else 1
         
+        # Priority Fix 1: Normalize Trend Labels (case-insensitive & multi-lingual)
+        TREND_STABLE = {'stabil', 'stable', 'artan', 'growing', 'increasing'}
+        TREND_GROWING = {'artan', 'growing', 'increasing'}
+        
         # Prefer stable or growing themes with good coverage
-        if ratio >= 0.7 and trend in ['Stabil', 'Artan']:
+        if ratio >= 0.7 and trend in TREND_STABLE:
             return 'monthly'
-        elif ratio >= 0.6 and trend == 'Artan':
+        elif ratio >= 0.6 and trend in TREND_GROWING:
             return 'monthly'
         elif ratio >= 0.4 and std_ratio < 0.5:  # Low variance
             return 'quarterly'
@@ -611,7 +639,7 @@ def export_to_json(
 # MAIN EXECUTION
 # ============================================================================
 
-def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
+def run_analysis(data_dir: Path = None, export: bool = True, ground_truth_csv: Path = None) -> dict:
     """
     Run the complete GDELT theme analysis pipeline.
     
@@ -688,6 +716,10 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
     # Coverage analysis
     coverage = analyze_coverage(quality, common_themes, trend)
     
+    # Priority Fix 2: Implement V3 Validation
+    if iptc_mapping is not None:
+        validate_iptc_mapping(coverage, iptc_mapping, ground_truth_csv)
+    
     # IPTC'ye göre aggregate et
     country_cat_coverage = None
     
@@ -760,20 +792,24 @@ def run_analysis(data_dir: Path = None, export: bool = True) -> dict:
     
     # Export if requested
     if export:
-        export_results(decision_matrix, group_matrix, group_analysis, coverage)
+        output_dir = Path(__file__).parent / "analysis_output"
+        output_dir.mkdir(exist_ok=True, parents=True)
+        
+        export_results(decision_matrix, group_matrix, group_analysis, coverage, output_dir=output_dir)
         export_to_json(decision_matrix, group_matrix, group_analysis, {
             'category_stats': category_stats,
             'country_cat_coverage': country_cat_coverage,
             'trend_with_coverage': trend_with_coverage
-        })
+        }, output_file=output_dir / "gdelt_analysis_results.json")
         
         # Yeni export'lar
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         if top_k_with_iptc is not None:
-            top_k_with_iptc.to_csv(Path(__file__).parent / "analysis_output" / f"top_k_with_iptc_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv", index=False)
+            top_k_with_iptc.to_csv(output_dir / f"top_k_with_iptc_{timestamp}.csv", index=False)
         if country_cat_coverage is not None:
-            country_cat_coverage.to_csv(Path(__file__).parent / "analysis_output" / f"country_cat_coverage_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv", index=False)
+            country_cat_coverage.to_csv(output_dir / f"country_cat_coverage_{timestamp}.csv", index=False)
         if trend_with_coverage is not None:
-            trend_with_coverage.to_csv(Path(__file__).parent / "analysis_output" / f"trend_with_coverage_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv", index=False)
+            trend_with_coverage.to_csv(output_dir / f"trend_with_coverage_{timestamp}.csv", index=False)
     
     return {
         'common_themes': common_themes,
@@ -823,6 +859,12 @@ if __name__ == "__main__":
         default=MONTHLY_THRESHOLD,
         help=f'Monthly usability threshold (default: {MONTHLY_THRESHOLD})'
     )
+    parser.add_argument(
+        '--ground-truth', '-g',
+        type=Path,
+        default=None,
+        help='Ground truth CSV for IPTC mapping validation (columns: theme_code, true_iptc_label)'
+    )
     
     args = parser.parse_args()
     
@@ -835,7 +877,8 @@ if __name__ == "__main__":
     # Run analysis
     results = run_analysis(
         data_dir=args.data_dir,
-        export=not args.no_export
+        export=not args.no_export,
+        ground_truth_csv=args.ground_truth
     )
     
     print("\n Analysis complete!")

@@ -94,9 +94,20 @@ def generate_iptc_treemaps(data_dir: Path = None, results_dir: Path = None):
     # Load total docs data (from analysis.py output or directly from monthly)
     try:
         # Try to load from analysis output first
-        total_docs = pd.read_csv(results_dir / "top_k_with_iptc_20241223_014750.csv")
-        print(" Loaded total docs from analysis output")
-    except FileNotFoundError:
+        analysis_dir = Path(__file__).parent / "analysis_output"
+        # Find the latest top_k_with_iptc file
+        export_files = list(analysis_dir.glob("top_k_with_iptc_*.csv"))
+        if not export_files:
+            # Check results dir as well (legacy)
+            export_files = list(results_dir.glob("top_k_with_iptc_*.csv"))
+        
+        if export_files:
+            latest_file = max(export_files, key=lambda f: f.stat().st_mtime)
+            total_docs = pd.read_csv(latest_file)
+            print(f" Loaded total docs from analysis output: {latest_file.name}")
+        else:
+            raise FileNotFoundError("No top_k_with_iptc file found")
+    except (FileNotFoundError, PermissionError):
         # Fallback: compute from monthly data
         try:
             monthly = pd.read_csv(data_dir / "gdelt_monthly_docs_per_theme_country_2022_2024.csv")
